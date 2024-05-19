@@ -10,8 +10,20 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.8.6",
     "@astrojs/check": "^0.7.0",
+    "@astrojs/react": "^3.3.4",
+    "astro": "^4.8.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.33.4",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.211",
+    "@unocss/astro": "^0.60.2",
+    "@unocss/preset-icons": "^0.60.2",
+    "@unocss/preset-wind": "^0.60.2",
+    "@unocss/reset": "^0.60.2",
+    "unocss": "^0.60.2"
   }
 }

@@ -1,0 +1,24 @@
+---
+const { title, description, ogImage } = Astro.props;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <!-- <style>
+    @import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap");
+  </style> -->
+  <link rel="canonical" href="https://akitoshi-lab.com" />
+  <meta name="description" content={description} />
+  <meta name="keyword" content="ロボット, ブログ" />
+  <meta property="og:url" content="https://akitoshi-lab.com" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content="Akitoshi Lab." />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:site" content="@konoe_akitoshi" />
+  <meta name="twitter:card" content="summary_large_image" />
+</head>

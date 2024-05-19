@@ -1,0 +1,349 @@
+---
+// Your main page
+import "uno.css";
+import { config } from "../settings/site-settings";
+import Head from "../components/Head.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Card from "../components/Card.astro";
+
+import { Image } from "astro:assets";
+
+import Image1 from "../assets/img/back.png";
+import escape from "../assets/img/works/escape.jpg";
+import scorpion_2018_1 from "../assets/img/works/scorpion-2018-1.jpg";
+import scorpion_2018_2 from "../assets/img/works/scorpion-2018-2.jpg";
+import scorpion_2019_1 from "../assets/img/works/scorpion-2019-1.jpg";
+import scorpion_2019_2 from "../assets/img/works/scorpion-2019-2.jpg";
+import scorpion_2019_3 from "../assets/img/works/scorpion-2019-3.jpg";
+import scorpion_2020_1 from "../assets/img/works/scorpion-2020-1.jpg";
+import scorpion_2020_2 from "../assets/img/works/scorpion-2020-2.jpg";
+import scorpion_2021_1 from "../assets/img/works/scorpion-2021-1.jpg";
+import scorpion_2021_2 from "../assets/img/works/scorpion-2021-2.jpg";
+import scorpion_2021_3 from "../assets/img/works/scorpion-2021-3.jpg";
+import scorpion_2022_1 from "../assets/img/works/scorpion-2022-1.jpg";
+import scorpion_2022_2 from "../assets/img/works/scorpion-2022-2.jpg";
+import scorpion_2023_1 from "../assets/img/works/scorpion-2023-1.jpg";
+import scorpion_2023_2 from "../assets/img/works/scorpion-2023-2.jpg";
+import emorobo from "../assets/img/works/emorobo.jpg";
+import coursebreaker_2018 from "../assets/img/works/coursebreaker-2018.jpg";
+import coursebreaker_2019 from "../assets/img/works/coursebreaker-2019.jpg";
+
+const skillSet = [
+  {
+    name: "ロボット学会賞, デザイン賞",
+    by: "RobocupJuniorJapanOpen",
+    since: "2022",
+  },
+  {
+    name: "2nd",
+    by: "Robocup Aisa-Apsific (Junior Soccer Open)",
+    since: "2021",
+  },
+  { name: "採択", by: "サイエンスキャッスル研究費 THK賞", since: "2021" },
+  {
+    name: "RookieGameChangerAward",
+    by: "FIRST Robotics Competition Infinite ReCharge",
+    since: "2021",
+  },
+  {
+    name: "Best Team Description paper award, Individual 4th",
+    by: "RoboCup Word Wide (Junior Soccer Open)",
+    since: "2021",
+  },
+  { name: "Open 2位", by: "RobocupJuniorJapanOpen", since: "2021" },
+  {
+    name: "Open 準優勝",
+    by: "ロボカップジュニア・京滋奈ブロック大会",
+    since: "2021",
+  },
+  { name: "2nd Prize", by: "RoboMaster", since: "2020" },
+  {
+    name: "Most Popular Poster in Open",
+    by: "RoboCupJunior Soccer Virtual Poster Session",
+    since: "2020",
+  },
+  { name: "入選3等", by: "第64回日本学生科学賞", since: "2020" },
+  {
+    name: "Open 優勝",
+    by: "ロボカップジュニア・京滋奈ブロック大会",
+    since: "2020",
+  },
+  { name: "Open 準優勝", by: "関西オープン", since: "2019" },
+  { name: "LightWeight4位", by: "BIWAKOオープン", since: "2018" },
+  {
+    name: "LightWeight4位,SuperTeam優勝",
+    by: "せとうちオープン",
+    since: "2018",
+  },
+  {
+    name: "NIPPON League サッカー ビギナーズ 予選12位",
+    by: "ロボカップジュニア・ジャパンオープン2018和歌山",
+    since: "2018",
+  },
+  { name: "Classic部門 優勝", by: "SRC@国際ロボット展", since: "2017" },
+  { name: "全国予選 8位", by: "SRC13", since: "2016" },
+  {
+    name: "2等賞「オクラに見つけた水玉の正体」",
+    by: "第53回自然科学観察コンクール",
+    since: "2012",
+  },
+];
+const works = [
+  {
+    image: scorpion_2023_2,
+    title: "Scorpion ver.2023-2",
+    desc: "RobocupJuniorJapnOpen2023に出場した機体です．",
+    prizes: ["RSJ賞", "デザイン賞"],
+  },
+  {
+    image: scorpion_2023_1,
+    title: "Scorpion Ver.2023-1",
+    desc: "RobocupJunior関東ブロック2023に出場した機体です",
+    prizes: ["優勝"],
+  },
+  {
+    image: scorpion_2022_2,
+    title: "Scorpion Ver.2022-2",
+    desc: "RobocupJuniorJapnOpen2022に出場した機体です．モーターや回路の大幅な改善を行いました．個人的には失敗作です．",
+    prizes: ["5位"],
+  },
+  {
+    image: scorpion_2022_1,
+    title: "Scorpion Ver.2022-1",
+    desc: "RobocupJunior京滋奈ブロック2022に出場した機体です．RCAPの機体をブラッシュアップし，ソフトウェアの改善を行いました．",
+    prizes: ["優勝"],
+  },
+  {
+    image: emorobo,
+    title: "emorobo",
+    desc: "「感情を読み取る配膳ロボット」というコンセプトです．THK賞の資金を基に製作しました",
+    prizes: ["サイエンスキャッスル研究費 THK賞"],
+  },
+  {
+    image: Image1,
+    title: "Scorpion ver.2021-3",
+    desc: "RCAPに出場した機体です．「サッカーをすること」を目指し大幅な改善を行いました．",
+    prizes: ["2nd", "試合結果1位"],
+  },
+  {
+    image: scorpion_2021_3,
+    title: "Scorpion Ver.2021-3",
+    desc: "世界大会で使用した機体です．ゴルフボールに対応したロボットを作るという課題に対応するため急遽作成しました．1日でゴルフボール対応のドリブラーを製作しました．",
+    prizes: ["加点"],
+  },
+  {
+    image: scorpion_2021_2,
+    title: "Scorpion Ver.2021-2",
+    desc: "世界大会で使用した機体です．多くの思い出が詰まった機体です．",
+    prizes: ["4nd", "SestTDP"],
+  },
+  {
+    image: scorpion_2021_1,
+    title: "Scorpion Ver.2021-1",
+    desc: "RobocupJuniorJapnOpen2021に出場した機体です",
+    prizes: ["準優勝"],
+  },
+  {
+    image: scorpion_2020_2,
+    title: "Scorpion Ver.2020-2",
+    desc: "試作機体です．",
+    prizes: [],
+  },
+  {
+    image: coursebreaker_2019,
+    title: "CourseBreaker Ver.2020",
+    desc: "RobocupJunior京滋奈ブロック2020に出場した機体です．ゴールキーパー用途として製作しました．",
+    prizes: ["優勝", "学生科学賞3等"],
+  },
+  {
+    image: scorpion_2020_1,
+    title: "Scorpion Ver.2020-1",
+    desc: "RobocupJunior京滋奈ブロック2020に出場した機体です．アタッカー機体です．",
+    prizes: ["優勝"],
+  },
+  {
+    image: scorpion_2019_3,
+    title: "Scorpion Ver.2019-3",
+    desc: "関西オープン2019に出場した機体です．Open初参戦の機体です．",
+    prizes: ["4位"],
+  },
+  {
+    image: scorpion_2019_2,
+    title: "Scorpion Ver.2019-2",
+    desc: "試作機体です．せとうちオープンに持っていきました．",
+    prizes: [],
+  },
+  {
+    image: scorpion_2019_1,
+    title: "Scorpion Ver.2019-1",
+    desc: "ビギナーの機体をLightweight対応に改造したものです．BIWAKOオープンやせとうちオープンで活躍しました．",
+    prizes: ["4位", "SuperTeam優勝"],
+  },
+  {
+    image: scorpion_2018_2,
+    title: "Scorpion Ver.2018-2",
+    desc: "RobocupJuniorJapnOpen2018に出場した機体です．ビギナーリーグに出場していました．",
+    prizes: ["12位"],
+  },
+  {
+    image: coursebreaker_2018,
+    title: "CourseBreaker Ver.2018",
+    desc: "RobocupJuniorJapnOpen&京滋奈ブロック2018に出場した機体です．",
+    prizes: ["12位", "優勝"],
+  },
+  {
+    image: scorpion_2018_1,
+    title: "Scorpion Ver.2018-1",
+    desc: "RobocupJunior京滋奈ブロック2018に出場した機体です．",
+    prizes: ["優勝"],
+  },
+  {
+    image: escape,
+    title: "Escape",
+    desc: "SRC13&国際ロボット展に出場していた時の機体です．",
+    prizes: ["SRC13敢闘賞", "SRC国際ロボット展優勝"],
+  },
+];
+---
+
+<html lang="ja">
+  <Head
+    title="About me | Akitoshi Lab."
+    description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
+    ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
+  />
+  <body class="m-0 p-0 font-snself overflow-x-hidden">
+    <Header />
+    <main class="max-w-3xl mx-auto pt-10 pb-12">
+      <astro-island>
+        <Card />
+      </astro-island>
+
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">About Blog</h2>
+        <hr class="border-gray-400 mb-4" />
+        <p>
+          このブログ(akitoshi-lab.com)は，@konoe_aktoshiが日常で感じたことやひらめいたことを書いている”メモ帳”です．
+        </p>
+        <p>
+          もちろん，技術的なことも書きますが，必ずしも正しいとは限りません．私が小さい脳で一生懸命考えてやったことの備忘録です．
+        </p>
+        <a
+          href={config.social.buyMeACoffee}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            height="40"
+            alt="Buy Me A Coffee"
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+            class="mt-4"
+          />
+        </a>
+      </section>
+
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">サイト環境</h2>
+        <hr class="border-gray-400 mb-4" />
+        <h3 class="text-xl mb-2">物理環境</h3>
+        <p>Yamaha RTX1210</p>
+        <p>Dell S6010-on</p>
+        <p>HPE DL360 gen8</p>
+        <p>Dell R620</p>
+        <p>Dell R720xd</p>
+        <h3 class="text-xl mb-2">計算環境</h3>
+        <p>Ubuntu Server</p>
+        <p>Nginx</p>
+        <p>Nuxt3</p>
+        <p>Micro CMS</p>
+      </section>
+
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">資格</h2>
+        <hr class="border-gray-400 mb-4" />
+        <h3 class="text-xl mb-2">Credly</h3>
+        <div
+          data-iframe-width="150"
+          data-iframe-height="270"
+          data-share-badge-id="6ff7b8a5-c4c8-4d1d-a683-071162cb3a5f"
+          data-share-badge-host="https://www.credly.com"
+        >
+        </div>
+        <script
+          type="text/javascript"
+          async
+          src="//cdn.credly.com/assets/utilities/embed.js"></script>
+        <h3 class="text-xl mb-2">No Badge</h3>
+        <p>第四級アマチュア無線技士</p>
+      </section>
+
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">Works</h2>
+        <hr class="border-gray-400 mb-4" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {
+            works.map((work) => (
+              <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+                <Image
+                  src={work.image}
+                  alt="work image"
+                  class="w-full h-40 object-cover"
+                />
+                <div class="p-4 flex flex-col justify-between">
+                  <div>
+                    <h3 class="text-xl mb-2">{work.title}</h3>
+                    <p class="text-sm text-gray-600">{work.desc}</p>
+                  </div>
+                  {work.prizes.length > 0 && (
+                    <div class="flex items-center mt-4">
+                      <span class="i-material-symbols-rewarded-ads-outline-rounded text-yellow-500 mr-2" />
+                      <ul class="list-disc list-inside">
+                        {work.prizes.map((prize, i) => (
+                          <li class="text-sm">{prize}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">Profile</h2>
+        <hr class="border-gray-400 mb-4" />
+        <h3 class="text-xl mb-2">Affiliated</h3>
+        <span class="i-hugeicons-university"></span>
+        <p>電気通信大学</p>
+        <span class="i-bi-pc-display"></span>
+        <p>MMA</p>
+        <p>Scramble</p>
+        <h3 class="text-xl mb-2">Prize</h3>
+        <table class="w-full table-auto mt-4">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 bg-gray-700 text-white">年度</th>
+              <th class="px-4 py-2 bg-gray-700 text-white">イベント名</th>
+              <th class="px-4 py-2 bg-gray-700 text-white">受賞内容</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              skillSet.map((item) => (
+                <tr>
+                  <td class="border px-4 py-2">{item.since}</td>
+                  <td class="border px-4 py-2">{item.by}</td>
+                  <td class="border px-4 py-2">{item.name}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,61 +1,42 @@
 ---
-interface Props {
-	title: string;
-	body: string;
-	href: string;
-}
-
-const { href, title, body } = Astro.props;
+import Image1 from '../assets/img/back.png';
+import Avatar from '../assets/img/avatar.png';
+import { config } from '../settings/site-settings';
+import { Image } from 'astro:assets';
 ---
 
-<li class="link-card">
-	<a href={href}>
-		<h2>
-			{title}
-			<span>&rarr;</span>
-		</h2>
-		<p>
-			{body}
-		</p>
-	</a>
-</li>
-<style>
-	.link-card {
-		list-style: none;
-		display: flex;
-		padding: 1px;
-		background-color: #23262d;
-		background-image: none;
-		background-size: 400%;
-		border-radius: 7px;
-		background-position: 100%;
-		transition: background-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-	}
-	.link-card > a {
-		width: 100%;
-		text-decoration: none;
-		line-height: 1.4;
-		padding: calc(1.5rem - 1px);
-		border-radius: 8px;
-		color: white;
-		background-color: #23262d;
-		opacity: 0.8;
-	}
-	h2 {
-		margin: 0;
-		font-size: 1.25rem;
-		transition: color 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-	}
-	p {
-		margin-top: 0.5rem;
-		margin-bottom: 0;
-	}
-	.link-card:is(:hover, :focus-within) {
-		background-position: 0;
-		background-image: var(--accent-gradient);
-	}
-	.link-card:is(:hover, :focus-within) h2 {
-		color: rgb(var(--accent-light));
-	}
-</style>
+<div class="relative w-full h-96 bg-cover bg-center rounded-lg mb-10" style={`background-image: url(${Image1.src});`}>
+    <div class="absolute inset-0 bg-black bg-opacity-60 rounded-lg flex flex-col justify-center items-center text-center p-10">
+        <div class="w-40 h-40 rounded-full shadow-lg">
+            <Image src={Avatar} alt="Avatar" class="w-full h-full object-cover rounded-full" />
+        </div>
+        <div class="mt-4 mb-4 text-white">
+            <h1 class="text-4xl mb-2">Akitoshi Saeki</h1>
+            <h2 class="text-xl mb-5">Engineer, Student</h2>
+            <p class="text-sm mb-5">ロボットを作るのが大好きな大学生です．</p>
+            <div class="flex justify-center flex-wrap gap-4">
+                <a href={config.social.github} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-github"></i>
+                </a>
+                <a href={config.social.twitterProf} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-ri-twitter-x-fill"></i>
+                </a>
+                <a href={config.social.youtube} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-youtube"></i>
+                </a>
+                <a href={config.social.facebook} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-facebook"></i>
+                </a>
+                <a href={config.social.instagram} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-instagram"></i>
+                </a>
+                <a href={config.social.threads} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-threads"></i>
+                </a>
+                <a href={config.social.linkedin} class="social-icon text-2xl text-white" target="_blank">
+                    <i class="i-simple-icons-linkedin"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
