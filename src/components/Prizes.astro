@@ -1,6 +1,5 @@
 ---
-import { config } from '../settings/site-settings';
-import { Image } from 'astro:assets';
+// import { Image } from 'astro:assets';
 
 const skillSet = [
   {
@@ -64,29 +63,16 @@ const skillSet = [
 ];
 ---
 
-<section class="mb-10">
+<!-- <section class="mb-10 p-4"> -->
   <h2 class="text-3xl mb-4">Prize</h2>
   <hr class="border-gray-400 mb-4" />
-  <div class="overflow-x-auto">
-    <table class="w-full table-auto mt-4">
-      <thead>
-        <tr>
-          <th class="px-4 py-2 bg-gray-700 text-white">年度</th>
-          <th class="px-4 py-2 bg-gray-700 text-white">イベント名</th>
-          <th class="px-4 py-2 bg-gray-700 text-white">受賞内容</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          skillSet.map((item) => (
-            <tr>
-              <td class="border px-4 py-2">{item.since}</td>
-              <td class="border px-4 py-2">{item.by}</td>
-              <td class="border px-4 py-2">{item.name}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+  <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    {skillSet.map((item) => (
+      <div class="border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <h3 class="text-xl font-semibold mb-2">{item.since}</h3>
+        <p class="text-gray-600 mb-2">{item.by}</p>
+        <p class="text-gray-800">{item.name}</p>
+      </div>
+    ))}
   </div>
-</section>
+<!-- </section> -->
