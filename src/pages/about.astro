@@ -1,14 +1,12 @@
 ---
-// Your main page
 import "uno.css";
-import { config } from "../settings/site-settings";
-import { Image } from "astro:assets";
+// import { Image } from "astro:assets";
 import Head from "../components/Head.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Card from "../components/Card.astro";
-import Works from "../components/Works.astro";
 import Prizes from "../components/Prizes.astro";
+import Environment from "../components/Environment.astro";
 ---
 
 <html lang="ja">
@@ -24,21 +22,9 @@ import Prizes from "../components/Prizes.astro";
         <Card />
       </astro-island>
 
-      <section class="mb-10">
-        <h2 class="text-3xl mb-4">サイト環境</h2>
-        <hr class="border-gray-400 mb-4" />
-        <h3 class="text-xl mb-2">物理環境</h3>
-        <p>Yamaha RTX1210</p>
-        <p>Dell S6010-on</p>
-        <p>HPE DL360 gen8</p>
-        <p>Dell R620</p>
-        <p>Dell R720xd</p>
-        <h3 class="text-xl mb-2">計算環境</h3>
-        <p>Ubuntu Server</p>
-        <p>Nginx</p>
-        <p>Nuxt3</p>
-        <p>Micro CMS</p>
-      </section>
+      <astro-island>
+        <Environment />
+      </astro-island>
 
       <section class="mb-10">
         <h2 class="text-3xl mb-4">資格</h2>
@@ -55,8 +41,7 @@ import Prizes from "../components/Prizes.astro";
         <script
           type="text/javascript"
           async
-          src="//cdn.credly.com/assets/utilities/embed.js"
-        ></script>
+          src="//cdn.credly.com/assets/utilities/embed.js"></script>
         <!-- badge2 -->
         <div
           data-iframe-width="150"
@@ -68,16 +53,11 @@ import Prizes from "../components/Prizes.astro";
         <script
           type="text/javascript"
           async
-          src="//cdn.credly.com/assets/utilities/embed.js"
-        ></script>
+          src="//cdn.credly.com/assets/utilities/embed.js"></script>
 
         <h3 class="text-xl mb-2">No Badge</h3>
         <p>第四級アマチュア無線技士</p>
       </section>
-
-      <astro-island>
-        <Works />
-      </astro-island>
 
       <section class="mb-10">
         <h2 class="text-3xl mb-4">Affiliated</h2>
@@ -92,7 +72,6 @@ import Prizes from "../components/Prizes.astro";
       <astro-island>
         <Prizes />
       </astro-island>
-
     </main>
     <Footer />
   </body>
