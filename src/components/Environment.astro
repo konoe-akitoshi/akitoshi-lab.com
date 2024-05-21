@@ -1,0 +1,100 @@
+---
+// import { config } from '../settings/site-settings';
+---
+
+<section class="mb-10">
+    <h2 class="text-3xl mb-4">自宅環境</h2>
+    <hr class="border-gray-400 mb-4" />
+
+    <h3 class="text-xl mb-2">物理環境</h3>
+    <div class="network-diagram bg-white p-6 lg:p-8 rounded-lg shadow-lg">
+        <div class="flex flex-col items-center mb-6 lg:mb-8">
+            <!-- Router -->
+            <div class="flex flex-col items-center mb-6 lg:mb-8">
+                <div class="flex items-center mb-2 bg-gray-100 p-3 lg:p-4 rounded-lg shadow">
+                    <div class="i-mdi:router-network w-8 h-8 lg:w-10 lg:h-10 text-gray-800 mr-2"></div>
+                    <p class="text-black text-md lg:text-lg">Yamaha RTX1210</p>
+                </div>
+                <div class="h-6 lg:h-8 w-1 bg-gray-400"></div>
+            </div>
+    
+            <!-- Switch -->
+            <div class="flex flex-col items-center mb-6 lg:mb-8">
+                <div class="flex items-center mb-2 bg-gray-100 p-3 lg:p-4 rounded-lg shadow">
+                    <div class="i-clarity:network-switch-solid w-8 h-8 lg:w-10 lg:h-10 text-gray-800 mr-2"></div>
+                    <p class="text-black text-md lg:text-lg">Dell S6010-on</p>
+                </div>
+                <div class="h-6 lg:h-8 w-1 bg-gray-400"></div>
+            </div>
+    
+            <!-- Servers Box -->
+            <div class="flex flex-col items-center w-full">
+                <div class="bg-gray-100 p-4 lg:p-6 rounded-lg shadow inline-block">
+                    <div class="flex flex-wrap justify-center lg:justify-start items-start">
+                        <!-- Server 1 -->
+                        <div class="bg-white p-4 rounded-lg shadow flex flex-col items-center mx-2 lg:mx-4 mb-4 lg:mb-0">
+                            <div class="bg-gray-200 p-3 lg:p-4 rounded-lg shadow flex flex-col items-center mb-2 lg:mb-4">
+                                <div class="i-mdi:server-outline w-6 h-6 lg:w-8 lg:h-8 text-gray-800 mb-2"></div>
+                                <p class="text-black text-sm lg:text-md text-center">HPE DL360 gen8</p>
+                            </div>
+                            <div class="flex flex-wrap justify-center">
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Server 2 -->
+                        <div class="bg-white p-4 rounded-lg shadow flex flex-col items-center mx-2 lg:mx-4 mb-4 lg:mb-0">
+                            <div class="bg-gray-200 p-3 lg:p-4 rounded-lg shadow flex flex-col items-center mb-2 lg:mb-4">
+                                <div class="i-mdi:server-outline w-6 h-6 lg:w-8 lg:h-8 text-gray-800 mb-2"></div>
+                                <p class="text-black text-sm lg:text-md text-center">Dell R620</p>
+                            </div>
+                            <div class="flex flex-wrap justify-center">
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Server 3 -->
+                        <div class="bg-white p-4 rounded-lg shadow flex flex-col items-center mx-2 lg:mx-4 mb-4 lg:mb-0">
+                            <div class="bg-gray-200 p-3 lg:p-4 rounded-lg shadow flex flex-col items-center mb-2 lg:mb-4">
+                                <div class="i-mdi:server-outline w-6 h-6 lg:w-8 lg:h-8 text-gray-800 mb-2"></div>
+                                <p class="text-black text-sm lg:text-md text-center">Dell R720xd</p>
+                            </div>
+                            <div class="flex flex-wrap justify-center">
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg shadow mx-1 lg:mx-2 mb-2 lg:mb-0">
+                                    <div class="i-mdi:ubuntu w-4 h-4 lg:w-6 lg:h-6 text-orange-600"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+    .network-diagram {
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    </style>
+    
+    
+
+    <h3 class="text-xl mb-2">計算環境</h3>
+    <p>Ubuntu Server</p>
+    <p>Nginx</p>
+    <p>Nuxt3</p>
+    <p>Micro CMS</p>
+</section>
