@@ -1,0 +1,92 @@
+---
+import { config } from '../settings/site-settings';
+import { Image } from 'astro:assets';
+
+const skillSet = [
+  {
+    name: "ロボット学会賞, デザイン賞",
+    by: "RobocupJuniorJapanOpen",
+    since: "2022",
+  },
+  {
+    name: "2nd",
+    by: "Robocup Aisa-Apsific (Junior Soccer Open)",
+    since: "2021",
+  },
+  { name: "採択", by: "サイエンスキャッスル研究費 THK賞", since: "2021" },
+  {
+    name: "RookieGameChangerAward",
+    by: "FIRST Robotics Competition Infinite ReCharge",
+    since: "2021",
+  },
+  {
+    name: "Best Team Description paper award, Individual 4th",
+    by: "RoboCup Word Wide (Junior Soccer Open)",
+    since: "2021",
+  },
+  { name: "Open 2位", by: "RobocupJuniorJapanOpen", since: "2021" },
+  {
+    name: "Open 準優勝",
+    by: "ロボカップジュニア・京滋奈ブロック大会",
+    since: "2021",
+  },
+  { name: "2nd Prize", by: "RoboMaster", since: "2020" },
+  {
+    name: "Most Popular Poster in Open",
+    by: "RoboCupJunior Soccer Virtual Poster Session",
+    since: "2020",
+  },
+  { name: "入選3等", by: "第64回日本学生科学賞", since: "2020" },
+  {
+    name: "Open 優勝",
+    by: "ロボカップジュニア・京滋奈ブロック大会",
+    since: "2020",
+  },
+  { name: "Open 準優勝", by: "関西オープン", since: "2019" },
+  { name: "LightWeight4位", by: "BIWAKOオープン", since: "2018" },
+  {
+    name: "LightWeight4位,SuperTeam優勝",
+    by: "せとうちオープン",
+    since: "2018",
+  },
+  {
+    name: "NIPPON League サッカー ビギナーズ 予選12位",
+    by: "ロボカップジュニア・ジャパンオープン2018和歌山",
+    since: "2018",
+  },
+  { name: "Classic部門 優勝", by: "SRC@国際ロボット展", since: "2017" },
+  { name: "全国予選 8位", by: "SRC13", since: "2016" },
+  {
+    name: "2等賞「オクラに見つけた水玉の正体」",
+    by: "第53回自然科学観察コンクール",
+    since: "2012",
+  },
+];
+---
+
+<section class="mb-10">
+  <h2 class="text-3xl mb-4">Prize</h2>
+  <hr class="border-gray-400 mb-4" />
+  <div class="overflow-x-auto">
+    <table class="w-full table-auto mt-4">
+      <thead>
+        <tr>
+          <th class="px-4 py-2 bg-gray-700 text-white">年度</th>
+          <th class="px-4 py-2 bg-gray-700 text-white">イベント名</th>
+          <th class="px-4 py-2 bg-gray-700 text-white">受賞内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          skillSet.map((item) => (
+            <tr>
+              <td class="border px-4 py-2">{item.since}</td>
+              <td class="border px-4 py-2">{item.by}</td>
+              <td class="border px-4 py-2">{item.name}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

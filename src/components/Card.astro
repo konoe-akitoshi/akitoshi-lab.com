@@ -1,12 +1,12 @@
 ---
-import Image1 from '../assets/img/back.webp';
-import Avatar from '../assets/img/avatar.webp';
 import { config } from '../settings/site-settings';
 import { Image } from 'astro:assets';
+import Image1 from '../assets/img/back.webp';
+import Avatar from '../assets/img/avatar.webp';
 ---
 
 <div class="relative w-full h-96 bg-cover bg-center rounded-lg mb-10" style={`background-image: url(${Image1.src});`}>
-    <div class="absolute inset-0 bg-black bg-opacity-60 rounded-lg flex flex-col justify-center items-center text-center p-10">
+    <div class="absolute inset-0 bg-black bg-opacity-60 rounded-lg flex flex-col lg:flex-row justify-center items-center text-center lg:text-left p-10 gap-10">
         <div class="w-40 h-40 rounded-full shadow-lg">
             <Image src={Avatar} alt="Avatar" class="w-full h-full object-cover rounded-full" />
         </div>
