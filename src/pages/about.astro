@@ -7,6 +7,7 @@ import Footer from "../components/Footer.astro";
 import Card from "../components/Card.astro";
 import Prizes from "../components/Prizes.astro";
 import Environment from "../components/Environment.astro";
+import Affiliated from "../components/Affiliated.astro";
 import Image from "astro/components/Image.astro";
 import Badge1 from "../assets/img/badge/dell-genai-foundations.webp";
 import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
@@ -65,15 +66,9 @@ import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
         <p>第四級アマチュア無線技士</p>
       </section>
 
-      <section class="mb-10">
-        <h2 class="text-3xl mb-4">Affiliated</h2>
-        <hr class="border-gray-400 mb-4" />
-        <span class="i-hugeicons-university"></span>
-        <p>電気通信大学</p>
-        <span class="i-bi-pc-display"></span>
-        <p>MMA</p>
-        <p>Scramble</p>
-      </section>
+      <astro-island>
+        <Affiliated />
+      </astro-island>
 
       <astro-island>
         <Prizes />
