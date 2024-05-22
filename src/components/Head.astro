@@ -1,5 +1,5 @@
 ---
-const { title, description, ogImage } = Astro.props;
+const { title, description, ogImage, canonicalUrl } = Astro.props;
 ---
 
 <head>
@@ -7,13 +7,10 @@ const { title, description, ogImage } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <!-- <style>
-    @import url("https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap");
-  </style> -->
-  <link rel="canonical" href="https://akitoshi-lab.com" />
+  <link rel="canonical" href={canonicalUrl} />
   <meta name="description" content={description} />
   <meta name="keyword" content="ロボット, ブログ" />
-  <meta property="og:url" content="https://akitoshi-lab.com" />
+  <meta property="og:url" content={canonicalUrl} />
   <meta property="og:type" content="article" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
