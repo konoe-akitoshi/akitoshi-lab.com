@@ -1,18 +1,65 @@
 ---
 import { Image } from 'astro:assets';
-import UEC from '../assets/img/avatar.webp';
+import UEC from '../assets/img/affiliated/uec-logo.webp';
+import MMA from '../assets/img/affiliated/mma-logo.webp';
+import Infocraft from '../assets/img/affiliated/infocraft-logo.webp';
+import Scramble from '../assets/img/affiliated/scramble-logo.webp';
 ---
 
-<section class="mb-10">
-    <h2 class="text-3xl mb-4">Affiliated</h2>
-    <hr class="border-gray-400 mb-4" />
-    <Image src={UEC} width={32} densities={[1, 2]} alt="uec" class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" />
-    <p>電気通信大学</p>
-    <Image src={UEC} width={32} densities={[1, 2]} alt="avatar" class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" />
-    <p>電気通信大学 MMA</p>
-    <Image src={UEC} width={32} densities={[1, 2]} alt="uec" class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" />
-    <p>Infocraft Inc.</p>
-    <p>サーバー管理部 バイト</p>
-    <Image src={UEC} width={32} densities={[1, 2]} alt="uec" class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" />
-    <p>（一社）次世代ロボットエンジニア支援機構</p>
-  </section>
+<section class="bg-white">
+  <h2 class="text-3xl mb-6">🏢 Affiliated</h2>
+  <hr class="border-gray-400 mb-6" />
+  <div class="mb-10 p-6 space-y-6 rounded-lg shadow-lg">
+      <div>
+          <div class="flex items-start">
+              <div class="w-16 h-16 overflow-hidden flex-shrink-0 rounded-lg mr-4 bg-gray-200 flex items-center justify-center">
+                  <Image src={UEC} width={64} densities={[1, 2]} alt="uec-logo" class="object-contain max-w-full max-h-full" />
+              </div>
+              <div class="text-sm">
+                  <p class="font-semibold text-base">電気通信大学</p>
+                  <p class="text-gray-400">The University of Electro-Communications</p>
+                  <p class="text-gray-400">Apr 2022 - Present</p>
+              </div>
+          </div>
+          <hr class="border-gray-100 border-opacity-25 my-0" />
+      </div>
+      <div>
+          <div class="flex items-start">
+              <div class="w-16 h-16 overflow-hidden flex-shrink-0 rounded-lg mr-4 bg-gray-200 flex items-center justify-center">
+                  <Image src={MMA} width={64} densities={[1, 2]} alt="mma-logo" class="object-contain max-w-full max-h-full" />
+              </div>
+              <div class="text-sm">
+                  <p class="font-semibold text-base">電気通信大学 MMA</p>
+                  <p class="text-gray-400">UEC MMA</p>
+                  <p class="text-gray-400">Apr 2022 - Present</p>
+              </div>
+          </div>
+          <hr class="border-gray-100 border-opacity-25 my-0" />
+      </div>
+      <div>
+          <div class="flex items-start">
+              <div class="w-16 h-16 overflow-hidden flex-shrink-0 rounded-lg mr-4 bg-gray-200 flex items-center justify-center">
+                  <Image src={Infocraft} width={64} densities={[1, 2]} alt="infocraft-logo" class="object-contain max-w-full max-h-full" />
+              </div>
+              <div class="text-sm">
+                  <p class="font-semibold text-base">Infocraft Inc.</p>
+                  <p class="text-gray-400">サーバー管理部 バイト</p>
+                  <p class="text-gray-400">May 2023 - Present</p>
+              </div>
+          </div>
+          <hr class="border-gray-100 border-opacity-25 my-0" />
+      </div>
+      <div>
+          <div class="flex items-start">
+              <div class="w-16 h-16 overflow-hidden flex-shrink-0 rounded-lg mr-4 bg-gray-200 flex items-center justify-center">
+                  <Image src={Scramble} width={64} densities={[1, 2]} alt="scramble-logo" class="object-contain max-w-full max-h-full" />
+              </div>
+              <div class="text-sm">
+                  <p class="font-semibold text-base">（一社）次世代ロボットエンジニア支援機構</p>
+                  <p class="text-gray-400">Scramble</p>
+                  <p class="text-gray-400">Apr 2020 - Present</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
