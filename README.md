@@ -48,4 +48,8 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm run astro -- --help` | Get help using the Astro CLI                     |
 
+## ⚡ Speed
+![image](https://github.com/konoe-akitoshi/akitoshi-lab.com/assets/51017077/bfaf11c0-b1c5-47ff-b1d1-a8071dead5ff)
+![Uploading image.png…]()
+
 © 2022 Akitoshi Saeki
