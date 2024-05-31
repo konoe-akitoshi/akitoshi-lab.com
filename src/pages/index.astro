@@ -3,9 +3,6 @@ import Head from '../components/Head.astro';
 import BackgroundSlideshow from '../components/BackgroundSlideshow.astro';
 import { Image } from 'astro:assets';
 import Avatar from '../assets/img/avatar.webp';
-import BlogIcon from '../assets/blog.svg';
-import WorksIcon from '../assets/works.svg';
-import GalleryIcon from '../assets/gallery.svg';
 ---
 
 <html lang="ja">
@@ -31,15 +28,15 @@ import GalleryIcon from '../assets/gallery.svg';
         About me
       </a>
       <a href="https://blog.akitoshi-lab.com/" class="button inline-flex items-center justify-start gap-2 bg-gray-600 text-white no-underline border-none p-3 rounded-lg cursor-pointer mb-2 w-full box-border transition-colors duration-300 hover:bg-gray-700 active:bg-gray-800 focus:outline-none lg:gap-4 lg:p-5 lg:mb-4">
-        <Image src={BlogIcon} width={32} densities={[1, 2]} alt="blog" class="w-6 h-6 lg:w-8 lg:h-8" />
+        <div class="i-carbon:blog w-6 h-6 lg:w-8 lg:h-8" style="color: black;"></div>
         Blog
       </a>
       <a href="/works" class="button inline-flex items-center justify-start gap-2 bg-gray-600 text-white no-underline border-none p-3 rounded-lg cursor-pointer mb-2 w-full box-border transition-colors duration-300 hover:bg-gray-700 active:bg-gray-800 focus:outline-none lg:gap-4 lg:p-5 lg:mb-4">
-        <Image src={WorksIcon} width={32} densities={[1, 2]} alt="works" class="w-6 h-6 lg:w-8 lg:h-8" />
+        <div class="i-codicon:tools w-6 h-6 lg:w-8 lg:h-8" style="color: black;"></div>
         Works
       </a>
       <a href="/" class="button inline-flex items-center justify-start gap-2 bg-gray-600 text-white no-underline border-none p-3 rounded-lg cursor-pointer mb-2 w-full box-border transition-colors duration-300 hover:bg-gray-700 active:bg-gray-800 focus:outline-none lg:gap-4 lg:p-5 lg:mb-4">
-        <Image src={GalleryIcon} width={32} densities={[1, 2]} alt="gallery" class="w-6 h-6 lg:w-8 lg:h-8" />
+        <div class="i-system-uicons:picture w-6 h-6 lg:w-8 lg:h-8" style="color: black;"></div>
         Gallery
       </a>
     </div>
