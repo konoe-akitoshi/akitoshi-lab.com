@@ -50,6 +50,6 @@ All commands are run from the root of the project, from a terminal:
 
 ## ⚡ Speed
 ![image](https://github.com/konoe-akitoshi/akitoshi-lab.com/assets/51017077/bfaf11c0-b1c5-47ff-b1d1-a8071dead5ff)
-![Uploading image.png…]()
+![GOLL7uja4AACq3p](https://github.com/konoe-akitoshi/akitoshi-lab.com/assets/51017077/f38cddc2-81f2-4d1b-b467-5ee8fa60df55)
 
 © 2022 Akitoshi Saeki
