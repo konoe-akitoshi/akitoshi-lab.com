@@ -1,8 +1,5 @@
 /* src/settings/siteSettings.ts */
 
-// Blogの１ページあたりの記事数
-export const BLOG_PER_PAGE = 10;
-
 export const config = {
   siteName: "Akitoshi Lab.",
   siteUrl: "https://blog.akitoshi-lab.com",
