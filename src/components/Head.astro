@@ -1,5 +1,6 @@
 ---
 const { title, description, ogImage, canonicalUrl } = Astro.props;
+import { ViewTransitions } from 'astro:transitions';
 ---
 
 <head>
@@ -8,6 +9,7 @@ const { title, description, ogImage, canonicalUrl } = Astro.props;
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} >
   <title>{title}</title>
+  <ViewTransitions />
   <link rel="canonical" href={canonicalUrl} />
   <meta name="description" content={description} />
   <meta name="keyword" content="ロボット, ブログ" />
