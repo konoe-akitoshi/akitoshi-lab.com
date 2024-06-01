@@ -1,6 +1,6 @@
 ---
 // import { config } from '../settings/site-settings';
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 import Image1 from "../assets/img/back.webp";
 import escape from "../assets/img/works/escape.jpg";
 import scorpion_2018_1 from "../assets/img/works/scorpion-2018-1.jpg";
@@ -140,26 +140,27 @@ const works = [
 ---
 
 <section class="mb-10">
-    <h2 class="text-3xl mb-4">Works</h2>
-    <hr class="border-gray-400 mb-4" />
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {
-        works.map((work) => (
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+  <h2 class="text-3xl mb-4">Works</h2>
+  <hr class="border-gray-400 mb-4" />
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {
+      works.map((work) => (
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+          <a href="/works/Scorpion-2023-2" class="no-underline text-black">
             <Image
               src={work.image}
               alt="work image"
               class="w-full h-40 object-cover"
             />
-            <div class="p-4 flex flex-col justify-between">
+            <div class="p-4 flex flex-col justify-between gap-1">
               <div>
                 <h3 class="text-xl mb-2">{work.title}</h3>
                 <p class="text-sm text-gray-600">{work.desc}</p>
               </div>
               {work.prizes.length > 0 && (
-                <div class="flex items-center mt-4">
+                <div class="flex items-center gap-1">
                   <span class="i-material-symbols-rewarded-ads-outline-rounded text-yellow-500 mr-2" />
-                  <ul class="list-disc list-inside">
+                  <ul class="list-none list-outside p-0">
                     {work.prizes.map((prize, i) => (
                       <li class="text-sm">{prize}</li>
                     ))}
@@ -167,8 +168,9 @@ const works = [
                 </div>
               )}
             </div>
-          </div>
-        ))
-      }
-    </div>
-  </section>
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</section>
