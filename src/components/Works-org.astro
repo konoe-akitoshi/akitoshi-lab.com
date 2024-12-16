@@ -1,0 +1,51 @@
+---
+// import { config } from '../settings/site-settings';
+import { Image } from "astro:assets";
+import adocate from "../assets/img/works/software/adocate.png";
+
+const works = [
+  {
+    image: adocate,
+    title: "Adocate",
+    url: "https://github.com/konoe-akitoshi/Adocate",
+    desc: "Googleマップのロケーション履歴を活用して、写真にGPS位置情報（緯度・経度）を追加するツールです。",
+    prizes: [],
+  },
+];
+---
+
+<section class="mb-10">
+  <h2 class="text-3xl mb-4">Works-app</h2>
+  <hr class="border-gray-400 mb-4" />
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {
+      works.map((work) => (
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition-transform hover:scale-105">
+          <a href={work.url} class="no-underline text-black">
+            <Image
+              src={work.image}
+              alt="work image"
+              class="w-full h-40 object-cover"
+            />
+            <div class="p-4 flex flex-col justify-between gap-1">
+              <div>
+                <h3 class="text-xl m-0">{work.title}</h3>
+                <p class="text-sm text-gray-600">{work.desc}</p>
+              </div>
+              {work.prizes.length > 0 && (
+                <div class="flex items-center gap-1">
+                  <span class="i-material-symbols-rewarded-ads-outline-rounded text-yellow-500 mr-2" />
+                  <ul class="list-none list-outside p-0">
+                    {work.prizes.map((prize, i) => (
+                      <li class="text-sm">{prize}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </a>
+        </div>
+      ))
+    }
+  </div>
+</section>
