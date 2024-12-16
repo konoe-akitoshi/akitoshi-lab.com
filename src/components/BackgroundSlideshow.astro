@@ -4,13 +4,11 @@ import slide02 from '../assets/img2.webp';
 import slide03 from '../assets/img3.webp';
 import slide04 from '../assets/img4.webp';
 
-
 const slides = [
   slide01,
   slide02,
   slide03,
   slide04,
-
 ];
 ---
 
@@ -20,7 +18,7 @@ const slides = [
     <div class="swiper-wrapper">
       <!-- Slides -->
       {slides.map((slide, index) => (
-        <div class="swiper-slide" style={`background-image: url(${slide.src})`}></div>
+        <div class="swiper-slide" style={`background-image: url(${slide.src})`} key={index}></div>
       ))}
     </div>
     <!-- If we need pagination -->
@@ -32,34 +30,46 @@ const slides = [
   
     <!-- If we need scrollbar -->
     <div class="swiper-scrollbar"></div>
-  </div>
-  
-  <style>
-    .swiper-container {
-      width: 100%;
-      height: 100vh;
-    }
-  
-    .swiper-wrapper {
-      display: flex;
-    }
-  
-    .swiper-slide {
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-    }
-  
-    .swiper-button-next, .swiper-button-prev {
-      color: rgb(215, 119, 22);
-    }
-  </style>
-  
-  <script>
-    import Swiper from 'swiper/bundle';
-    import 'swiper/swiper-bundle.css';
-  
+</div>
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  .swiper-wrapper {
+    display: flex;
+  }
+
+  .swiper-slide {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .swiper-button-next, .swiper-button-prev {
+    color: rgb(215, 119, 22);
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper/bundle';
+  import 'swiper/swiper-bundle.css';
+
+  window.onload = () => {
     const swiperConfig = {
       loop: true,
       effect: 'fade',
@@ -84,7 +94,7 @@ const slides = [
         el: '.swiper-scrollbar',
       },
     };
-  
+
     new Swiper('.swiper-container', swiperConfig);
-  </script>
-  
+  };
+</script>
