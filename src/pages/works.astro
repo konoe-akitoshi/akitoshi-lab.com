@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WorksParsonal from "../components/WorksParsonal.astro";
 import WorksSoftware from "../components/Works-Software.astro";
+import WorksInfra from "../components/Works-infra.astro";
 ---
 
 <html lang="ja">
@@ -17,6 +18,7 @@ import WorksSoftware from "../components/Works-Software.astro";
     <Header />
     <main class="max-w-3xl mx-auto pt-10 pb-12 p-4">
       <astro-island>
+        <WorksInfra />
         <WorksSoftware />
         <WorksParsonal />
       </astro-island>

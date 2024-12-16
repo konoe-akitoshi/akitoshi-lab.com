@@ -1,21 +1,28 @@
 ---
 // import { config } from '../settings/site-settings';
 import { Image } from "astro:assets";
-import adocate from "../assets/img/works/software/adocate.png";
+import mma from "../assets/img/works/infra/mma.jpg";
 
 const works = [
   {
-    image: adocate,
-    title: "Adocate",
-    url: "https://github.com/konoe-akitoshi/Adocate",
-    desc: "Googleマップのロケーション履歴を活用して、写真にGPS位置情報（緯度・経度）を追加するツールです。",
+    image: mma,
+    title: "MMA Infra",
+    url: "https://wiki.mma.club.uec.ac.jp/Computers",
+    desc: "MMAインフラの再構築を行いました。",
+    prizes: [],
+  },
+  {
+    image: mma,
+    title: "Akitoshi Lab. Infra",
+    url: "https://wiki.mma.club.uec.ac.jp/Computers",
+    desc: "お家の環境です。このサイトのホスティングのほかお家サービスを動かしています。",
     prizes: [],
   },
 ];
 ---
 
 <section class="mb-10">
-  <h2 class="text-3xl mb-4">Works-app</h2>
+  <h2 class="text-3xl mb-4">Works-infra</h2>
   <hr class="border-gray-400 mb-4" />
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {
