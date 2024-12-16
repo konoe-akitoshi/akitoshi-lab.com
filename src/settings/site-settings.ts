@@ -8,6 +8,7 @@ export const config = {
     repos: "https://github.com/",
     github: "https://github.com/konoe-akitoshi/",
     twitter: "@konoe_akitoshi",
+    zenn: "https://zenn.dev/konoe_akitoshi",
     twitterProf: "https://twitter.com/konoe_akitoshi",
     youtube: "https://www.youtube.com/channel/UCggdti8ePYm-BkV88SDxihg",
     facebook: "https://www.facebook.com/profile.php?id=100010721778478",
