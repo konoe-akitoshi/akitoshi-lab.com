@@ -11,7 +11,9 @@ import Avatar from '../assets/img/avatar.webp';
     description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
     ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
     canonicalUrl="https://akitoshi-lab.com/"
-  />
+  >
+    <link rel="preload" href={Avatar.src} as="image" slot="preload" />
+  </Head>
   <body class="m-0 p-0 font-mono bg-black overflow-x-hidden overflow-y-auto">
 
     <BackgroundSlideshow />
@@ -25,7 +27,15 @@ import Avatar from '../assets/img/avatar.webp';
     <div class="intro-link fixed top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 p-3 rounded-lg text-center w-11/12 max-w-md mx-auto lg:top-1/2 lg:right-4 lg:left-auto lg:-translate-y-1/2 lg:translate-x-0 lg:w-1/4 lg:p-5 z-1001">
       <h1 class="text-white text-lg mb-3 break-words lg:text-2xl lg:mb-5">Hi👋 I'm Akitoshi Saeki.</h1>
       <a href="/about" class="button inline-flex items-center justify-start gap-2 bg-gray-600 text-white no-underline border-none p-3 rounded-lg cursor-pointer mb-2 w-full box-border transition-colors duration-300 hover:bg-gray-700 active:bg-gray-800 focus:outline-none lg:gap-4 lg:p-5 lg:mb-4">
-        <Image src={Avatar} width={32} densities={[1, 2]} alt="avatar" class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" />
+        <Image 
+          src={Avatar} 
+          width={32} 
+          height={32}
+          densities={[1, 2]} 
+          alt="avatar" 
+          class="w-6 h-6 rounded-lg lg:w-8 lg:h-8" 
+          loading="eager"
+        />
         About me
       </a>
       <a href="https://blog.akitoshi-lab.com/" class="button inline-flex items-center justify-start gap-2 bg-gray-600 text-white no-underline border-none p-3 rounded-lg cursor-pointer mb-2 w-full box-border transition-colors duration-300 hover:bg-gray-700 active:bg-gray-800 focus:outline-none lg:gap-4 lg:p-5 lg:mb-4">
