@@ -9,8 +9,8 @@ export default defineConfig({
   integrations: [UnoCSS(), sitemap()],
   // パフォーマンス最適化設定（基本的なもののみ残す）
   build: {
-    // 画像の最適化
-    assets: true,
+    // アセットファイルの出力先ディレクトリ
+    assets: '_astro',
   },
   // 画像最適化設定
   image: {
