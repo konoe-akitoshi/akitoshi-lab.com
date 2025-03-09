@@ -1,28 +1,29 @@
 ---
-import Head from '../components/Head.astro';
+import Layout from '../layouts/Layout.astro';
 import BackgroundSlideshow from '../components/BackgroundSlideshow.astro';
 import { Image } from 'astro:assets';
 import Avatar from '../assets/img/avatar.webp';
 ---
 
-<html lang="ja">
-  <Head 
-    title="Home | Akitoshi Lab."
-    description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
-    ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
-    canonicalUrl="https://akitoshi-lab.com/"
-  >
-    <link rel="preload" href={Avatar.src} as="image" slot="preload" />
-  </Head>
-  <body class="m-0 p-0 font-mono bg-black overflow-x-hidden overflow-y-auto">
-
-    <BackgroundSlideshow />
-    
-    <header class="fixed top-0 w-full text-left bg-transparent p-4 lg:p-8 z-1000 grid place-items-start">
-      <a href="https://akitoshi-lab.com/" class="text-white no-underline text-base lg:text-lg">
-        <h1 class="my-1.5">Akitoshi Lab.</h1>
-      </a>
-    </header>
+<Layout
+  title="Home | Akitoshi Lab."
+  description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
+  ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
+  canonicalUrl="https://akitoshi-lab.com/"
+  useHeader={false}
+  useFooter={false}
+  useMainWrapper={false}
+  bodyClass="m-0 p-0 font-mono bg-black overflow-x-hidden overflow-y-auto"
+>
+  <link rel="preload" href={Avatar.src} as="image" slot="preload" />
+  
+  <BackgroundSlideshow />
+  
+  <header class="fixed top-0 w-full text-left bg-transparent p-4 lg:p-8 z-1000 grid place-items-start">
+    <a href="https://akitoshi-lab.com/" class="text-white no-underline text-base lg:text-lg">
+      <h1 class="my-1.5">Akitoshi Lab.</h1>
+    </a>
+  </header>
 
     <div class="intro-link fixed top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 p-3 rounded-lg text-center w-11/12 max-w-md mx-auto lg:top-1/2 lg:right-4 lg:left-auto lg:-translate-y-1/2 lg:translate-x-0 lg:w-1/4 lg:p-5 z-1001">
       <h1 class="text-white text-lg mb-3 break-words lg:text-2xl lg:mb-5">Hi👋 I'm Akitoshi Saeki.</h1>
@@ -55,5 +56,4 @@ import Avatar from '../assets/img/avatar.webp';
     <footer class="fixed bottom-0 w-full text-left bg-transparent p-4 lg:p-8 z-1000 text-gray-500 grid place-items-start">
       <p class="my-0">&copy; 2024 Akitoshi Saeki</p>
     </footer>
-  </body>
-</html>
+</Layout>

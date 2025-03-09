@@ -1,9 +1,7 @@
 ---
 import "uno.css";
 // import { Image } from "astro:assets";
-import Head from "../components/Head.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import Prizes from "../components/Prizes.astro";
 import Environment from "../components/Environment.astro";
@@ -13,16 +11,13 @@ import Badge1 from "../assets/img/badge/dell-genai-foundations.webp";
 import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
 ---
 
-<html lang="ja">
-  <Head
-    title="About me | Akitoshi Lab."
-    description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
-    ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
-    canonicalUrl="https://akitoshi-lab.com/about/"
-  />
-  <body class="m-0 p-0 font-snself overflow-x-hidden bg-gray-50">
-    <Header />
-    <main class="max-w-3xl mx-auto pt-10 pb-12 p-4">
+<Layout
+  title="About me | Akitoshi Lab."
+  description="ロボットが大好きな大学生です．思ったことや日常の出来事をつぶやきます．たまに技術．"
+  ogImage="https://images.microcms-assets.io/assets/a1f82a67495a4c7c8cd02269aa346701/1b10a9dfa3dc476cb8a9154521d1f4bb/OGP.webp"
+  canonicalUrl="https://akitoshi-lab.com/about/"
+  bodyClass="m-0 p-0 font-snself overflow-x-hidden bg-gray-50"
+>
       <astro-island>
         <Card />
       </astro-island>
@@ -81,7 +76,4 @@ import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
       <astro-island>
         <Prizes />
       </astro-island>
-    </main>
-    <Footer />
-  </body>
-</html>
+</Layout>
