@@ -1,0 +1,466 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+
+// フォルダ内の画像を動的にインポート
+const imageFiles = import.meta.glob('../assets/img/gallery/*.jpg', { eager: true });
+
+// 画像データの配列を作成
+const images = Object.entries(imageFiles).map(([path, module]) => {
+  // ファイル名を取得（パスから抽出）
+  const filename = path.split('/').pop() || '';
+  // ファイル名から拡張子を除去してタイトルとして使用
+  const title = filename.replace(/\.[^/.]+$/, "");
+  
+  return {
+    src: module.default,
+    alt: `Gallery image ${filename}`,
+    title: title
+  };
+});
+
+// 画像をランダムに並び替え
+const shuffledImages = [...images].sort(() => Math.random() - 0.5);
+---
+
+<Layout
+  title="Gallery | Akitoshi Lab."
+  description="モダンなギャラリーページ。様々な作品を展示しています。"
+  ogImage="/img/OGP.webp"
+  bodyClass="m-0 p-0 font-snself overflow-x-hidden bg-gray-50"
+  useMainWrapper={false}
+>
+  <div class="gallery-page">
+    <div class="gallery-header">
+      <h1 class="gallery-title">Gallery</h1>
+      <p class="gallery-description">
+        写真をクリックすると拡大表示されます
+      </p>
+    </div>
+    
+    <section class="gallery-container">
+      <div class="gallery-masonry">
+        {shuffledImages.map((image, index) => (
+          <div class="gallery-item" data-index={index}>
+            <div class="gallery-image-container">
+              <Image 
+                src={image.src} 
+                alt={image.alt} 
+                class="gallery-image" 
+                width={800} 
+                height={600} 
+                loading="lazy"
+              />
+              <div class="gallery-overlay">
+                <h3 class="gallery-title">{image.title}</h3>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<!-- モーダル -->
+<div class="gallery-modal" id="galleryModal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <div class="modal-image-container">
+      <img src="" alt="" id="modalImage" class="modal-image">
+    </div>
+    <div class="modal-info">
+      <h3 id="modalTitle"></h3>
+    </div>
+    <div class="modal-navigation">
+      <button id="prevButton" class="nav-button">&lt;</button>
+      <button id="nextButton" class="nav-button">&gt;</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gallery-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+
+  .gallery-header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .gallery-title {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: #333;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .gallery-description {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #666;
+    letter-spacing: 0.02em;
+  }
+
+  .gallery-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .gallery-masonry {
+    columns: 1;
+    column-gap: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .gallery-masonry {
+      columns: 2;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .gallery-masonry {
+      columns: 3;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-masonry {
+      columns: 3;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .gallery-masonry {
+      columns: 4;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gallery-header {
+      padding: 2rem 1.5rem 1.5rem;
+    }
+    
+    .gallery-title {
+      font-size: 2rem;
+    }
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .gallery-image-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gallery-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .gallery-item:hover .gallery-image {
+    transform: scale(1.02);
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  /* モーダルスタイル */
+  .gallery-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .gallery-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+  }
+
+  .modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+  }
+
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 1010;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+  }
+
+  .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .modal-image-container {
+    width: 100%;
+    height: 90vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-image {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+  }
+
+  .modal-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    transform: translateY(-50%);
+  }
+
+  .nav-button {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* アニメーション */
+  @keyframes fadeIn {
+    from { 
+      opacity: 0;
+    }
+    to { 
+      opacity: 1;
+    }
+  }
+
+  .gallery-item {
+    animation: fadeIn 0.8s ease forwards;
+    animation-delay: calc(var(--index) * 0.05s);
+    opacity: 0;
+  }
+
+  /* モーダルアニメーション */
+  @keyframes modalFadeIn {
+    from { 
+      opacity: 0;
+    }
+    to { 
+      opacity: 1;
+    }
+  }
+
+  .modal-content {
+    animation: modalFadeIn 0.3s ease forwards;
+  }
+</style>
+
+<script is:inline>
+  // ページ読み込み後に実行
+  document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const closeButton = document.querySelector('.close-button');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    
+    // 画像データを取得
+    let currentIndex = 0;
+    const images = [];
+    
+    // 各ギャラリーアイテムからデータを抽出
+    galleryItems.forEach((item, index) => {
+      const img = item.querySelector('img');
+      const title = item.querySelector('.gallery-title')?.textContent || '';
+      
+      images.push({
+        src: img.src,
+        alt: img.alt,
+        title: title
+      });
+      
+      // アニメーション用にインデックスをセット
+      item.style.setProperty('--index', index);
+    });
+
+    // ギャラリーアイテムクリック時の処理
+    galleryItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        currentIndex = index;
+        updateModal();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // スクロール防止
+      });
+    });
+
+    // モーダルを閉じる
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // キーボードナビゲーション
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('active')) return;
+      
+      if (e.key === 'Escape') {
+        closeModal();
+      } else if (e.key === 'ArrowLeft') {
+        navigateImage(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateImage(1);
+      }
+    });
+
+    // 前の画像へ
+    prevButton.addEventListener('click', () => navigateImage(-1));
+    
+    // 次の画像へ
+    nextButton.addEventListener('click', () => navigateImage(1));
+
+    // モーダルを閉じる関数
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = ''; // スクロール復活
+      
+      // アニメーション完了後に非表示
+      setTimeout(() => {
+        if (!modal.classList.contains('active')) {
+          modal.style.display = 'none';
+        }
+      }, 300);
+    }
+
+    // 画像ナビゲーション関数
+    function navigateImage(direction) {
+      currentIndex = (currentIndex + direction + images.length) % images.length;
+      updateModal();
+    }
+
+    // モーダル内容更新関数
+    function updateModal() {
+      const image = images[currentIndex];
+      
+      // フェードアウト効果
+      modalImage.style.opacity = 0;
+      
+      setTimeout(() => {
+        modalImage.src = image.src;
+        modalImage.alt = image.alt;
+        modalTitle.textContent = image.title;
+        
+        // 画像読み込み完了後にフェードイン
+        modalImage.onload = () => {
+          modalImage.style.opacity = 1;
+        };
+        
+        // 表示
+        modal.style.display = 'flex';
+      }, 200);
+    }
+  });
+</script>
