@@ -1,8 +1,9 @@
 ---
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 // フォルダ内の画像を動的にインポート
-const imageFiles = import.meta.glob('../assets/img/gallery/*.jpg', { eager: true });
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/gallery/*.jpg', { eager: true });
 
 // 画像データの配列を作成
 const images = Object.entries(imageFiles).map(([path, module]) => {
