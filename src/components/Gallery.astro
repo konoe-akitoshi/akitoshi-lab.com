@@ -24,7 +24,7 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
 ---
 
 <section class="gallery-container">
-  <div class="gallery-masonry">
+  <div class="gallery-grid">
     {shuffledImages.map((image, index) => (
       <div class="gallery-item" data-index={index}>
         <div class="gallery-image-container">
@@ -36,9 +36,6 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
             height={600} 
             loading="lazy"
           />
-          <div class="gallery-overlay">
-            <h3 class="gallery-title">{image.title}</h3>
-          </div>
         </div>
       </div>
     ))}
@@ -47,113 +44,79 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
 
 <!-- モーダル -->
 <div class="gallery-modal" id="galleryModal">
+  <div class="modal-backdrop"></div>
   <div class="modal-content">
     <span class="close-button">&times;</span>
     <div class="modal-image-container">
       <img src="" alt="" id="modalImage" class="modal-image">
     </div>
     <div class="modal-info">
-      <h3 id="modalTitle"></h3>
-    </div>
-    <div class="modal-navigation">
-      <button id="prevButton" class="nav-button">&lt;</button>
-      <button id="nextButton" class="nav-button">&gt;</button>
+      <p id="modalTitle"></p>
     </div>
   </div>
 </div>
 
 <style>
   .gallery-container {
-    width: 100%;
-    max-width: 1600px;
+    width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
   }
 
-  .gallery-masonry {
-    columns: 1;
-    column-gap: 20px;
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 80px 60px;
+    padding: 2rem 0;
   }
 
   @media (min-width: 640px) {
-    .gallery-masonry {
-      columns: 2;
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 100px 80px;
     }
   }
 
   @media (min-width: 768px) {
-    .gallery-masonry {
-      columns: 3;
+    .gallery-container {
+      padding: 0 4rem;
     }
-  }
-
-  @media (min-width: 1024px) {
-    .gallery-masonry {
-      columns: 3;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .gallery-masonry {
-      columns: 4;
+    
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 120px 40px;
+      padding: 3rem 0;
     }
   }
 
   .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 20px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    border-radius: 6px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: opacity 0.3s ease;
   }
 
   .gallery-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0.9;
   }
 
   .gallery-image-container {
     width: 100%;
     position: relative;
     overflow: hidden;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
   }
 
   .gallery-image {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     display: block;
-    transition: transform 0.4s ease;
-  }
-
-  .gallery-item:hover .gallery-image {
-    transform: scale(1.02);
-  }
-
-  .gallery-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-  }
-
-  .gallery-item:hover .gallery-overlay {
-    opacity: 1;
-  }
-
-  .gallery-title {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 300;
-    letter-spacing: 0.5px;
   }
 
   /* モーダルスタイル */
@@ -164,12 +127,20 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(5px);
     z-index: 1000;
     overflow: hidden;
     opacity: 0;
     transition: opacity 0.3s ease;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
   }
 
   .gallery-modal.active {
@@ -181,22 +152,20 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
 
   .modal-content {
     position: relative;
-    width: 90%;
+    width: 85%;
     max-width: 1200px;
-    height: 90vh;
+    height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
+    justify-content: center;
   }
 
   .close-button {
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: 30px;
+    font-size: 28px;
     color: white;
     cursor: pointer;
     z-index: 1010;
@@ -205,69 +174,45 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 50%;
+    background: none;
+    border: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
   }
 
   .close-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
   }
 
   .modal-image-container {
     width: 100%;
-    height: 90vh;
+    height: 85vh;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 40px;
   }
 
   .modal-image {
     max-width: 100%;
-    max-height: 90vh;
+    max-height: 85vh;
     object-fit: contain;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
 
   .modal-info {
     position: absolute;
-    bottom: 0;
+    bottom: 30px;
     left: 0;
     right: 0;
-    padding: 20px;
+    padding: 15px;
     color: white;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
-
-  .modal-navigation {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    transform: translateY(-50%);
-  }
-
-  .nav-button {
-    background-color: rgba(0, 0, 0, 0.3);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .nav-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    text-align: center;
+    opacity: 0.8;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
   }
 
   /* アニメーション */
@@ -308,6 +253,7 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
     const modal = document.getElementById('galleryModal');
     const modalImage = document.getElementById('modalImage');
     const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
     const closeButton = document.querySelector('.close-button');
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
@@ -319,17 +265,22 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
     // 各ギャラリーアイテムからデータを抽出
     galleryItems.forEach((item, index) => {
       const img = item.querySelector('img');
-      const title = item.querySelector('.gallery-title')?.textContent || '';
+      const dataIndex = item.getAttribute('data-index');
+      const originalIndex = parseInt(dataIndex);
+      
+      // シャッフルされた画像配列から元のデータを取得
+      const originalData = window.shuffledImagesData ? window.shuffledImagesData[originalIndex] : null;
+      const title = originalData?.title || img.alt;
       
       images.push({
         src: img.src,
         alt: img.alt,
         title: title
       });
-      
-      // アニメーション用にインデックスをセット
-      item.style.setProperty('--index', index);
     });
+    
+    // グローバル変数に画像データを保存
+    window.galleryImagesData = images;
 
     // ギャラリーアイテムクリック時の処理
     galleryItems.forEach((item, index) => {
@@ -343,9 +294,12 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
 
     // モーダルを閉じる
     closeButton.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
+    
+    // モーダルの背景部分をクリックしたときに閉じる
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener('click', closeModal);
+    }
 
     // キーボードナビゲーション
     document.addEventListener('keydown', (e) => {
@@ -353,18 +307,8 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
       
       if (e.key === 'Escape') {
         closeModal();
-      } else if (e.key === 'ArrowLeft') {
-        navigateImage(-1);
-      } else if (e.key === 'ArrowRight') {
-        navigateImage(1);
       }
     });
-
-    // 前の画像へ
-    prevButton.addEventListener('click', () => navigateImage(-1));
-    
-    // 次の画像へ
-    nextButton.addEventListener('click', () => navigateImage(1));
 
     // モーダルを閉じる関数
     function closeModal() {
@@ -379,11 +323,6 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
       }, 300);
     }
 
-    // 画像ナビゲーション関数
-    function navigateImage(direction) {
-      currentIndex = (currentIndex + direction + images.length) % images.length;
-      updateModal();
-    }
 
     // モーダル内容更新関数
     function updateModal() {
@@ -405,6 +344,18 @@ const shuffledImages = [...images].sort(() => Math.random() - 0.5);
         // 表示
         modal.style.display = 'flex';
       }, 200);
+    }
+  });
+  
+  // ページ読み込み時にフェードイン効果
+  window.addEventListener('load', () => {
+    const gallery = document.querySelector('.gallery-grid');
+    if (gallery) {
+      gallery.style.opacity = 0;
+      setTimeout(() => {
+        gallery.style.transition = 'opacity 800ms';
+        gallery.style.opacity = 1;
+      }, 100);
     }
   });
 </script>
