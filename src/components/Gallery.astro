@@ -22,7 +22,8 @@ const images = Object.entries(imageFiles).map(([path, module]) => {
 // 画像をランダムに並び替え（重複なし）
 // Set を使用して一意の画像を確保
 const uniqueImages = Array.from(new Set(images.map(img => img.src.src)))
-  .map(src => images.find(img => img.src.src === src));
+  .map(src => images.find(img => img.src.src === src))
+  .filter((img): img is typeof images[0] => img !== undefined); // undefinedを除外
 
 const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
 ---
@@ -271,17 +272,19 @@ const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
     const modal = document.getElementById('galleryModal');
     const modalImage = document.getElementById('modalImage');
     const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
+    // 不要な変数を削除
+    // const modalDescription = document.getElementById('modalDescription');
     const closeButton = document.querySelector('.close-button');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
+    // 不要な変数を削除
+    // const prevButton = document.getElementById('prevButton');
+    // const nextButton = document.getElementById('nextButton');
     
     // 画像データを取得
     let currentIndex = 0;
     const images = [];
     
     // 各ギャラリーアイテムからデータを抽出
-    galleryItems.forEach((item, index) => {
+    galleryItems.forEach((item) => {
       const img = item.querySelector('img');
       const dataIndex = item.getAttribute('data-index');
       const originalIndex = parseInt(dataIndex);
