@@ -43,3 +43,13 @@ jobs:
 
       - name: Build
         run: pnpm build
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 7
+          
+      - name: Build completion notification
+        run: echo "Build completed successfully! Artifacts are ready for deployment."
