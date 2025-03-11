@@ -50,6 +50,14 @@ jobs:
           name: build-output
           path: dist/
           retention-days: 7
+      
+      - name: Deploy to production branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: production
+          publish_dir: ./dist
+          force_orphan: true
           
       - name: Build completion notification
         run: echo "Build completed successfully! Artifacts are ready for deployment."
