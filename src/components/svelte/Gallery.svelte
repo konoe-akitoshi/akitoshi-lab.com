@@ -1,7 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
-
-  // 画像データの型定義
   /** @type {Array<{src: string, alt: string, title: string}>} */
   const { images = [] } = $props();
 
@@ -11,28 +8,24 @@
   let modalImage = $state({ src: '', alt: '', title: '' });
   let imageLoaded = $state(false);
 
-  // DOM要素への参照（$stateで宣言）
-  let modal = $state(null);
-  let modalImageElement = $state(null);
-
   // 画像をクリックしたときの処理
   function openModal(index) {
     currentIndex = index;
     modalImage = images[currentIndex];
     isModalOpen = true;
     imageLoaded = false;
-    document.body.style.overflow = 'hidden'; // スクロール防止
+    document.body.style.overflow = 'hidden';
   }
 
   // モーダルを閉じる処理
   function closeModal() {
     isModalOpen = false;
-    document.body.style.overflow = ''; // スクロール復活
+    document.body.style.overflow = '';
   }
 
   // モーダル内のクリックを処理する関数
   function handleModalClick(e) {
-    // クリックされた要素が画像またはキャプションの子孫でない場合にモーダルを閉じる
+    // クリックされた要素が画像コンテナまたは閉じるボタンの子孫でない場合にモーダルを閉じる
     const isImageClick = e.target.closest('.modal-image-container') !== null;
     const isCloseButtonClick = e.target.closest('.close-button') !== null;
     
@@ -40,31 +33,6 @@
       closeModal();
     }
   }
-
-  // 画像読み込み完了時の処理
-  function handleImageLoad() {
-    imageLoaded = true;
-  }
-
-  // キーボードイベントの処理
-  function handleKeydown(e) {
-    if (!isModalOpen) return;
-    
-    if (e.key === 'Escape') {
-      closeModal();
-    }
-  }
-
-  // コンポーネントがマウントされたときの処理
-  onMount(() => {
-    // キーボードイベントのリスナーを追加
-    window.addEventListener('keydown', handleKeydown);
-    
-    // クリーンアップ関数
-    return () => {
-      window.removeEventListener('keydown', handleKeydown);
-    };
-  });
 </script>
 
 <section class="gallery-container">
@@ -91,11 +59,9 @@
   </div>
 </section>
 
-<!-- モーダル -->
 {#if isModalOpen}
   <div 
-    class="gallery-modal active" 
-    bind:this={modal}
+    class="gallery-modal active"
     onclick={handleModalClick}
     onkeydown={(e) => e.key === 'Escape' && closeModal()}
     role="dialog"
@@ -116,8 +82,7 @@
           alt={modalImage.alt} 
           class="modal-image" 
           class:loaded={imageLoaded}
-          bind:this={modalImageElement}
-          onload={handleImageLoad}
+          onload={() => imageLoaded = true}
         />
         <div class="modal-caption">
           <p>{modalImage.title}</p>
@@ -128,7 +93,6 @@
 {/if}
 
 <style>
-  /* 横スクロール防止 */
   :global(body) {
     overflow-x: hidden;
   }
@@ -201,7 +165,6 @@
     max-width: 100%;
   }
 
-  /* モーダルスタイル */
   .gallery-modal {
     display: flex;
     position: fixed;
@@ -235,12 +198,11 @@
   .modal-content {
     position: relative;
     width: 90%;
-    max-width: 1400px;
+    max-width: 95vw;
     height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 95vw;
     animation: modalFadeIn 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   }
 
@@ -300,17 +262,11 @@
     opacity: 0.8;
   }
 
-  /* アニメーション */
   @keyframes fadeIn {
-    from { 
-      opacity: 0;
-    }
-    to { 
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
-  /* モーダルアニメーション */
   @keyframes modalFadeIn {
     from { 
       opacity: 0;
