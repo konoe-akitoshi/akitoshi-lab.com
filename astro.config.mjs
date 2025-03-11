@@ -3,10 +3,12 @@ import { defineConfig } from 'astro/config';
 import UnoCSS from '@unocss/astro';
 import sitemap from "@astrojs/sitemap";
 
+import svelte from '@astrojs/svelte';
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://akitoshi-lab.com",
-  integrations: [UnoCSS(), sitemap()],
+  integrations: [UnoCSS(), sitemap(), svelte()],
   // パフォーマンス最適化設定（基本的なもののみ残す）
   build: {
     // アセットファイルの出力先ディレクトリ

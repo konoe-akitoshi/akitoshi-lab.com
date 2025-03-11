@@ -1,6 +1,33 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import GalleryComponent from "../components/Gallery.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import GalleryComponent from "../components/svelte/Gallery.svelte";
+
+// フォルダ内の画像を動的にインポート
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/gallery/*', { eager: true });
+
+// 画像データの配列を作成
+const images = Object.entries(imageFiles).map(([path, module]) => {
+  // ファイル名を取得（パスから抽出）
+  const filename = path.split('/').pop() || '';
+  // ファイル名から拡張子を除去してタイトルとして使用
+  const title = filename.replace(/\.[^/.]+$/, "");
+  
+  return {
+    src: module.default.src,
+    alt: `Gallery image ${filename}`,
+    title: title
+  };
+});
+
+// 画像をランダムに並び替え（重複なし）
+// Set を使用して一意の画像を確保
+const uniqueImages = Array.from(new Set(images.map(img => img.src)))
+  .map(src => images.find(img => img.src === src))
+  .filter((img): img is typeof images[0] => img !== undefined); // undefinedを除外
+
+const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
 ---
 
 <Layout
@@ -15,7 +42,7 @@ import GalleryComponent from "../components/Gallery.astro";
       <h2 class="gallery-title">GALLERY</h2>
     </div>
     
-    <GalleryComponent />
+    <GalleryComponent client:load images={shuffledImages} />
   </div>
 </Layout>
 
