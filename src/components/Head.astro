@@ -35,7 +35,7 @@ import { ViewTransitions } from 'astro:transitions';
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:site_name" content="Akitoshi Lab." />
-  <meta property="og:image" content={ogImage} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
   <meta name="twitter:site" content="@konoe_akitoshi" />
   <meta name="twitter:card" content="summary_large_image" />
 </head>
