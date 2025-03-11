@@ -128,7 +128,7 @@
     
     .gallery-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: 120px 40px;
+      gap: 40px 40px;
       padding: 3rem 0;
     }
   }
@@ -150,7 +150,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
-    aspect-ratio: 4/3;
+    aspect-ratio: 1/1;
     display: flex;
     align-items: center;
     justify-content: center;
