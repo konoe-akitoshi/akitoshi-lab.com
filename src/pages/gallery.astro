@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import type { ImageMetadata } from "astro";
-import Gallery from "../components/svelte/Gallery.svelte";
+import GalleryComponent from "../components/svelte/Gallery.svelte";
 
 // 画像ファイルを動的にインポート
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/gallery/*', { eager: true });
@@ -38,7 +38,7 @@ const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
       <h2 class="gallery-title">GALLERY</h2>
     </div>
     
-    <Gallery client:load images={shuffledImages} />
+    <GalleryComponent client:load images={shuffledImages} />
   </div>
 </Layout>
 
