@@ -30,9 +30,13 @@
     document.body.style.overflow = ''; // スクロール復活
   }
 
-  // 背景クリックでモーダルを閉じる
-  function handleBackdropClick(e) {
-    if (e.target.classList.contains('modal-backdrop')) {
+  // モーダル内のクリックを処理する関数
+  function handleModalClick(e) {
+    // クリックされた要素が画像またはキャプションの子孫でない場合にモーダルを閉じる
+    const isImageClick = e.target.closest('.modal-image-container') !== null;
+    const isCloseButtonClick = e.target.closest('.close-button') !== null;
+    
+    if (!isImageClick && !isCloseButtonClick) {
       closeModal();
     }
   }
@@ -89,15 +93,17 @@
 
 <!-- モーダル -->
 {#if isModalOpen}
-  <div class="gallery-modal active" bind:this={modal}>
-    <div 
-      class="modal-backdrop" 
-      role="button"
-      tabindex="0"
-      onclick={handleBackdropClick}
-      onkeydown={(e) => e.key === 'Enter' && closeModal()}
-      aria-label="Close modal"
-    ></div>
+  <div 
+    class="gallery-modal active" 
+    bind:this={modal}
+    onclick={handleModalClick}
+    onkeydown={(e) => e.key === 'Escape' && closeModal()}
+    role="dialog"
+    tabindex="-1"
+    aria-modal="true"
+    aria-label="Image gallery modal"
+  >
+    <div class="modal-backdrop"></div>
     <div class="modal-content">
       <button class="close-button" onclick={closeModal} aria-label="Close modal">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
