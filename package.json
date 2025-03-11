@@ -13,13 +13,12 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^4.2.1",
     "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/svelte": "^7.0.5",
-    "astro": "^5.4.2",
+    "@astrojs/svelte": "^7.0.6",
+    "astro": "^5.4.3",
     "sharp": "^0.33.5",
     "svelte": "^5.22.6",
     "swiper": "^11.2.5",
-    "typescript": "^5.8.2",
-    "vite": "^5.4.14"
+    "typescript": "^5.8.2"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.315",
@@ -27,7 +26,8 @@
     "@unocss/preset-icons": "^0.60.4",
     "@unocss/preset-wind": "^0.60.4",
     "@unocss/reset": "^0.60.4",
-    "unocss": "^0.60.4"
+    "unocss": "^0.60.4",
+    "vite": "^6.2.1"
   },
   "packageManager": "pnpm@9.1.2+sha512.127dc83b9ea10c32be65d22a8efb4a65fb952e8fefbdfded39bdc3c97efc32d31b48b00420df2c1187ace28c921c902f0cb5a134a4d032b8b5295cbfa2c681e2"
 }
