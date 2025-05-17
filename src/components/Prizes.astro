@@ -1,11 +1,19 @@
 ---
 // import { Image } from 'astro:assets';
 
-const skillSet = [
+type Prize = {
+  name: string;
+  by: string;
+  since: string;
+  url?: string;
+};
+
+const skillSet: Prize[] = [
   {
     name: "4nd",
     by: "ICTSC 2024",
     since: "2025",
+    url: "/awards/ictsc-2024",
   },
   {
     name: "ロボット学会賞, デザイン賞",
@@ -71,12 +79,42 @@ const skillSet = [
 <!-- <section class="mb-10 p-4"> -->
   <h2 class="text-3xl mb-4"><i class="i-material-symbols-light-trophy-outline-rounded"></i> Awards</h2>
   <hr class="border-gray-400 mb-4" />
-  <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-    {skillSet.map((item) => (
-      <div class="border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <h3 class="text-xl font-semibold mb-2">{item.name}</h3>
-        <p class="text-gray-600 mb-2">{item.by}</p>
-        <p class="text-gray-800">{item.since}</p>
+  <div>
+    {Array.from(
+      skillSet.reduce((acc, item) => {
+        if (!acc.has(item.since)) acc.set(item.since, []);
+        acc.get(item.since).push(item);
+        return acc;
+      }, new Map())
+    ).sort((a, b) => b[0].localeCompare(a[0])).map(([year, items]) => (
+      <div class="mb-6">
+        <h4 class="text-lg font-bold text-[#232425] mb-2 flex items-center">
+          <span class="i-material-symbols-calendar-month-outline mr-2 text-xl text-[#A0A0A0]"></span>
+          {year}
+        </h4>
+        <ul class="pl-0 list-none">
+          {items.map((item: Prize) =>
+            <li class="mb-3 last:mb-0">
+              {item.url ? (
+                <a href={item.url} class="flex items-start transition-all duration-150 hover:bg-[#F5F6F7] focus:bg-[#F5F6F7] outline-none px-2 py-1 no-underline cursor-pointer group" target="_self" tabindex="0">
+                  <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-xl mr-3 mt-0.5 flex-shrink-0 opacity-80"></span>
+                  <div>
+                    <div class="font-semibold text-[#232425]">{item.by}</div>
+                    <div class="text-[#6B7280] text-sm">{item.name}</div>
+                  </div>
+                </a>
+              ) : (
+                <div class="flex items-start px-2 py-1">
+                  <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-xl mr-3 mt-0.5 flex-shrink-0 opacity-80"></span>
+                  <div>
+                    <div class="font-semibold text-[#232425]">{item.by}</div>
+                    <div class="text-[#6B7280] text-sm">{item.name}</div>
+                  </div>
+                </div>
+              )}
+            </li>
+          )}
+        </ul>
       </div>
     ))}
   </div>
