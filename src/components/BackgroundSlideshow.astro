@@ -19,10 +19,49 @@ const slideSrcs = [
     alt="background slide"
     style="width:100%;height:100vh;object-fit:cover;position:fixed;top:0;left:0;z-index:-1;transition:opacity 1s;"
   />
+  <!-- インジケーター -->
+  <div id="bg-slideshow-indicator">
+    {slideSrcs.map((_, i) => (
+      <div class="indicator-bar" id={`indicator-bar-${i}`}></div>
+    ))}
+  </div>
 </div>
 
 <style>
-  #bg-slideshow {
+  #bg-slideshow-indicator {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .indicator-bar {
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .indicator-bar.active {
+    background: #fff;
+  }
+  .indicator-bar .progress {
+    display: block;
+    height: 100%;
+    background: #ffb300;
+    border-radius: 2px;
+    width: 0%;
+    animation: progressBarAnim 6s linear forwards;
+  }
+  @keyframes progressBarAnim {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
     width: 100%;
     height: 100vh;
     position: fixed;
@@ -48,12 +87,32 @@ const slideSrcs = [
   const slides = ["/src/assets/img1.webp","/src/assets/img2.webp","/src/assets/img3.webp","/src/assets/img4.webp"];
   let current = 0;
   const img = document.getElementById('bg-slide-img');
+  const duration = 8000;
+
+  function updateIndicator(current, duration) {
+    for (let i = 0; i < slides.length; i++) {
+      const bar = document.getElementById(`indicator-bar-${i}`);
+      bar.classList.toggle('active', i === current);
+      bar.innerHTML = '';
+      if (i === current) {
+        const progress = document.createElement('span');
+        progress.className = 'progress';
+        progress.style.animationDuration = duration + 'ms';
+        bar.appendChild(progress);
+      }
+    }
+  }
+
+  // 初期表示時にインジケーターをセット
+  updateIndicator(current, duration);
+
   setInterval(() => {
     current = (current + 1) % slides.length;
     img.style.opacity = 0;
     setTimeout(() => {
       img.src = slides[current];
       img.style.opacity = 1;
+      updateIndicator(current, duration);
     }, 500);
-  }, 8000);
+  }, duration);
 </script>
