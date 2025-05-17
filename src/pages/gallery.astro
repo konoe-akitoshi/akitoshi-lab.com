@@ -13,7 +13,7 @@ const images = await Promise.all(
     const filename = path.split('/').pop() || '';
     const title = filename.replace(/\.[^/.]+$/, "");
     // サムネイル用に最適化
-    const thumb = await getImage({ src: module.default, width: 320, quality: 40 });
+    const thumb = await getImage({ src: module.default, width: 640, quality: 60 });
     return {
       thumb: thumb.src,
       full: module.default.src,
@@ -49,9 +49,16 @@ const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
 </Layout>
 
 <style>
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
   .gallery-page {
     width: 100%;
     min-height: 100vh;
     background: #FAFAFA;
+    overflow-x: hidden;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 </style>
