@@ -38,11 +38,12 @@ const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
   bodyClass="m-0 p-0 font-sans overflow-x-hidden bg-background text-text"
   useMainWrapper={false}
 >
-  <div class="gallery-page p-y-12 p-x-0">
-    <div class="gallery-header pt-8 pb-12 text-center">
-      <h2 class="text-base font-normal uppercase tracking-wider mb-6 gallery-title">GALLERY</h2>
+  <div class="gallery-page max-w-5xl mx-auto py-10 px-2 sm:px-4">
+    <div class="gallery-header pt-2 pb-4 text-center">
+      <h2 class="text-2xl font-bold uppercase tracking-wider mb-2 text-[#232425]">GALLERY</h2>
+      <div class="w-24 h-[2px] bg-gray-200 rounded mx-auto mb-2"></div>
+      <p class="text-[#A0A0A0] text-xs mb-0">作品・風景・記録などのフォトギャラリー</p>
     </div>
-    
     <GalleryComponent client:load images={shuffledImages} />
   </div>
 </Layout>
@@ -51,5 +52,6 @@ const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
   .gallery-page {
     width: 100%;
     min-height: 100vh;
+    background: #FAFAFA;
   }
 </style>
