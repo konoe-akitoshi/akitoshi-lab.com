@@ -1,6 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 const galleryImages = await Astro.glob('../assets/img/gallery/*.{webp,jpg,jpeg,png}');
-let slideSrcs = Object.values(galleryImages).map(img => img.src);
+let slideImages = Object.values(galleryImages).map(img => img.default);
 
 // シャッフル関数
 function shuffle<T>(array: T[]): T[] {
@@ -10,25 +11,36 @@ function shuffle<T>(array: T[]): T[] {
   }
   return array;
 }
-slideSrcs = shuffle(slideSrcs);
+// ランダムで最大10枚だけ使う
+slideImages = shuffle(slideImages).slice(0, 10);
 ---
 
 <div id="bg-slideshow">
-  <img
+  <Image
     id="bg-slide-img-1"
-    src={slideSrcs[0]}
-    alt="background slide"
-    style="width:100%;height:100vh;object-fit:cover;position:fixed;top:0;left:0;z-index:-1;transition:opacity 2s cubic-bezier(.4,0,.2,1);opacity:1;"
+    src={slideImages[0]}
+    alt=""
+    width={slideImages[0]?.width}
+    height={slideImages[0]?.height}
+    style="position:fixed;top:0;left:0;z-index:-1;transition:opacity 2s cubic-bezier(.4,0,.2,1);opacity:1;object-fit:cover;width:100vw;height:100vh;"
+    class="bg-slide-img"
+    loading="lazy"
+    decoding="async"
   />
-  <img
+  <Image
     id="bg-slide-img-2"
-    src={slideSrcs[0]}
-    alt="background slide"
-    style="width:100%;height:100vh;object-fit:cover;position:fixed;top:0;left:0;z-index:-2;transition:opacity 2s cubic-bezier(.4,0,.2,1);opacity:0;"
+    src={slideImages[0]}
+    alt=""
+    width={slideImages[0]?.width}
+    height={slideImages[0]?.height}
+    style="position:fixed;top:0;left:0;z-index:-2;transition:opacity 2s cubic-bezier(.4,0,.2,1);opacity:0;object-fit:cover;width:100vw;height:100vh;"
+    class="bg-slide-img"
+    loading="lazy"
+    decoding="async"
   />
   <!-- インジケーター -->
   <div id="bg-slideshow-indicator">
-    {slideSrcs.map((_, i) => (
+    {slideImages.map((_, i) => (
       <div class="indicator-bar" id={`indicator-bar-${i}`}></div>
     ))}
   </div>
