@@ -4,90 +4,56 @@ import slide02 from '../assets/img2.webp';
 import slide03 from '../assets/img3.webp';
 import slide04 from '../assets/img4.webp';
 
-const slides = [
-  slide01,
-  slide02,
-  slide03,
-  slide04,
+const slideSrcs = [
+  slide01.src,
+  slide02.src,
+  slide03.src,
+  slide04.src,
 ];
 ---
 
-<!-- Slider main container -->
-<div class="swiper-container">
-    <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
-      <!-- Slides -->
-      {slides.map((slide, index) => (
-        <div class="swiper-slide" style={`background-image: url(${slide.src})`}></div>
-      ))}
-    </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
-  
-    <!-- If we need navigation buttons -->
-    <!-- <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div> -->
-  
-    <!-- If we need scrollbar -->
-    <div class="swiper-scrollbar"></div>
+<div id="bg-slideshow">
+  <img
+    id="bg-slide-img"
+    src={slideSrcs[0]}
+    alt="background slide"
+    style="width:100%;height:100vh;object-fit:cover;position:fixed;top:0;left:0;z-index:-1;transition:opacity 1s;"
+  />
 </div>
 
 <style>
-  .swiper-container {
+  #bg-slideshow {
     width: 100%;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
     z-index: -1;
+    pointer-events: none;
   }
-
-  .swiper-wrapper {
-    display: flex;
-  }
-
-  .swiper-slide {
+  #bg-slide-img {
     width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: opacity 1s;
+    opacity: 1;
   }
-
-  /* .swiper-button-next, .swiper-button-prev {
-    color: rgb(215, 119, 22);
-  } */
 </style>
 
-<script>
-  import Swiper from 'swiper/bundle';
-  import 'swiper/swiper-bundle.css';
-
-  window.onload = () => {
-    const swiperConfig = {
-      loop: true,
-      effect: 'fade',
-      fadeEffect: {
-        crossFade: true,
-      },
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      speed: 2000,
-      allowTouchMove: false,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      scrollbar: {
-        el: '.swiper-scrollbar',
-      },
-    };
-
-    new Swiper('.swiper-container', swiperConfig);
-  };
+<script is:inline>
+  const slides = ["/src/assets/img1.webp","/src/assets/img2.webp","/src/assets/img3.webp","/src/assets/img4.webp"];
+  let current = 0;
+  const img = document.getElementById('bg-slide-img');
+  setInterval(() => {
+    current = (current + 1) % slides.length;
+    img.style.opacity = 0;
+    setTimeout(() => {
+      img.src = slides[current];
+      img.style.opacity = 1;
+    }, 500);
+  }, 8000);
 </script>
