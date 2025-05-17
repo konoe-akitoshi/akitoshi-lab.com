@@ -8,6 +8,7 @@ interface Props {
 	useFooter?: boolean;
 	useMainWrapper?: boolean;
 	bodyClass?: string;
+	keyword?: string;
 }
 
 const { 
@@ -18,7 +19,8 @@ const {
 	useHeader = true,
 	useFooter = true,
 	useMainWrapper = true,
-	bodyClass = "m-0 p-0 font-snself overflow-x-hidden bg-gray-50 text-gray-900"
+	bodyClass = "m-0 p-0 font-snself overflow-x-hidden bg-gray-50 text-gray-900",
+	keyword
 } = Astro.props;
 
 import Head from "../components/Head.astro";
@@ -32,6 +34,7 @@ import Footer from "../components/Footer.astro";
     description={description}
     ogImage={ogImage}
     canonicalUrl={canonicalUrl}
+    keyword={keyword}
   >
     <slot name="preload" slot="preload" />
   </Head>

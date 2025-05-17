@@ -1,5 +1,5 @@
 ---
-const { title, description, ogImage, canonicalUrl } = Astro.props;
+const { title, description, ogImage, canonicalUrl, keyword } = Astro.props;
 import { ViewTransitions } from 'astro:transitions';
 ---
 
@@ -29,7 +29,7 @@ import { ViewTransitions } from 'astro:transitions';
   <slot name="preload" />
   
   <meta name="description" content={description} />
-  <meta name="keyword" content="ロボット, ブログ" />
+  <meta name="keyword" content={keyword} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:type" content="article" />
   <meta property="og:title" content={title} />
