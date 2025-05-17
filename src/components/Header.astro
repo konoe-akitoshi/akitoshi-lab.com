@@ -1,36 +1,96 @@
 ---
 // Header.astro
 ---
-<header class="fixed top-0 w-full bg-black z-10 shadow-md transform transition-transform ease-in-out duration-300">
-    <div class="mx-auto max-w-screen-xl flex flex-col lg:flex-row justify-between items-center p-4 lg:px-8 gap-1 lg:gap-0">
-        <a href="/" class="text-2xl lg:text-3xl text-white no-underline pb-1 leading-tight tracking-wider shadow-lg">
-            Akitoshi Lab.
-        </a>
-        <nav class="w-full lg:w-auto">
-            <ul class="flex justify-center lg:justify-end gap-4 lg:gap-6 m-0 p-0 list-none items-center w-full lg:w-auto">
-                <li>
-                    <a href="/about/" class="text-base lg:text-xl text-white no-underline p-2 rounded transition duration-300 hover:bg-white hover:bg-opacity-20">
-                        ABOUT
-                    </a>
-                </li>
-                <li>
-                    <a href="https://blog.akitoshi-lab.com/" class="text-base lg:text-xl text-white no-underline p-2 rounded transition duration-300 hover:bg-white hover:bg-opacity-20">
-                        Blog
-                    </a>
-                </li>
-                <li>
-                    <a href="/works/" class="text-base lg:text-xl text-white no-underline p-2 rounded transition duration-300 hover:bg-white hover:bg-opacity-20">
-                        Works
-                    </a>
-                </li>
-                <li>
-                    <a href="/gallery/" class="text-base lg:text-xl text-white no-underline p-2 rounded transition duration-300 hover:bg-white hover:bg-opacity-20">
-                        Gallery
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+<header class="fixed top-0 w-full z-10 shadow-sm transition-transform ease-in-out duration-300" style="background: #181A1B;">
+  <div class="mx-auto max-w-screen-xl flex flex-col lg:flex-row justify-between items-center px-4 py-2 lg:px-8 lg:py-3 gap-2">
+    <a href="/" class="text-xl lg:text-2xl" style="color: #E0E0E0; text-decoration: none; padding-bottom: 0.15em; line-height: 1.1; letter-spacing: 0.03em; font-weight: 600; outline: none;">
+      Akitoshi Lab.
+    </a>
+    <nav class="w-full lg:w-auto mt-1 lg:mt-0" aria-label="メインナビゲーション">
+      <ul class="flex flex-wrap justify-center lg:justify-end gap-3 lg:gap-5 m-0 p-0 list-none items-center w-full lg:w-auto">
+        <li>
+          <a href="/about/" class="header-link">ABOUT</a>
+        </li>
+        <li>
+          <a href="https://blog.akitoshi-lab.com/" class="header-link">Blog</a>
+        </li>
+        <li>
+          <a href="/works/" class="header-link">Works</a>
+        </li>
+        <li>
+          <a href="/gallery/" class="header-link">Gallery</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<div class="empty h-10 mb-10"></div>
+<style>
+.header-link {
+  color: #E0E0E0;
+  background: none;
+  text-decoration: none;
+  padding: 0.45em 1.1em;
+  border-radius: 5px;
+  font-size: 0.98em;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+  outline: none;
+  display: inline-block;
+  line-height: 1.5;
+}
+.header-link:hover,
+.header-link:focus {
+  color: #fff;
+  background: #232425;
+}
+
+/* スマホ表示用レスポンシブ調整 */
+@media (max-width: 640px) {
+  header.fixed,
+  header .mx-auto,
+  nav[aria-label="メインナビゲーション"] ul,
+  .header-link {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  header.fixed {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  header .mx-auto {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 7px !important;
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+    padding-top: 0.7rem !important;
+    padding-bottom: 0.7rem !important;
+  }
+  header .mx-auto > a {
+    text-align: center;
+    font-size: 1.05rem !important;
+    padding-bottom: 0.18em !important;
+  }
+  nav[aria-label="メインナビゲーション"] ul {
+    flex-wrap: wrap;
+    justify-content: center !important;
+    gap: 0.4rem 0.5rem !important;
+    margin-top: 0.15rem;
+  }
+  .header-link {
+    font-size: 0.93em !important;
+    padding: 0.4em 0.5em !important;
+    min-width: 70px;
+    text-align: center;
+  }
+  .h-14, .h-16 {
+    height: 3.2rem !important;
+  }
+}
+</style>
+
+<div class="h-14 lg:h-16"></div>
+
+
