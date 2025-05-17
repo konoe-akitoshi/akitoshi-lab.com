@@ -4,23 +4,28 @@ import type { ImageMetadata } from "astro";
 import GalleryComponent from "../components/svelte/Gallery.svelte";
 
 // 画像ファイルを動的にインポート
+import { getImage } from "astro:assets";
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/gallery/*', { eager: true });
 
 // 画像データを作成し、重複を排除
-const images = Object.entries(imageFiles).map(([path, module]) => {
-  const filename = path.split('/').pop() || '';
-  const title = filename.replace(/\.[^/.]+$/, "");
-  
-  return {
-    src: module.default.src,
-    alt: `Gallery image ${filename}`,
-    title
-  };
-});
+const images = await Promise.all(
+  Object.entries(imageFiles).map(async ([path, module]) => {
+    const filename = path.split('/').pop() || '';
+    const title = filename.replace(/\.[^/.]+$/, "");
+    // サムネイル用に最適化
+    const thumb = await getImage({ src: module.default, width: 320, quality: 40 });
+    return {
+      thumb: thumb.src,
+      full: module.default.src,
+      alt: `Gallery image ${filename}`,
+      title
+    };
+  })
+);
 
 // 一意の画像を確保してランダムに並び替え
-const uniqueImages = Array.from(new Set(images.map(img => img.src)))
-  .map(src => images.find(img => img.src === src))
+const uniqueImages = Array.from(new Set(images.map(img => img.full)))
+  .map(full => images.find(img => img.full === full))
   .filter((img): img is typeof images[0] => img !== undefined);
 
 const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);

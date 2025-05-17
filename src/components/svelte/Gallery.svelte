@@ -1,5 +1,5 @@
 <script>
-  /** @type {Array<{src: string, alt: string, title: string}>} */
+  /** @type {Array<{thumb: string, full: string, alt: string, title: string}>} */
   const { images = [] } = $props();
 
   // リアクティブな状態
@@ -47,10 +47,10 @@
         aria-label={`View ${image.title}`}
       >
         <div class="gallery-image-container">
-          <img 
-            src={image.src} 
-            alt={image.alt} 
-            class="gallery-image" 
+          <img
+            src={image.thumb}
+            alt={image.alt}
+            class="gallery-image"
             loading="lazy"
           />
         </div>
@@ -78,7 +78,7 @@
       </button>
       <div class="modal-image-container">
         <img 
-          src={modalImage.src} 
+          src={modalImage.full}
           alt={modalImage.alt} 
           class="modal-image" 
           class:loaded={imageLoaded}
