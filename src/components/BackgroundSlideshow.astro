@@ -1,15 +1,16 @@
 ---
-import slide01 from '../assets/img1.webp';
-import slide02 from '../assets/img2.webp';
-import slide03 from '../assets/img3.webp';
-import slide04 from '../assets/img4.webp';
+const galleryImages = await Astro.glob('../assets/img/gallery/*.{webp,jpg,jpeg,png}');
+let slideSrcs = Object.values(galleryImages).map(img => img.src);
 
-const slideSrcs = [
-  slide01.src,
-  slide02.src,
-  slide03.src,
-  slide04.src,
-];
+// シャッフル関数
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+slideSrcs = shuffle(slideSrcs);
 ---
 
 <div id="bg-slideshow">
@@ -96,7 +97,7 @@ const slideSrcs = [
 </style>
 
 <script is:inline>
-  const slides = ["/src/assets/img1.webp","/src/assets/img2.webp","/src/assets/img3.webp","/src/assets/img4.webp"];
+  const slides = ["/src/assets/img/gallery/img1.webp","/src/assets/img/gallery/img2.webp","/src/assets/img/gallery/img3.webp","/src/assets/img/gallery/img4.webp","/src/assets/img/gallery/港.jpg","/src/assets/img/gallery/樹氷.jpeg","/src/assets/img/gallery/木の中の氷.jpeg"];
   let current = 0;
   let showing = 1; // 1 or 2
   const img1 = document.getElementById('bg-slide-img-1');
