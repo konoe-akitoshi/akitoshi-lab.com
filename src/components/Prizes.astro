@@ -25,7 +25,12 @@ const skillSet: Prize[] = [
     by: "Robocup Aisa-Apsific (Junior Soccer Open)",
     since: "2021",
   },
-  { name: "採択「感情を汲み取る自立走行型配膳ロボットの開発」", by: "サイエンスキャッスル研究費 THK賞", since: "2021", url:"awards/science-castle-thk-2021" },
+  {
+    name: "採択「感情を汲み取る自立走行型配膳ロボットの開発」",
+    by: "サイエンスキャッスル研究費 THK賞",
+    since: "2021",
+    url: "awards/science-castle-thk-2021",
+  },
   {
     name: "RookieGameChangerAward",
     by: "FIRST Robotics Competition Infinite ReCharge",
@@ -52,7 +57,7 @@ const skillSet: Prize[] = [
     name: "入選3等「自律走行システムの考案」",
     by: "第64回日本学生科学賞",
     since: "2020",
-    url:"/awards/japan-student-science-prize-64th",
+    url: "/awards/japan-student-science-prize-64th",
   },
   {
     name: "Open 優勝",
@@ -83,45 +88,64 @@ const skillSet: Prize[] = [
 ---
 
 <!-- <section class="mb-10 p-4"> -->
-  <h2 class="text-3xl mb-4"><i class="i-material-symbols-light-trophy-outline-rounded"></i> Awards</h2>
-  <hr class="border-gray-400 mb-4" />
-  <div>
-    {Array.from(
+<h2 class="text-3xl mb-4">
+  <i class="i-material-symbols-light-trophy-outline-rounded"></i> Awards
+</h2>
+<hr class="border-gray-400 mb-4" />
+<div>
+  {
+    Array.from(
       skillSet.reduce((acc, item) => {
         if (!acc.has(item.since)) acc.set(item.since, []);
         acc.get(item.since).push(item);
         return acc;
       }, new Map())
-    ).sort((a, b) => b[0].localeCompare(a[0])).map(([year, items]) => (
-      <div class="mb-6">
-        <h4 class="text-lg font-bold text-[#232425] mb-2 flex items-center">
-          <span class="i-material-symbols-calendar-month-outline mr-2 text-xl text-[#A0A0A0]"></span>
-          {year}
-        </h4>
-        <ul class="pl-0 list-none">
-          {items.map((item: Prize) =>
-            <li class="mb-2 last:mb-0">
-              {item.url ? (
-                <a href={item.url} class="flex items-center gap-3 rounded-lg transition-all duration-150 hover:bg-[#F3F4F6] focus:bg-[#E5E7EB] outline-none px-3 py-2 no-underline cursor-pointer group min-h-[48px]" target="_self" tabindex="0">
-                  <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-lg flex-shrink-0 opacity-80"></span>
-                  <div class="flex flex-col justify-center">
-                    <span class="font-semibold text-[#232425] text-base leading-tight">{item.by}</span>
-                    <span class="text-[#6B7280] text-sm leading-tight">{item.name}</span>
+    )
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([year, items]) => (
+        <div class="mb-6">
+          <h4 class="text-lg font-bold text-[#232425] mb-2 flex items-center">
+            <span class="i-material-symbols-calendar-month-outline mr-2 text-xl text-[#A0A0A0]" />
+            {year}
+          </h4>
+          <ul class="pl-0 list-none">
+            {items.map((item: Prize) => (
+              <li class="mb-2 last:mb-0">
+                {item.url ? (
+                  <a
+                    href={item.url}
+                    class="flex items-center gap-3 rounded-lg transition-all duration-150 hover:bg-[#F3F4F6] focus:bg-[#E5E7EB] outline-none px-3 py-2 no-underline cursor-pointer group min-h-[48px]"
+                    target="_self"
+                    tabindex="0"
+                  >
+                    <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-lg flex-shrink-0 opacity-80" />
+                    <div class="flex flex-col justify-center">
+                      <span class="font-semibold text-[#232425] text-base leading-tight">
+                        {item.by}
+                      </span>
+                      <span class="text-[#6B7280] text-sm leading-tight">
+                        {item.name}
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div class="flex items-center gap-3 px-3 py-2 min-h-[48px]">
+                    <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-lg flex-shrink-0 opacity-80" />
+                    <div class="flex flex-col justify-center">
+                      <span class="font-semibold text-[#232425] text-base leading-tight">
+                        {item.by}
+                      </span>
+                      <span class="text-[#6B7280] text-sm leading-tight">
+                        {item.name}
+                      </span>
+                    </div>
                   </div>
-                </a>
-              ) : (
-                <div class="flex items-center gap-3 px-3 py-2 min-h-[48px]">
-                  <span class="i-material-symbols-trophy-rounded text-[#BFAF60] text-lg flex-shrink-0 opacity-80"></span>
-                  <div class="flex flex-col justify-center">
-                    <span class="font-semibold text-[#232425] text-base leading-tight">{item.by}</span>
-                    <span class="text-[#6B7280] text-sm leading-tight">{item.name}</span>
-                  </div>
-                </div>
-              )}
-            </li>
-          )}
-        </ul>
-      </div>
-    ))}
-  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+  }
+</div>
 <!-- </section> -->
