@@ -13,12 +13,15 @@ date: "2012-00-00"
 
 2012年に開催された第53回大会で、私は小学校の部において「オクラに見つけた水玉の正体」という研究で2等賞を受賞しました。
 
+---
+
 **研究タイトル:** オクラに見つけた水玉の正体
 
 **受賞者:** 佐伯 明俊
+
 **所属:** 京都市立錦林小学校 3年
 
-## 研究の概要
+### 研究の概要
 
 夏休みに自宅で育てていたオクラの葉っぱに透明な水玉が付いていることに気づき、この水玉の正体を調べる研究を始めました。
 
@@ -30,10 +33,18 @@ date: "2012-00-00"
 
 さらに、オクラの葉、茎、花、つぼみ、実のどこがネバネバするかを調べ、ムチンの分布についても考察を深めました。
 
-[← Aboutページに戻る](/about/)
+---
+
+後年、2020年のYahoo!知恵袋の投稿で、私の研究「オクラに見つけた水玉の正体」が引用されました。
+
+**引用元:**
+
+第53回入賞作品 小学校の部 2等賞 オクラに見つけた水玉の正体
+[https://www.shizecon.net/award/detail.html?id=257](https://www.shizecon.net/award/detail.html?id=257) 
+
+Yahoo!知恵袋での言及
+[https://web.archive.org/web/20210124113538/https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11230383616](https://web.archive.org/web/20210124113538/https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11230383616)
 
 ---
 
-**引用元:**
-第53回入賞作品 小学校の部 2等賞 オクラに見つけた水玉の正体
-[https://www.shizecon.net/award/detail.html?id=257](https://www.shizecon.net/award/detail.html?id=257) 
+[← Aboutページに戻る](/about/)
