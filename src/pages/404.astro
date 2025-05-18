@@ -1,13 +1,427 @@
 ---
 import Layout from "../layouts/Layout.astro";
-title: "404 Not Found"
-description: "ページが見つかりません"
 ---
 
 <Layout title="404 Not Found" description="ページが見つかりません">
   <main class="min-h-screen flex flex-col items-center justify-center py-0 px-4 text-center">
-    <h1 class="text-6xl font-bold text-[#232425] mb-4">404</h1>
+    <h1 class="text-6xl font-bold text-[#232425] mb-4 flex items-center justify-center">
+      <span id="score-left" class="robot-score">4</span>
+      <span id="goal" class="goal-area relative mx-2">0</span>
+      <span id="score-right" class="robot-score">4</span>
+    </h1>
     <p class="text-xl text-[#6B7280] mb-6">Page not found.<br />お探しのページは見つかりませんでした。</p>
+    <div id="soccer-field" class="relative w-full max-w-md h-64 bg-green-500 rounded-xl mb-6 overflow-hidden">
+      <div id="center-line" class="absolute top-0 left-1/2 w-1 h-full bg-white transform -translate-x-1/2"></div>
+      <div id="center-circle" class="absolute top-1/2 left-1/2 w-20 h-20 border-2 border-white rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+      
+      <!-- ホールドエリア左 -->
+      <div id="hold-area-left" class="absolute left-0 top-1/2 w-20 h-40 bg-green-400 rounded-r-full transform -translate-y-1/2"></div>
+      
+      <!-- ホールドエリア右 -->
+      <div id="hold-area-right" class="absolute right-0 top-1/2 w-20 h-40 bg-green-400 rounded-l-full transform -translate-y-1/2"></div>
+      
+      <!-- ロボット左 -->
+      <div id="robot-left" class="robot absolute left-10 top-1/2 w-14 h-10 transform -translate-y-1/2">
+        <div class="robot-body bg-blue-600 w-full h-full rounded-l-full flex items-center ml-2">
+          <div class="robot-eye w-3 h-3 bg-white rounded-full mr-1 ml-2"></div>
+          <div class="robot-eye w-3 h-3 bg-white rounded-full ml-1"></div>
+        </div>
+      </div>
+      
+      <!-- ロボット右 -->
+      <div id="robot-right" class="robot absolute right-10 top-1/2 w-14 h-10 transform -translate-y-1/2 rotate-180">
+        <div class="robot-body bg-red-600 w-full h-full rounded-l-full flex items-center ml-2">
+          <div class="robot-eye w-3 h-3 bg-white rounded-full mr-1 ml-2"></div>
+          <div class="robot-eye w-3 h-3 bg-white rounded-full ml-1"></div>
+        </div>
+      </div>
+      
+      <!-- ボール -->
+      <div id="ball" class="absolute w-6 h-6 bg-white rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div class="ball-pattern absolute inset-1 bg-gray-900 clip-pentagon"></div>
+      </div>
+      
+      <!-- ゴールエリア左 -->
+      <div id="goal-left" class="absolute left-0 top-1/2 w-5 h-24 bg-white transform -translate-y-1/2"></div>
+      
+      <!-- ゴールエリア右 -->
+      <div id="goal-right" class="absolute right-0 top-1/2 w-5 h-24 bg-white transform -translate-y-1/2"></div>
+    </div>
+    
     <a href="/" class="inline-block bg-[#232425] text-white rounded px-6 py-2 font-semibold hover:bg-[#313233] transition-colors duration-150 no-underline hover:no-underline focus:no-underline">Back to Home / トップページへ</a>
   </main>
 </Layout>
+
+<style>
+  .goal-area {
+    font-size: 6rem;
+    display: inline-block;
+    position: relative;
+    transform: scaleY(1.2);
+  }
+  
+  .robot-score {
+    font-size: 6rem;
+  }
+  
+  .goal-flash {
+    animation: flash 0.5s ease-in-out 3;
+  }
+  
+  @keyframes flash {
+    0%, 100% { color: #232425; }
+    50% { color: #FFD700; }
+  }
+  
+  /* ボールのサッカーパターン（五角形） */
+  .clip-pentagon {
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  }
+  
+  .score-up {
+    animation: bounce 0.5s ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+</style>
+
+<script>
+  // 各要素の取得
+  const soccerField = document.getElementById('soccer-field');
+  const ball = document.getElementById('ball');
+  const robotLeft = document.getElementById('robot-left');
+  const robotRight = document.getElementById('robot-right');
+  const scoreLeft = document.getElementById('score-left');
+  const scoreRight = document.getElementById('score-right');
+  const goal = document.getElementById('goal');
+  
+  // フィールドサイズのデフォルト値（DOM要素がない場合に備えて）
+  const fieldWidth = soccerField?.offsetWidth || 400;
+  const fieldHeight = soccerField?.offsetHeight || 240;
+  
+  // スコア初期値
+  let leftScore = 4;
+  let rightScore = 4;
+  
+  // ボールの初期位置とスピード
+  let ballX = fieldWidth / 2;
+  let ballY = fieldHeight / 2;
+  let ballSpeedX = 0;
+  let ballSpeedY = 0;
+  
+  // ゲーム状態
+  let gameStarted = false;
+  let gameRunning = false;
+  
+  // ボールの位置を更新する関数
+  function updateBallPosition(): void {
+    if (!gameRunning) return;
+    
+    // ボールの移動
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+    
+    // 摩擦の効果（少しずつ減速）
+    ballSpeedX *= 0.98;
+    ballSpeedY *= 0.98;
+    
+    // 壁での反射（上下）
+    if (ballY < 0 || ballY > fieldHeight) {
+      ballSpeedY = -ballSpeedY * 0.8;
+      ballY = ballY < 0 ? 0 : fieldHeight;
+    }
+    
+    // ゴール判定（左）
+    if (ballX < 10 && ballY > fieldHeight / 2 - 48 && ballY < fieldHeight / 2 + 48) {
+      goalScored('right');
+      resetBall();
+    }
+    
+    // ゴール判定（右）
+    if (ballX > fieldWidth - 10 && ballY > fieldHeight / 2 - 48 && ballY < fieldHeight / 2 + 48) {
+      goalScored('left');
+      resetBall();
+    }
+    
+    // 壁での反射（左右、ゴールエリア以外）
+    if ((ballX < 0 && (ballY < fieldHeight / 2 - 48 || ballY > fieldHeight / 2 + 48)) ||
+        (ballX > fieldWidth && (ballY < fieldHeight / 2 - 48 || ballY > fieldHeight / 2 + 48))) {
+      ballSpeedX = -ballSpeedX * 0.8;
+      ballX = ballX < 0 ? 0 : fieldWidth;
+    }
+    
+    // ロボットとの接触判定
+    if (robotLeft) checkRobotCollision(robotLeft);
+    if (robotRight) checkRobotCollision(robotRight);
+    
+    // ボールの位置を更新
+    if (ball) {
+      ball.style.left = `${ballX}px`;
+      ball.style.top = `${ballY}px`;
+      ball.style.transform = 'translate(-50%, -50%) rotate(' + (ballX + ballY) + 'deg)';
+    }
+    
+    // ロボットの移動（ボールを追いかける）
+    moveRobots();
+    
+    // ロボット同士の衝突を防止
+    checkRobotCollisions();
+    
+    // 次のフレームを要求
+    requestAnimationFrame(updateBallPosition);
+  }
+  
+  // ロボットの移動
+  function moveRobots(): void {
+    if (!robotLeft || !robotRight || !soccerField) return;
+    
+    // フィールドを左右に分割
+    const centerX = soccerField.offsetWidth / 2;
+    
+    // 左ロボットの移動（ボールを追いかける）
+    const leftRobotX = robotLeft.offsetLeft + robotLeft.offsetWidth / 2;
+    const leftRobotY = robotLeft.offsetTop + robotLeft.offsetHeight / 2;
+    
+    // ボールの方向へ移動（左ロボットは左半分を優先）
+    let targetXLeft = ballX;
+    // 右側に行き過ぎないようにする（中央より少し右まで許容）
+    if (targetXLeft > centerX + 20) targetXLeft = centerX + 20;
+    
+    const dxLeft = (targetXLeft - leftRobotX) * 0.03;
+    const dyLeft = (ballY - leftRobotY) * 0.03;
+    
+    robotLeft.style.left = (robotLeft.offsetLeft + dxLeft) + 'px';
+    robotLeft.style.top = (robotLeft.offsetTop + dyLeft) + 'px';
+    
+    // 右ロボットの移動（ボールを追いかける）
+    const rightRobotX = robotRight.offsetLeft + robotRight.offsetWidth / 2;
+    const rightRobotY = robotRight.offsetTop + robotRight.offsetHeight / 2;
+    
+    // ボールの方向へ移動（右ロボットは右半分を優先）
+    let targetXRight = ballX;
+    // 左側に行き過ぎないようにする（中央より少し左まで許容）
+    if (targetXRight < centerX - 20) targetXRight = centerX - 20;
+    
+    const dxRight = (targetXRight - rightRobotX) * 0.04;
+    const dyRight = (ballY - rightRobotY) * 0.04;
+    
+    robotRight.style.left = (robotRight.offsetLeft + dxRight) + 'px';
+    robotRight.style.top = (robotRight.offsetTop + dyRight) + 'px';
+  }
+  
+  // ロボットとボールの衝突判定
+  function checkRobotCollision(robot: HTMLElement): void {
+    if (!soccerField) return;
+    
+    const robotRect = robot.getBoundingClientRect();
+    const fieldRect = soccerField.getBoundingClientRect();
+    
+    const robotX = robotRect.left + robotRect.width / 2 - fieldRect.left;
+    const robotY = robotRect.top + robotRect.height / 2 - fieldRect.top;
+    
+    const distance = Math.sqrt(Math.pow(robotX - ballX, 2) + Math.pow(robotY - ballY, 2));
+    
+    // 衝突した場合
+    if (distance < 20) {
+      // ボールの反射方向を計算
+      const angle = Math.atan2(ballY - robotY, ballX - robotX);
+      const power = 5; // キックの強さ
+      
+      ballSpeedX = Math.cos(angle) * power;
+      ballSpeedY = Math.sin(angle) * power;
+      
+      // 少し離す
+      ballX = robotX + Math.cos(angle) * 22;
+      ballY = robotY + Math.sin(angle) * 22;
+    }
+  }
+  
+  // ロボット同士の衝突判定と回避
+  function checkRobotCollisions(): void {
+    if (!robotLeft || !robotRight || !soccerField) return;
+    
+    const leftRect = robotLeft.getBoundingClientRect();
+    const rightRect = robotRight.getBoundingClientRect();
+    const fieldRect = soccerField.getBoundingClientRect();
+    
+    // フィールド座標系に変換
+    const leftX = leftRect.left + leftRect.width / 2 - fieldRect.left;
+    const leftY = leftRect.top + leftRect.height / 2 - fieldRect.top;
+    const rightX = rightRect.left + rightRect.width / 2 - fieldRect.left;
+    const rightY = rightRect.top + rightRect.height / 2 - fieldRect.top;
+    
+    const distance = Math.sqrt(Math.pow(rightX - leftX, 2) + Math.pow(rightY - leftY, 2));
+    const minDistance = 40; // 最小距離を大きくする
+    
+    // 重なっている場合または近づき過ぎている場合
+    if (distance < minDistance) {
+      // 反発する方向を計算
+      const angle = Math.atan2(leftY - rightY, leftX - rightX);
+      const pushDistance = (minDistance - distance) * 0.7; // 反発力を強める
+      
+      // 左ロボットを右ロボットから離す
+      const leftDx = Math.cos(angle) * pushDistance;
+      const leftDy = Math.sin(angle) * pushDistance;
+      robotLeft.style.left = (robotLeft.offsetLeft + leftDx) + 'px';
+      robotLeft.style.top = (robotLeft.offsetTop + leftDy) + 'px';
+      
+      // 右ロボットを左ロボットから離す
+      const rightDx = -Math.cos(angle) * pushDistance;
+      const rightDy = -Math.sin(angle) * pushDistance;
+      robotRight.style.left = (robotRight.offsetLeft + rightDx) + 'px';
+      robotRight.style.top = (robotRight.offsetTop + rightDy) + 'px';
+      
+      // ボールの挙動も調整（ロボット同士がぶつかった場合にボールが挟まれないように）
+      if (
+        Math.sqrt(Math.pow(ballX - leftX, 2) + Math.pow(ballY - leftY, 2)) < 20 &&
+        Math.sqrt(Math.pow(ballX - rightX, 2) + Math.pow(ballY - rightY, 2)) < 20
+      ) {
+        // ボールを少し上に移動
+        ballY -= 10;
+        if (ball) {
+          ball.style.top = `${ballY}px`;
+        }
+      }
+    }
+  }
+  
+  // ゴールが決まった時の処理
+  function goalScored(scorer: 'left' | 'right'): void {
+    // スコアの更新
+    if (scorer === 'left') {
+      leftScore++;
+      if (scoreLeft) {
+        scoreLeft.textContent = leftScore.toString();
+        scoreLeft.classList.add('score-up');
+        setTimeout(() => scoreLeft && scoreLeft.classList.remove('score-up'), 500);
+      }
+    } else {
+      rightScore++;
+      if (scoreRight) {
+        scoreRight.textContent = rightScore.toString();
+        scoreRight.classList.add('score-up');
+        setTimeout(() => scoreRight && scoreRight.classList.remove('score-up'), 500);
+      }
+    }
+    
+    // ゴールエフェクト
+    if (goal) {
+      goal.classList.add('goal-flash');
+      setTimeout(() => goal && goal.classList.remove('goal-flash'), 1500);
+    }
+    
+    // 一時停止
+    gameRunning = false;
+    setTimeout(() => {
+      gameRunning = true;
+      
+      // ロボットとボールを初期位置にリセット
+      resetPositions();
+      
+      requestAnimationFrame(updateBallPosition);
+    }, 1500);
+  }
+  
+  // ボールをリセットする
+  function resetBall(): void {
+    ballX = fieldWidth / 2;
+    ballY = fieldHeight / 2;
+    ballSpeedX = (Math.random() - 0.5) * 4;
+    ballSpeedY = (Math.random() - 0.5) * 4;
+    
+    if (ball) {
+      ball.style.left = `${ballX}px`;
+      ball.style.top = `${ballY}px`;
+    }
+  }
+  
+  // 全ての要素を初期位置にリセットする
+  function resetPositions(): void {
+    // ボールをリセット
+    resetBall();
+    
+    // ロボットを初期位置に戻す
+    if (soccerField && robotLeft && robotRight) {
+      // 左ロボットの初期位置
+      robotLeft.style.left = `${soccerField.offsetWidth * 0.25 - robotLeft.offsetWidth / 2}px`;
+      robotLeft.style.top = `${soccerField.offsetHeight / 2 - robotLeft.offsetHeight / 2}px`;
+      
+      // 右ロボットの初期位置
+      robotRight.style.left = `${soccerField.offsetWidth * 0.75 - robotRight.offsetWidth / 2}px`;
+      robotRight.style.top = `${soccerField.offsetHeight / 2 - robotRight.offsetHeight / 2}px`;
+    }
+  }
+  
+  // ボールをクリックしたらゲーム開始
+  ball?.addEventListener('click', function() {
+    if (!gameStarted) {
+      gameStarted = true;
+      gameRunning = true;
+      
+      // ランダムな方向に初速を与える
+      ballSpeedX = (Math.random() - 0.5) * 8;
+      ballSpeedY = (Math.random() - 0.5) * 8;
+      
+      // アニメーションスタート
+      requestAnimationFrame(updateBallPosition);
+    } else if (!gameRunning) {
+      // 一時停止中ならば再開
+      gameRunning = true;
+      requestAnimationFrame(updateBallPosition);
+    } else if (ball && soccerField) {
+      // 既にゲーム中なら、ボールをキックする
+      const ballRect = ball.getBoundingClientRect();
+      const fieldRect = soccerField.getBoundingClientRect();
+      const clickX = ballRect.left + ballRect.width / 2 - fieldRect.left;
+      const clickY = ballRect.top + ballRect.height / 2 - fieldRect.top;
+      
+      // クリックの方向とは逆にボールを動かす
+      const centerX = fieldWidth / 2;
+      const centerY = fieldHeight / 2;
+      const angle = Math.atan2(clickY - centerY, clickX - centerX);
+      
+      ballSpeedX = -Math.cos(angle) * 10;
+      ballSpeedY = -Math.sin(angle) * 10;
+    }
+  });
+  
+  // 初期位置の設定と自動ゲーム開始
+  document.addEventListener('DOMContentLoaded', function() {
+    // DOMが読み込まれたらフィールドサイズを再設定
+    if (soccerField) {
+      const updatedFieldWidth = soccerField.offsetWidth;
+      const updatedFieldHeight = soccerField.offsetHeight;
+      
+      if (updatedFieldWidth > 0) ballX = updatedFieldWidth / 2;
+      if (updatedFieldHeight > 0) ballY = updatedFieldHeight / 2;
+    }
+    
+    // 初期配置を設定
+    if (soccerField && ball && robotLeft && robotRight) {
+      // ボールの初期位置
+      ball.style.left = `${ballX}px`;
+      ball.style.top = `${ballY}px`;
+      
+      // ロボットの初期位置
+      robotLeft.style.left = `${soccerField.offsetWidth * 0.25 - robotLeft.offsetWidth / 2}px`;
+      robotLeft.style.top = `${soccerField.offsetHeight / 2 - robotLeft.offsetHeight / 2}px`;
+      
+      robotRight.style.left = `${soccerField.offsetWidth * 0.75 - robotRight.offsetWidth / 2}px`;
+      robotRight.style.top = `${soccerField.offsetHeight / 2 - robotRight.offsetHeight / 2}px`;
+      
+      // 自動的にゲーム開始
+      gameStarted = true;
+      gameRunning = true;
+      
+      // ランダムな方向に初速を与える
+      ballSpeedX = (Math.random() - 0.5) * 6;
+      ballSpeedY = (Math.random() - 0.5) * 6;
+      
+      // アニメーションスタート
+      requestAnimationFrame(updateBallPosition);
+    }
+  });
+</script>
