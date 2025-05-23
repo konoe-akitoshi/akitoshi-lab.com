@@ -7,8 +7,10 @@ date: "2025-04-01"
 
 # ICTSC 2024 4nd
 
-ICTSC（Intercollegiate Computer Science Tournament for Students and Companies）は、学生と企業が協力して行うIT技術コンテストです。
+ICTSC（ICTトラブルシューティングコンテスト）は、全国の学生を対象に、ネットワークやサーバーのトラブルシューティング技術を競う技術コンテストです。
 
-2024年大会で4位入賞しました。
+2025年3月15日と16日に東京都調布市のNTT中央研修センタで開催されました。
+
+チーム結束Baudとして本戦に出場し競技成績は4位でした。
 
 [← Aboutページに戻る](/about/)
