@@ -29,9 +29,6 @@ importers:
       svelte:
         specifier: ^5.30.2
         version: 5.30.2
-      swiper:
-        specifier: ^11.2.6
-        version: 11.2.6
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -1945,10 +1942,6 @@ packages:
   svelte@5.30.2:
     resolution: {integrity: sha512-zfGFEwwPeILToOxOqQyFq/vc8euXrX2XyoffkBNgn/k8D1nxbLt5+mNaqQBmZF/vVhBGmkY6VmNK18p9Gf0auQ==}
     engines: {node: '>=18'}
-
-  swiper@11.2.6:
-    resolution: {integrity: sha512-8aXpYKtjy3DjcbzZfz+/OX/GhcU5h+looA6PbAzHMZT6ESSycSp9nAjPCenczgJyslV+rUGse64LMGpWE3PX9Q==}
-    engines: {node: '>= 4.7.0'}
 
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
@@ -4784,8 +4777,6 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.17
       zimmerframe: 1.1.2
-
-  swiper@11.2.6: {}
 
   tiny-inflate@1.0.3: {}
 
