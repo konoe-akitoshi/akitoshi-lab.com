@@ -1,37 +1,50 @@
 # akitoshi-lab.com
 
-- **Framework**: [Astro](https://astro.build/)
-- **Styling**: [Uno CSS](https://unocss.dev/)
-- **Hosting**: [Static Web Server](https://static-web-server.net/)
+Akitoshi's personal portfolio website featuring modern Japanese-focused design.
+
+## Tech Stack
+
+- **Framework**: [Astro](https://astro.build/) - Static Site Generator
+- **Styling**: [UnoCSS](https://unocss.dev/) - Utility-first CSS
+- **Interactive Components**: [Svelte](https://svelte.dev/)
+- **Package Manager**: [pnpm](https://pnpm.io/)
+- **Language**: TypeScript
 
 ## 🚀 Project Structure
 
 ```text
 /
 ├── public/
-│   └── favicon.svg
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   └── img/
 ├── src/
 │   ├── assets/
-│   │   └── img
+│   │   └── img/
 │   ├── components/
-│   │   └── Head.astro
-│   │   └── Header.astro
-│   │   └── Footer.astro
-│   │   └── Affiliated.astro
-│   │   └── Card.astro
-│   │   └── Environment.astro
-│   │   └── Prizes.astro
-│   │   └── WorksParsonl.astro
-│   │   └── Slideshow.jsx
+│   │   ├── Head.astro
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── Card.astro
+│   │   └── svelte/
+│   │       └── Gallery.svelte
 │   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-│       └── about.astro
-│       └── works.astro
+│   │   ├── Layout.astro
+│   │   └── WorksDetailLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── about.astro
+│   │   ├── works.astro
+│   │   ├── gallery.astro
+│   │   ├── awards/
+│   │   │   └── *.md
+│   │   └── works/
+│   │       └── *.md
+│   └── settings/
+│       └── site-settings.ts
 ├── astro.config.mjs
 ├── uno.config.ts
-├── README.md
+├── CLAUDE.md
 └── package.json
 ```
 
@@ -41,12 +54,11 @@ All commands are run from the root of the project, from a terminal:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm run dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm run build`           | Build your production site to `./dist/`          |
-| `pnpm run preview`         | Preview your build locally, before deploying     |
-| `pnpm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm run astro -- --help` | Get help using the Astro CLI                     |
+| `pnpm install`            | Installs dependencies                            |
+| `pnpm run dev`            | Starts local dev server at `localhost:4321`     |
+| `pnpm run build`          | Build production site (includes type checking)  |
+| `pnpm run preview`        | Preview your build locally, before deploying    |
+| `pnpm run astro check`    | Run Astro type checking                          |
 
 ## ⚡ Speed
 ![image](https://github.com/konoe-akitoshi/akitoshi-lab.com/assets/51017077/bfaf11c0-b1c5-47ff-b1d1-a8071dead5ff)
