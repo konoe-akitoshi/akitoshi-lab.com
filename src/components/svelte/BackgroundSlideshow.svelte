@@ -4,105 +4,85 @@
   /** @type {{ images: Array<{ src: string, width: number, height: number }> }} */
   const { images = [] } = $props();
 
-  let currentIndex = $state(0);
-  let nextIndex = $state(1);
-  let showNext = $state(false);
-  let imageError = $state(false);
+  // 2スロット交互方式：表示中の画像のsrcを変更しない
+  let slotA = $state(images[0]);
+  let slotB = $state(images[1] ?? images[0]);
+  let activeSlot = $state('A');
+  let transitioning = $state(false);
+  let nextIndex = $state(2 % (images.length || 1));
 
-  const duration = 10000; // 表示時間 10秒
-  const transitionDuration = 2000; // トランジション 2秒
+  const duration = 10000;
+  const transitionDuration = 2000;
 
-  // 現在と次の画像を取得
-  let currentImage = $derived(images[currentIndex]);
-  let nextImage = $derived(images[nextIndex]);
-
-  // 画像読み込みエラー時のハンドラ
-  function handleImageError() {
-    imageError = true;
-  }
+  // インジケーター用
+  const currentIndex = $derived(
+    images.findIndex(img => img.src === (activeSlot === 'A' ? slotA : slotB)?.src)
+  );
 
   onMount(() => {
     if (images.length <= 1) return;
 
-    const timers = { timeout: null, raf: null };
+    let timerId = null;
+    let active = true;
 
-    // 次の画像をプリロード
-    function preloadImage(index) {
-      const img = new Image();
-      img.src = images[index]?.src || '';
-    }
+    const preload = (i) => { new Image().src = images[i]?.src ?? ''; };
+    preload(nextIndex);
 
-    // 2枚目をプリロード
-    preloadImage(nextIndex);
+    const next = () => {
+      if (!active) return;
+      timerId = setTimeout(() => {
+        if (!active) return;
+        transitioning = true;
 
-    const interval = setInterval(() => {
-      // 次の画像を表示開始
-      showNext = true;
+        timerId = setTimeout(() => {
+          if (!active) return;
+          activeSlot = activeSlot === 'A' ? 'B' : 'A';
+          transitioning = false;
 
-      // トランジション完了後に状態を更新
-      timers.timeout = setTimeout(() => {
-        currentIndex = nextIndex;
-        nextIndex = (nextIndex + 1) % images.length;
-
-        // 1フレーム遅らせてnext画像を削除（ちらつき防止）
-        timers.raf = requestAnimationFrame(() => {
-          showNext = false;
-        });
-
-        // 次の画像をプリロード
-        preloadImage(nextIndex);
-      }, transitionDuration);
-    }, duration);
-
-    return () => {
-      clearInterval(interval);
-      if (timers.timeout) clearTimeout(timers.timeout);
-      if (timers.raf) cancelAnimationFrame(timers.raf);
+          requestAnimationFrame(() => {
+            if (!active) return;
+            if (activeSlot === 'A') slotB = images[nextIndex];
+            else slotA = images[nextIndex];
+            nextIndex = (nextIndex + 1) % images.length;
+            preload(nextIndex);
+            next();
+          });
+        }, transitionDuration);
+      }, duration);
     };
+
+    next();
+    return () => { active = false; clearTimeout(timerId); };
   });
 </script>
 
-{#if images.length > 0 && !imageError}
-  <div
-    class="slideshow"
-    style="--transition-duration: {transitionDuration}ms; --duration: {duration}ms;"
-    role="presentation"
-  >
-    <!-- 現在の画像 (常に表示) -->
+{#if images.length > 0}
+  <div class="slideshow" style="--t:{transitionDuration}ms;--d:{duration}ms">
     <img
-      src={currentImage.src}
+      src={slotA?.src}
+      width={slotA?.width}
+      height={slotA?.height}
       alt=""
-      width={currentImage.width}
-      height={currentImage.height}
-      class="slide current"
+      class="slide"
+      class:visible={activeSlot === 'A'}
+      class:fading={activeSlot === 'B' && transitioning}
       loading="eager"
       decoding="async"
-      fetchpriority="high"
-      role="presentation"
-      onerror={handleImageError}
     />
-
-    <!-- 次の画像 (トランジション中のみ表示) -->
-    {#if showNext && nextImage}
-      <img
-        src={nextImage.src}
-        alt=""
-        width={nextImage.width}
-        height={nextImage.height}
-        class="slide next"
-        decoding="async"
-        role="presentation"
-        onerror={handleImageError}
-      />
-    {/if}
-
-    <!-- インジケーター -->
-    <div class="indicator" role="presentation">
+    <img
+      src={slotB?.src}
+      width={slotB?.width}
+      height={slotB?.height}
+      alt=""
+      class="slide"
+      class:visible={activeSlot === 'B'}
+      class:fading={activeSlot === 'A' && transitioning}
+      decoding="async"
+    />
+    <div class="dots">
       {#each images as _, i}
-        <div class="bar" class:active={i === currentIndex}>
-          {#if i === currentIndex && !showNext}
-            <span class="progress"></span>
-          {/if}
+        <div class="dot" class:active={i === currentIndex}>
+          {#if i === currentIndex && !transitioning}<span></span>{/if}
         </div>
       {/each}
     </div>
@@ -110,72 +90,30 @@
 {/if}
 
 <style>
-  .slideshow {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-  }
-
+  .slideshow { position: fixed; inset: 0; z-index: -1; overflow: hidden; }
   .slide {
-    position: absolute;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    pointer-events: none;
+    position: absolute; inset: 0; width: 100vw; height: 100vh;
+    object-fit: cover; opacity: 0; z-index: 1; pointer-events: none;
   }
+  .slide.visible { opacity: 1; z-index: 2; }
+  .slide.fading {
+    z-index: 3; will-change: opacity;
+    animation: fade var(--t) ease-out forwards;
+  }
+  @keyframes fade { from { opacity: 0 } to { opacity: 1 } }
 
-  .slide.current {
-    z-index: 1;
+  .dots {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px; z-index: 10; pointer-events: none;
   }
-
-  .slide.next {
-    z-index: 2;
-    will-change: opacity;
-    animation: fadeIn var(--transition-duration, 2000ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  .dot {
+    width: 24px; height: 2px; background: rgba(255,255,255,.18);
+    border-radius: 1px; overflow: hidden; position: relative;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .dot.active { background: rgba(255,255,255,.45); }
+  .dot span {
+    display: block; height: 100%; background: rgba(255,255,255,.7);
+    animation: progress var(--d) linear forwards;
   }
-
-  .indicator {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 12px;
-    z-index: 10;
-    pointer-events: none;
-  }
-
-  .bar {
-    width: 24px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.18);
-    border-radius: 1px;
-    overflow: hidden;
-    position: relative;
-    transition: background 0.3s;
-  }
-
-  .bar.active {
-    background: rgba(255, 255, 255, 0.45);
-  }
-
-  .progress {
-    display: block;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 1px;
-    animation: progressFill var(--duration, 10000ms) linear forwards;
-  }
-
-  @keyframes progressFill {
-    from { width: 0%; }
-    to { width: 100%; }
-  }
+  @keyframes progress { from { width: 0 } to { width: 100% } }
 </style>
