@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "convert:avif": "node scripts/convert-to-progressive-avif.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

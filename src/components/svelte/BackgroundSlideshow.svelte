@@ -1,31 +1,35 @@
 <script>
   import { onMount } from 'svelte';
 
-  /** @type {{ images: Array<{ src: string, width: number, height: number }> }} */
-  const { images = [] } = $props();
+  /** @type {{ images: string[] }} */
+  let { images = [] } = $props();
+
+  // 初期値をローカル配列にコピー（Svelte 5警告回避 + 不変性保証）
+  const initialImages = [...images];
+  const imageCount = initialImages.length;
 
   // 2スロット交互方式：表示中の画像のsrcを変更しない
-  let slotA = $state(images[0]);
-  let slotB = $state(images[1] ?? images[0]);
+  let slotA = $state(initialImages[0] ?? '');
+  let slotB = $state(initialImages[1] ?? initialImages[0] ?? '');
   let activeSlot = $state('A');
   let transitioning = $state(false);
-  let nextIndex = $state(2 % (images.length || 1));
+  let nextIndex = $state(2 % (imageCount || 1));
 
   const duration = 10000;
   const transitionDuration = 2000;
 
   // インジケーター用
   const currentIndex = $derived(
-    images.findIndex(img => img.src === (activeSlot === 'A' ? slotA : slotB)?.src)
+    initialImages.indexOf(activeSlot === 'A' ? slotA : slotB)
   );
 
   onMount(() => {
-    if (images.length <= 1) return;
+    if (imageCount <= 1) return;
 
     let timerId = null;
     let active = true;
 
-    const preload = (i) => { new Image().src = images[i]?.src ?? ''; };
+    const preload = (i) => { new Image().src = initialImages[i] ?? ''; };
     preload(nextIndex);
 
     const next = () => {
@@ -41,9 +45,9 @@
 
           requestAnimationFrame(() => {
             if (!active) return;
-            if (activeSlot === 'A') slotB = images[nextIndex];
-            else slotA = images[nextIndex];
-            nextIndex = (nextIndex + 1) % images.length;
+            if (activeSlot === 'A') slotB = initialImages[nextIndex];
+            else slotA = initialImages[nextIndex];
+            nextIndex = (nextIndex + 1) % imageCount;
             preload(nextIndex);
             next();
           });
@@ -56,12 +60,10 @@
   });
 </script>
 
-{#if images.length > 0}
+{#if initialImages.length > 0}
   <div class="slideshow" style="--t:{transitionDuration}ms;--d:{duration}ms">
     <img
-      src={slotA?.src}
-      width={slotA?.width}
-      height={slotA?.height}
+      src={slotA}
       alt=""
       class="slide"
       class:visible={activeSlot === 'A'}
@@ -70,9 +72,7 @@
       decoding="async"
     />
     <img
-      src={slotB?.src}
-      width={slotB?.width}
-      height={slotB?.height}
+      src={slotB}
       alt=""
       class="slide"
       class:visible={activeSlot === 'B'}
@@ -80,7 +80,7 @@
       decoding="async"
     />
     <div class="dots">
-      {#each images as _, i}
+      {#each initialImages as _, i}
         <div class="dot" class:active={i === currentIndex}>
           {#if i === currentIndex && !transitioning}<span></span>{/if}
         </div>

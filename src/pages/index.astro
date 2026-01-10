@@ -4,20 +4,23 @@ import BackgroundSlideshow from '../components/svelte/BackgroundSlideshow.svelte
 import { Image } from 'astro:assets';
 import Avatar from '../assets/img/avatar.webp';
 
-// ギャラリー画像を取得してシャッフル
-const galleryImages = import.meta.glob('../assets/img/gallery/*.{webp,jpg,jpeg,png}', { eager: true });
-let slideImages = Object.values(galleryImages).map((img: any) => ({
-  src: img.default.src,
-  width: img.default.width,
-  height: img.default.height,
-}));
+// Progressive AVIF画像をpublic/から直接取得（Astroの再エンコードをバイパス）
+const galleryImagePaths = [
+  '/img/gallery/img1.avif',
+  '/img/gallery/img2.avif',
+  '/img/gallery/img3.avif',
+  '/img/gallery/img4.avif',
+  '/img/gallery/木の中の氷.avif',
+  '/img/gallery/樹氷.avif',
+  '/img/gallery/港.avif',
+];
 
 // シャッフル
+let slideImages = [...galleryImagePaths];
 for (let i = slideImages.length - 1; i > 0; i--) {
   const j = Math.floor(Math.random() * (i + 1));
   [slideImages[i], slideImages[j]] = [slideImages[j], slideImages[i]];
 }
-slideImages = slideImages.slice(0, 10);
 ---
 
 <Layout
@@ -31,7 +34,7 @@ slideImages = slideImages.slice(0, 10);
   bodyClass="m-0 p-0 font-mono bg-black overflow-x-hidden overflow-y-auto"
 >
   <link rel="preload" href={Avatar.src} as="image" slot="preload" />
-  <link rel="preload" href={slideImages[0]?.src} as="image" slot="preload" />
+  <!-- Progressive AVIFはpreloadしない（プログレッシブ表示が無効になるため） -->
 
   <BackgroundSlideshow images={slideImages} client:load />
   
