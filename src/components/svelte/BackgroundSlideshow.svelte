@@ -4,15 +4,27 @@
   /** @type {{ images: Array<{ src: string, width: number, height: number }> }} */
   const { images = [] } = $props();
 
-  let current = $state(0);
-  let next = $state(1);
-  let transitioning = $state(false);
+  let currentIndex = $state(0);
+  let nextIndex = $state(1);
+  let showNext = $state(false);
+  let imageError = $state(false);
 
-  const duration = 10000; // 10秒
-  const transitionDuration = 2000; // 2秒
+  const duration = 10000; // 表示時間 10秒
+  const transitionDuration = 2000; // トランジション 2秒
+
+  // 現在と次の画像を取得
+  let currentImage = $derived(images[currentIndex]);
+  let nextImage = $derived(images[nextIndex]);
+
+  // 画像読み込みエラー時のハンドラ
+  function handleImageError() {
+    imageError = true;
+  }
 
   onMount(() => {
     if (images.length <= 1) return;
+
+    const timers = { timeout: null, raf: null };
 
     // 次の画像をプリロード
     function preloadImage(index) {
@@ -20,57 +32,82 @@
       img.src = images[index]?.src || '';
     }
 
-    // 初期プリロード
-    preloadImage(1);
+    // 2枚目をプリロード
+    preloadImage(nextIndex);
 
     const interval = setInterval(() => {
-      transitioning = true;
+      // 次の画像を表示開始
+      showNext = true;
 
-      // トランジション完了後に状態更新
-      setTimeout(() => {
-        current = next;
-        next = (next + 1) % images.length;
-        transitioning = false;
+      // トランジション完了後に状態を更新
+      timers.timeout = setTimeout(() => {
+        currentIndex = nextIndex;
+        nextIndex = (nextIndex + 1) % images.length;
 
-        // 次の次の画像をプリロード
-        preloadImage((next + 1) % images.length);
+        // 1フレーム遅らせてnext画像を削除（ちらつき防止）
+        timers.raf = requestAnimationFrame(() => {
+          showNext = false;
+        });
+
+        // 次の画像をプリロード
+        preloadImage(nextIndex);
       }, transitionDuration);
     }, duration);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (timers.timeout) clearTimeout(timers.timeout);
+      if (timers.raf) cancelAnimationFrame(timers.raf);
+    };
   });
 </script>
 
-<div class="slideshow">
-  {#each images as image, i}
+{#if images.length > 0 && !imageError}
+  <div
+    class="slideshow"
+    style="--transition-duration: {transitionDuration}ms; --duration: {duration}ms;"
+    role="presentation"
+  >
+    <!-- 現在の画像 (常に表示) -->
     <img
-      src={image.src}
+      src={currentImage.src}
       alt=""
-      width={image.width}
-      height={image.height}
-      class="slide"
-      class:active={i === current}
-      class:next={i === next && transitioning}
-      loading={i === 0 ? "eager" : "lazy"}
+      width={currentImage.width}
+      height={currentImage.height}
+      class="slide current"
+      loading="eager"
       decoding="async"
-      fetchpriority={i === 0 ? "high" : "auto"}
+      fetchpriority="high"
+      role="presentation"
+      onerror={handleImageError}
     />
-  {/each}
 
-  <!-- インジケーター -->
-  <div class="indicator">
-    {#each images as _, i}
-      <div class="bar" class:active={i === current}>
-        {#if i === current}
-          <span
-            class="progress"
-            style="animation-duration: {duration}ms;"
-          ></span>
-        {/if}
-      </div>
-    {/each}
+    <!-- 次の画像 (トランジション中のみ表示) -->
+    {#if showNext && nextImage}
+      <img
+        src={nextImage.src}
+        alt=""
+        width={nextImage.width}
+        height={nextImage.height}
+        class="slide next"
+        decoding="async"
+        role="presentation"
+        onerror={handleImageError}
+      />
+    {/if}
+
+    <!-- インジケーター -->
+    <div class="indicator" role="presentation">
+      {#each images as _, i}
+        <div class="bar" class:active={i === currentIndex}>
+          {#if i === currentIndex && !showNext}
+            <span class="progress"></span>
+          {/if}
+        </div>
+      {/each}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .slideshow {
@@ -86,19 +123,22 @@
     width: 100vw;
     height: 100vh;
     object-fit: cover;
-    opacity: 0;
-    transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
   }
 
-  .slide.active {
-    opacity: 1;
+  .slide.current {
     z-index: 1;
   }
 
   .slide.next {
-    opacity: 1;
     z-index: 2;
+    will-change: opacity;
+    animation: fadeIn var(--transition-duration, 2000ms) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .indicator {
@@ -131,10 +171,10 @@
     height: 100%;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 1px;
-    animation: progress-fill linear forwards;
+    animation: progressFill var(--duration, 10000ms) linear forwards;
   }
 
-  @keyframes progress-fill {
+  @keyframes progressFill {
     from { width: 0%; }
     to { width: 100%; }
   }
