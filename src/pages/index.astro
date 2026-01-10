@@ -1,8 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import BackgroundSlideshow from '../components/BackgroundSlideshow.astro';
+import BackgroundSlideshow from '../components/svelte/BackgroundSlideshow.svelte';
 import { Image } from 'astro:assets';
 import Avatar from '../assets/img/avatar.webp';
+
+// ギャラリー画像を取得してシャッフル
+const galleryImages = import.meta.glob('../assets/img/gallery/*.{webp,jpg,jpeg,png}', { eager: true });
+let slideImages = Object.values(galleryImages).map((img: any) => ({
+  src: img.default.src,
+  width: img.default.width,
+  height: img.default.height,
+}));
+
+// シャッフル
+for (let i = slideImages.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [slideImages[i], slideImages[j]] = [slideImages[j], slideImages[i]];
+}
+slideImages = slideImages.slice(0, 10);
 ---
 
 <Layout
@@ -16,8 +31,9 @@ import Avatar from '../assets/img/avatar.webp';
   bodyClass="m-0 p-0 font-mono bg-black overflow-x-hidden overflow-y-auto"
 >
   <link rel="preload" href={Avatar.src} as="image" slot="preload" />
-  
-  <BackgroundSlideshow />
+  <link rel="preload" href={slideImages[0]?.src} as="image" slot="preload" />
+
+  <BackgroundSlideshow images={slideImages} client:load />
   
   <header class="fixed top-0 w-full text-left bg-transparent p-4 lg:p-8 z-1000 grid place-items-start">
     <a href="https://akitoshi-lab.com/" class="text-white no-underline text-base lg:text-lg">
