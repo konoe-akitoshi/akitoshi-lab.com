@@ -4,14 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is Akitoshi's personal portfolio website built with Astro, featuring a modern Japanese-focused design with works, awards, and personal information.
+Akitoshi's personal portfolio website built with Astro, featuring a modern Japanese-focused design with works, awards, and personal information.
 
-**Tech Stack:**
-- Framework: Astro (Static Site Generator)
-- Styling: UnoCSS (Utility-first CSS)
-- Interactive Components: Svelte
-- Package Manager: pnpm
-- Language: TypeScript
+**Tech Stack:** Astro, UnoCSS, Svelte, TypeScript, pnpm
 
 ## Development Commands
 
@@ -21,46 +16,39 @@ This is Akitoshi's personal portfolio website built with Astro, featuring a mode
 | `pnpm run dev` | Start dev server at localhost:4321 |
 | `pnpm run build` | Build production site (includes type checking) |
 | `pnpm run preview` | Preview production build locally |
-| `pnpm run astro check` | Run Astro type checking |
+| `pnpm run astro check` | Run Astro type checking only |
 
-## Architecture & Key Concepts
+## Architecture
 
-### Page Routing
-- Static pages in `src/pages/` (index, about, works, gallery, 404)
-- Markdown content pages for works (`src/pages/works/*.md`) and awards (`src/pages/awards/*.md`)
-- All pages use either `Layout.astro` or `WorksDetailLayout.astro`
+### Layouts
+- `Layout.astro`: Main layout with configurable props (`useHeader`, `useFooter`, `useMainWrapper`, `bodyClass`)
+- `WorksDetailLayout.astro`: For work detail pages, reads frontmatter for hero section with title, author, date, thumbnail
 
-### Content Structure
-- **Works**: Markdown files with frontmatter using `WorksDetailLayout.astro`
-- **Awards**: Markdown files with frontmatter
-- **Assets**: Images organized in `src/assets/img/` and `public/img/`
+### Content (Markdown)
+Works and awards use markdown files with frontmatter:
 
-### Layout Architecture
-- `Layout.astro`: Main layout with configurable header/footer/wrapper
-- `WorksDetailLayout.astro`: Specialized layout for work detail pages with hero section, metadata display, and prose styling
+```yaml
+# Works frontmatter (src/pages/works/*.md)
+layout: ../../layouts/WorksDetailLayout.astro
+title: "Work Title"
+author: "Author Name"
+date: "DD Mon YYYY"
+thumbnail: "/img/works/image.jpg"
+description: "Description text"
+```
 
-### Component Organization
-- Astro components in `src/components/` for UI elements
-- Svelte components in `src/components/svelte/` for interactive features
-- Reusable components: Head, Header, Footer, Card, etc.
-
-### Styling System
-- UnoCSS with Wind preset and custom icons
-- Custom theme colors (background, text, primary, secondary, accent)
-- Custom shortcuts for buttons and common patterns
-- Typography rules for headings and paragraphs
-- Japanese font stack with fallbacks
+### Styling (UnoCSS)
+- Config: `uno.config.ts`
+- Theme colors: `background`, `text`, `primary`, `secondary`, `accent`
+- Shortcuts: `btn`, `btn-primary`, `btn-secondary`
+- Icons via `@iconify/json` (use `i-` prefix)
 
 ### Site Configuration
-- Global settings in `src/settings/site-settings.ts`
-- Site metadata, social links, and configuration centralized
-- Japanese language default with localized content
+Global settings in `src/settings/site-settings.ts` (site name, social links)
 
 ## Important Notes
 
-- Site is Japanese-focused with Japanese text as default
-- Uses pnpm as package manager (not npm/yarn)
-- Build process includes automatic type checking via `astro check`
-- Images are optimized with Sharp integration
-- All markdown content supports frontmatter metadata
-- UnoCSS shortcuts are available for consistent styling
+- Japanese language default (lang="ja")
+- Uses pnpm exclusively (not npm/yarn)
+- CI runs on push/PR to master via GitHub Actions (`.github/workflows/build.yml`)
+- Images go in `public/img/` (static) or `src/assets/img/` (optimized via Sharp)
