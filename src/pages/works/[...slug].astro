@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import WorksDetailLayout from '../../layouts/WorksDetailLayout.astro';
+import ContentLayout from '../../layouts/ContentLayout.astro';
 
 export async function getStaticPaths() {
   const works = await getCollection('works');
@@ -14,6 +14,9 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<WorksDetailLayout frontmatter={entry.data}>
+<ContentLayout
+  {...entry.data}
+  backLink={{ href: "/works", label: "Works一覧に戻る" }}
+>
   <Content />
-</WorksDetailLayout>
+</ContentLayout>
