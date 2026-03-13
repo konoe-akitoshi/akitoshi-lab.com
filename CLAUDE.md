@@ -6,17 +6,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Akitoshi's personal portfolio website built with Astro, featuring a modern Japanese-focused design with works, awards, and personal information.
 
-**Tech Stack:** Astro, UnoCSS, Svelte, TypeScript, pnpm
+**Tech Stack:** Astro, UnoCSS, Svelte, TypeScript, Bun
 
 ## Development Commands
 
 | Command | Action |
 |---------|--------|
-| `pnpm install` | Install dependencies |
-| `pnpm run dev` | Start dev server at localhost:4321 |
-| `pnpm run build` | Build production site (includes type checking) |
-| `pnpm run preview` | Preview production build locally |
-| `pnpm run astro check` | Run Astro type checking only |
+| `bun install` | Install dependencies |
+| `bun run dev` | Start dev server at localhost:4321 |
+| `bun run build` | Build production site (includes type checking) |
+| `bun run preview` | Preview production build locally |
+| `bun run astro check` | Run Astro type checking only |
 
 ## Architecture
 
@@ -49,6 +49,6 @@ Global settings in `src/settings/site-settings.ts` (site name, social links)
 ## Important Notes
 
 - Japanese language default (lang="ja")
-- Uses pnpm exclusively (not npm/yarn)
+- Uses Bun exclusively (not npm/yarn/pnpm)
 - CI runs on push/PR to master via GitHub Actions (`.github/workflows/build.yml`)
 - Images go in `public/img/` (static) or `src/assets/img/` (optimized via Sharp)
