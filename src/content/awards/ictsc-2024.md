@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/Layout.astro
 title: "ICTSC 2024 4nd"
 author: "Akitoshi Saeki"
 date: "2025-04-01"

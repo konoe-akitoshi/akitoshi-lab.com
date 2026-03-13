@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/Layout.astro
 title: "第53回自然科学観察コンクール 2等賞「オクラに見つけた水玉の正体」"
 author: "Akitoshi Saeki"
 date: "2012-00-00"
@@ -40,7 +39,7 @@ date: "2012-00-00"
 **引用元:**
 
 第53回入賞作品 小学校の部 2等賞 オクラに見つけた水玉の正体
-[https://www.shizecon.net/award/detail.html?id=257](https://www.shizecon.net/award/detail.html?id=257) 
+[https://www.shizecon.net/award/detail.html?id=257](https://www.shizecon.net/award/detail.html?id=257)
 
 Yahoo!知恵袋での言及
 [https://web.archive.org/web/20210124113538/https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11230383616](https://web.archive.org/web/20210124113538/https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11230383616)

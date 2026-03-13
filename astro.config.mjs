@@ -2,8 +2,10 @@
 import { defineConfig } from 'astro/config';
 import UnoCSS from '@unocss/astro';
 import sitemap from "@astrojs/sitemap";
-
 import svelte from '@astrojs/svelte';
+import { EventEmitter } from 'node:events';
+
+EventEmitter.defaultMaxListeners = 20;
 
 // https://astro.build/config
 export default defineConfig({

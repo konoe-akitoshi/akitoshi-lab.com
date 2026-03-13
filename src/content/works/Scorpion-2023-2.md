@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/WorksDetailLayout.astro
 title: "Scorpion ver.2023-2"
 author: "Akitoshi Saeki"
 date: "09 Aug 2022"

@@ -74,7 +74,6 @@ async function convertToProgressiveAvif(inputPath) {
   const dir = CONFIG.outputDir || inputPath.replace(/[^/\\]+$/, '');
   const name = basename(inputPath, extname(inputPath));
   const outputPath = join(dir, `${name}.avif`);
-  const ext = extname(inputPath).toLowerCase();
 
   if (CONFIG.outputDir && !existsSync(CONFIG.outputDir)) {
     mkdirSync(CONFIG.outputDir, { recursive: true });

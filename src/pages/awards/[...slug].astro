@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const awards = await getCollection('awards');
+  return awards.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={entry.data.title}>
+  <article class="max-w-2xl mx-auto px-4 py-12 prose prose-lg max-w-none prose-headings:text-text prose-p:text-text prose-strong:text-text prose-a:text-primary hover:prose-a:text-primary/80">
+    <Content />
+  </article>
+</Layout>

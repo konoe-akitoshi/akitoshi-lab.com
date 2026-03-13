@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/Layout.astro
 title: "第64回日本学生科学賞 入選3等「自律走行システムの考案」"
 author: "Akitoshi Saeki"
 date: "2020-00-00"
@@ -40,4 +39,4 @@ date: "2020-00-00"
 [https://event.yomiuri.co.jp/jssa/storage/archives/64/HIT017IT.pdf](https://event.yomiuri.co.jp/jssa/storage/archives/64/HIT017IT.pdf)
 
 過去の受賞作品（日本学生科学賞データベース）
-[https://event.yomiuri.co.jp/jssa/prize/search?page=610](https://event.yomiuri.co.jp/jssa/prize/search?page=610) 
+[https://event.yomiuri.co.jp/jssa/prize/search?page=610](https://event.yomiuri.co.jp/jssa/prize/search?page=610)

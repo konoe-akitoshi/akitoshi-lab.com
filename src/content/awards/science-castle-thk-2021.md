@@ -1,5 +1,4 @@
 ---
-layout: ../../layouts/Layout.astro
 title: "サイエンスキャッスル研究費 THK賞 2021 採択「感情を汲み取る自律走行型配膳ロボットの開発」"
 author: "Akitoshi Saeki"
 date: "2021-00-00"
@@ -27,4 +26,4 @@ date: "2021-00-00"
 
 **引用元:**
 サイエンスキャッスル研究費THK賞2021採択者発表！ - リバネス
-[https://castle.lne.st/company-project/12726/](https://castle.lne.st/company-project/12726/) 
+[https://castle.lne.st/company-project/12726/](https://castle.lne.st/company-project/12726/)
