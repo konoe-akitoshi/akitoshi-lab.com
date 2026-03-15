@@ -1,8 +1,8 @@
 # Build stage
 FROM node:22 AS build
 WORKDIR /app
-COPY package.json ./
-RUN npm install && npm rebuild sharp
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
 RUN npm run build
 
