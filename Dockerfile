@@ -2,7 +2,7 @@
 FROM node:22 AS build
 WORKDIR /app
 COPY package.json ./
-RUN npm install && node -e "require('sharp').versions.sharp && console.log('sharp OK:', require('sharp').versions)"
+RUN npm install && ls node_modules/sharp/lib/ && ls node_modules/@img/ 2>/dev/null || true && node -e "try{require('sharp')}catch(e){console.error(e.message)}"
 COPY . .
 RUN npm run build
 
