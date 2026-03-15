@@ -1,0 +1,10 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    environment:
+      - SERVER_LOG_LEVEL=info
