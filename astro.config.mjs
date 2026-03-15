@@ -1,11 +1,13 @@
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
+import { defineConfig, passthroughImageService, sharpImageService } from 'astro/config';
 import UnoCSS from '@unocss/astro';
 import sitemap from "@astrojs/sitemap";
 import svelte from '@astrojs/svelte';
 import { EventEmitter } from 'node:events';
 
 EventEmitter.defaultMaxListeners = 20;
+
+const isDocker = process.env.DOCKER === '1';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,6 +17,7 @@ export default defineConfig({
     assets: '_astro',
   },
   image: {
+    service: isDocker ? passthroughImageService() : sharpImageService(),
     quality: 80,
     responsiveStyles: true,
     layout: 'constrained',
