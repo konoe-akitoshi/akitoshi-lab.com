@@ -107,18 +107,16 @@ const tabs = [
 </style>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('#tab-bar .tab-item');
-    const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('#tab-bar .tab-item');
+  const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
 
-    buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.tab;
-        buttons.forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
-        panels.forEach((p) => {
-          p.style.display = p.id === `tab-${id}` ? '' : 'none';
-        });
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tab;
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      panels.forEach((p) => {
+        p.style.display = p.id === `tab-${id}` ? '' : 'none';
       });
     });
   });
