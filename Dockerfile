@@ -1,8 +1,8 @@
 # Build stage
 FROM node:22 AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci && npm install sharp
+COPY package.json ./
+RUN npm install && node -e "require('sharp').versions.sharp && console.log('sharp OK:', require('sharp').versions)"
 COPY . .
 RUN npm run build
 
