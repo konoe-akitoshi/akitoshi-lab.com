@@ -1,11 +1,10 @@
 # Build stage
 FROM node:22-slim AS build
-RUN npm install -g bun
 WORKDIR /app
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+COPY package.json ./
+RUN npm install
 COPY . .
-RUN bun run build
+RUN npm run build
 
 # Production stage
 FROM ghcr.io/static-web-server/static-web-server:2-alpine
