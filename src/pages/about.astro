@@ -1,12 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
-import AboutTabs from "../components/svelte/AboutTabs.svelte";
-import Environment from "../components/Environment.astro";
-import Affiliated from "../components/Affiliated.astro";
-import Image from "astro/components/Image.astro";
-import Badge1 from "../assets/img/badge/dell-genai-foundations.webp";
-import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
+import AboutTabs from "../components/AboutTabs.astro";
 ---
 
 <Layout
@@ -17,73 +12,5 @@ import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
   bodyClass="m-0 p-0 font-sans overflow-x-hidden bg-background text-text"
 >
       <Card />
-
-      <AboutTabs client:load>
-        <Fragment slot="profile">
-          <section class="mb-10">
-            <h2 class="text-3xl mb-4 flex items-center">
-              <i class="i-material-symbols-light-mindfulness-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-              Mind
-            </h2>
-            <hr class="border-gray-400 mb-4" />
-            <p>好きなことをとことん極める</p>
-          </section>
-
-          <section class="mb-10">
-            <h2 class="text-3xl mb-4 flex items-center">
-              <i class="i-material-symbols-light-upcoming-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-              Skills
-            </h2>
-            <hr class="border-gray-400 mb-4" />
-            <p>
-              <a href="https://skillicons.dev">
-                <img src="https://skillicons.dev/icons?i=git,github,bitbucket,gitlab,nextjs,astro,docker,fastapi,nginx,cloudflare,grafana,cpp,vim,vscode,arduino,raspberrypi,opencv,autocad,matlab,latex,md" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
-              </a>
-            </p>
-          </section>
-
-          <section class="mb-10">
-            <h2 class="text-3xl mb-4 flex items-center">
-              <i class="i-material-symbols-light-id-card-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-              資格
-            </h2>
-            <hr class="border-gray-400 mb-4" />
-            <h3 class="text-xl mb-2">認定資格</h3>
-            <a
-              href="https://www.credly.com/badges/dc1e577a-c863-4c11-8377-b51780f429ec/public_url"
-              class="btn inline-flex items-center p-2"
-            >
-              <Image
-                src={Badge1}
-                width={110}
-                densities={[1, 2]}
-                alt="Badge1"
-              />
-            </a>
-            <a
-              href="https://www.credly.com/badges/6ff7b8a5-c4c8-4d1d-a683-071162cb3a5f/public_url"
-              class="btn inline-flex items-center p-2"
-            >
-              <Image
-                src={Badge2}
-                width={110}
-                densities={[1, 2]}
-                alt="Badge2"
-              />
-            </a>
-            <p>CCNA CyberOps Associate 2024 修了</p>
-            <h3 class="text-xl mb-2">国家資格</h3>
-            <p>第四級アマチュア無線技士</p>
-          </section>
-        </Fragment>
-
-        <Fragment slot="affiliated">
-          <Affiliated />
-        </Fragment>
-
-        <Fragment slot="environment">
-          <Environment />
-        </Fragment>
-      </AboutTabs>
-
+      <AboutTabs />
 </Layout>
