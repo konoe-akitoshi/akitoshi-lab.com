@@ -3,6 +3,7 @@ FROM node:22 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
+RUN npm install --os=linux --cpu=x64 sharp
 COPY . .
 RUN npm run build
 
