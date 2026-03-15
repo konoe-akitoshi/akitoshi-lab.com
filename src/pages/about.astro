@@ -2,7 +2,7 @@
 // import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
-import Prizes from "../components/Prizes.astro";
+import Timeline from "../components/svelte/Timeline.svelte";
 import Environment from "../components/Environment.astro";
 import Affiliated from "../components/Affiliated.astro";
 import Image from "astro/components/Image.astro";
@@ -87,9 +87,13 @@ import Badge2 from "../assets/img/badge/dell-security-foundations-2024.webp";
         <p>第四級アマチュア無線技士</p>
       </section>
 
-      <astro-island>
-        <Prizes />
-      </astro-island>
+      <section class="mb-10">
+        <h2 class="text-3xl mb-4">
+          <i class="i-material-symbols-light-co-present-outline-rounded inline-block align-middle mr-2 text-4xl"></i> Timeline
+        </h2>
+        <hr class="border-gray-400 mb-4" />
+        <Timeline client:load />
+      </section>
 
       <astro-island>
         <Environment />
