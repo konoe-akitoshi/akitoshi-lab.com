@@ -53,7 +53,7 @@
     { title: 'OisixのSREチームとの交流会 お野菜を添えて', sub: '登壇', date: '2025-07', year: '2025', tags: ['speaking', 'network'] },
     { title: 'MCP Ops LT大会！！！', sub: '登壇', date: '2025-06', year: '2025', tags: ['speaking', 'ai'] },
     { title: 'RoboCupper Online Meeting by Scramble #2', sub: '登壇', date: '2022-11', year: '2022', tags: ['speaking', 'robotics'] },
-    { title: 'ICTSC 2025', sub: '1st Prize', date: '2026-03', year: '2026', tags: ['award', 'contest', 'network'], pickup: true },
+    { title: 'ICTSC 2025', sub: '1st Prize', date: '2026-03', year: '2026', tags: ['award', 'contest', 'network'], url: '/awards/ictsc-2025', pickup: true },
     { title: 'ICTSC 2024', sub: '4th', date: '2025-03', year: '2025', tags: ['award', 'contest', 'network'], url: '/awards/ictsc-2024', pickup: true },
     { title: 'RobocupJuniorJapanOpen', sub: 'ロボット学会賞, デザイン賞', date: '2023-03', year: '2023', tags: ['award', 'contest', 'robotics'] },
     { title: 'Robocup Asia-Pacific (Junior Soccer Open)', sub: '2nd', date: '2021-11', year: '2021', tags: ['award', 'contest', 'robotics'], pickup: true },
