@@ -75,7 +75,7 @@
     { title: '第53回自然科学観察コンクール', sub: '2等賞「オクラに見つけた水玉の正体」', date: '2012-06', year: '2012', tags: ['award', 'contest', 'research'], url: '/awards/shizen-kagaku-kansatsu-concours-53rd', pickup: true },
   ];
 
-  let expanded = $state(false);
+  let expanded = $state(true);
   let activeTags = $state(new Set());
 
   function toggleTag(tag) {
