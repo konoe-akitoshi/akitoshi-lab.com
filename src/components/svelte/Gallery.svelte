@@ -1,91 +1,103 @@
 <script>
-  /** @type {Array<{thumb: string, full: string, alt: string, title: string}>} */
-  const { images = [] } = $props();
+  /**
+   * Progressive AVIF Gallery
+   * @type {{ images: Array<{ src: string, title: string }> }}
+   */
+  let { images = [] } = $props();
 
-  // リアクティブな状態
   let currentIndex = $state(0);
   let isModalOpen = $state(false);
-  let modalImage = $state({ src: '', alt: '', title: '' });
-  let imageLoaded = $state(false);
 
-  // 画像をクリックしたときの処理
   function openModal(index) {
+    console.log('openModal called', index);
     currentIndex = index;
-    modalImage = images[currentIndex];
     isModalOpen = true;
-    imageLoaded = false;
     document.body.style.overflow = 'hidden';
   }
 
-  // モーダルを閉じる処理
   function closeModal() {
     isModalOpen = false;
     document.body.style.overflow = '';
   }
 
-  // モーダル内のクリックを処理する関数
-  function handleModalClick(e) {
-    // クリックされた要素が画像コンテナまたは閉じるボタンの子孫でない場合にモーダルを閉じる
-    const isImageClick = e.target.closest('.modal-image-container') !== null;
-    const isCloseButtonClick = e.target.closest('.close-button') !== null;
-    
-    if (!isImageClick && !isCloseButtonClick) {
-      closeModal();
-    }
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
   }
 </script>
+
+<svelte:window
+  onkeydown={(e) => {
+    if (!isModalOpen) return;
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+  }}
+/>
 
 <section class="gallery-container">
   <div class="gallery-grid">
     {#each images as image, index}
-      <div 
-        class="gallery-item" 
-        role="button"
-        tabindex="0"
+      <button
+        type="button"
+        class="gallery-item"
         onclick={() => openModal(index)}
-        onkeydown={(e) => e.key === 'Enter' && openModal(index)}
-        aria-label={`View ${image.title}`}
       >
         <div class="gallery-image-container">
           <img
-            src={image.thumb}
-            alt={image.alt}
+            src={image.src}
+            alt={image.title}
             class="gallery-image"
             loading="lazy"
+            decoding="async"
           />
         </div>
-      </div>
+        <div class="gallery-title">{image.title}</div>
+      </button>
     {/each}
   </div>
 </section>
 
 {#if isModalOpen}
-  <div 
-    class="gallery-modal active"
-    onclick={handleModalClick}
-    onkeydown={(e) => e.key === 'Escape' && closeModal()}
-    role="dialog"
-    tabindex="-1"
-    aria-modal="true"
-    aria-label="Image gallery modal"
-  >
+  <div class="gallery-modal" onclick={(e) => {
+    if (e.target === e.currentTarget || e.target.classList.contains('modal-backdrop')) {
+      closeModal();
+    }
+  }}>
     <div class="modal-backdrop"></div>
     <div class="modal-content">
-      <button class="close-button" onclick={closeModal} aria-label="Close modal">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <button class="close-button" onclick={closeModal}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
+
+      {#if images.length > 1}
+        <button class="nav-button prev" onclick={prevImage}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="nav-button next" onclick={nextImage}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      {/if}
+
       <div class="modal-image-container">
-        <img 
-          src={modalImage.full}
-          alt={modalImage.alt} 
-          class="modal-image" 
-          class:loaded={imageLoaded}
-          onload={() => imageLoaded = true}
+        <img
+          src={images[currentIndex]?.src}
+          alt={images[currentIndex]?.title}
+          class="modal-image"
+          decoding="async"
         />
         <div class="modal-caption">
-          <p>{modalImage.title}</p>
+          <p>{images[currentIndex]?.title}</p>
+          <span class="image-counter">{currentIndex + 1} / {images.length}</span>
         </div>
       </div>
     </div>
@@ -93,51 +105,25 @@
 {/if}
 
 <style>
-  :global(body) {
-    overflow-x: hidden;
-  }
-  
   .gallery-container {
     width: 100%;
     max-width: 100vw;
     margin: 0 auto;
     padding: 0 0.5rem;
     box-sizing: border-box;
-    overflow-x: hidden;
-  }
-
-  .gallery-grid {
-    max-width: 100%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-
-  .gallery-item {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .gallery-image-container {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .gallery-image {
-    max-width: 100%;
-    box-sizing: border-box;
   }
 
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 24px 0;
+    gap: 24px;
     padding: 1rem 0;
   }
 
   @media (min-width: 640px) {
     .gallery-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 100px 80px;
+      gap: 32px;
     }
   }
 
@@ -147,74 +133,68 @@
       max-width: 1200px;
       padding: 0 2rem;
     }
-    
     .gallery-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: 40px 40px;
+      gap: 40px;
       padding: 3rem 0;
     }
   }
 
   .gallery-item {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: opacity 0.3s ease;
-    animation: fadeIn 0.8s ease forwards;
-    opacity: 0;
+    width: 100%;
+    transition: transform 0.3s ease;
   }
 
   .gallery-item:hover {
-    opacity: 0.9;
+    transform: translateY(-4px);
   }
 
   .gallery-image-container {
     width: 100%;
-    position: relative;
+    aspect-ratio: 4/3;
     overflow: hidden;
-    aspect-ratio: 1/1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
+    background-color: #e8e8e8;
+    border-radius: 8px;
   }
 
   .gallery-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    display: block;
-    max-width: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
   }
 
+  .gallery-item:hover .gallery-image {
+    transform: scale(1.02);
+  }
+
+  .gallery-title {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #666;
+    text-align: center;
+  }
+
+  /* Modal */
   .gallery-modal {
-    display: flex;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: 1000;
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    max-width: 100vw;
+    display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .gallery-modal.active {
-    opacity: 1;
-  }
-
   .modal-backdrop {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-    cursor: pointer;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
   }
 
   .modal-content {
@@ -225,7 +205,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: modalFadeIn 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
   }
 
   .close-button {
@@ -242,20 +221,36 @@
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    opacity: 0.7;
-    transition: all 0.3s ease;
   }
 
   .close-button:hover {
-    opacity: 1;
     background: rgba(0, 0, 0, 0.5);
-    transform: scale(1.05);
   }
 
+  .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1010;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .nav-button:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-button.prev { left: 16px; }
+  .nav-button.next { right: 16px; }
+
   .modal-image-container {
-    position: relative;
-    max-width: 100%;
-    max-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -263,15 +258,9 @@
 
   .modal-image {
     max-width: 100%;
-    max-height: 85vh;
+    max-height: 80vh;
     object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    width: auto;
-  }
-
-  .modal-image.loaded {
-    opacity: 1;
+    border-radius: 4px;
   }
 
   .modal-caption {
@@ -279,24 +268,15 @@
     color: white;
     text-align: center;
     font-size: 0.9rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
     opacity: 0.8;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  .modal-caption p {
+    margin: 0 0 4px 0;
   }
 
-  @keyframes modalFadeIn {
-    from { 
-      opacity: 0;
-      transform: scale(0.98);
-    }
-    to { 
-      opacity: 1;
-      transform: scale(1);
-    }
+  .image-counter {
+    font-size: 0.75rem;
+    opacity: 0.6;
   }
 </style>

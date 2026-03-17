@@ -1,34 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import type { ImageMetadata } from "astro";
 import GalleryComponent from "../components/svelte/Gallery.svelte";
 
-// 画像ファイルを動的にインポート
-import { getImage } from "astro:assets";
-const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/gallery/*', { eager: true });
+// Progressive AVIF画像をpublic/から直接取得（Astroの再エンコードをバイパス）
+// Progressive AVIFは1/8→1/2→1/1の3レイヤー構成で、サムネイル不要
+const galleryImages = [
+  { src: '/img/gallery/img1.avif', title: 'img1' },
+  { src: '/img/gallery/img2.avif', title: 'img2' },
+  { src: '/img/gallery/img3.avif', title: 'img3' },
+  { src: '/img/gallery/img4.avif', title: 'img4' },
+  { src: '/img/gallery/木の中の氷.avif', title: '木の中の氷' },
+  { src: '/img/gallery/樹氷.avif', title: '樹氷' },
+  { src: '/img/gallery/港.avif', title: '港' },
+];
 
-// 画像データを作成し、重複を排除
-const images = await Promise.all(
-  Object.entries(imageFiles).map(async ([path, module]) => {
-    const filename = path.split('/').pop() || '';
-    const title = filename.replace(/\.[^/.]+$/, "");
-    // サムネイル用に最適化
-    const thumb = await getImage({ src: module.default, width: 640, quality: 60 });
-    return {
-      thumb: thumb.src,
-      full: module.default.src,
-      alt: `Gallery image ${filename}`,
-      title
-    };
-  })
-);
-
-// 一意の画像を確保してランダムに並び替え
-const uniqueImages = Array.from(new Set(images.map(img => img.full)))
-  .map(full => images.find(img => img.full === full))
-  .filter((img): img is typeof images[0] => img !== undefined);
-
-const shuffledImages = [...uniqueImages].sort(() => Math.random() - 0.5);
+// シャッフル
+const shuffledImages = [...galleryImages].sort(() => Math.random() - 0.5);
 ---
 
 <Layout
