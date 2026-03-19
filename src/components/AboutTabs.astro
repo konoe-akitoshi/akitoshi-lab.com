@@ -11,7 +11,6 @@ const pickupItems = getPickupItems();
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: 'i-material-symbols-light-person-outline-rounded' },
-  { id: 'affiliated', label: 'Affiliated', icon: 'i-material-symbols-light-domain' },
   { id: 'timeline', label: 'Timeline', icon: 'i-material-symbols-light-co-present-outline-rounded' },
   { id: 'environment', label: 'Environment', icon: 'i-material-symbols-light-shield-with-house-outline-rounded' },
 ];
@@ -34,85 +33,85 @@ const tabs = [
   </nav>
 
   <div id="tab-profile" class="tab-panel">
-    <section class="mb-10">
-      <h2 class="text-3xl mb-4 flex items-center">
-        <i class="i-material-symbols-light-mindfulness-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-        Mind
-      </h2>
-      <hr class="border-gray-400 mb-4" />
-      <p>好きなことをとことん極める</p>
-    </section>
+    <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm mb-8">
+      <dt class="text-gray-500">名前</dt>
+      <dd>佐伯 明俊</dd>
+      <dt class="text-gray-500">Handle</dt>
+      <dd>Akitoshi</dd>
+      <dt class="text-gray-500">所属</dt>
+      <dd>電気通信大学（在学中）</dd>
+      <dt class="text-gray-500">出身</dt>
+      <dd>京都市</dd>
+      <dt class="text-gray-500">居住</dt>
+      <dd>東京都</dd>
+      <dt class="text-gray-500">興味分野</dt>
+      <dd>ロボティクス / ネットワークインフラ / 人工知能 / 金属加工</dd>
+    </dl>
 
-    <section class="mb-10">
-      <h2 class="text-3xl mb-4 flex items-center">
-        <i class="i-material-symbols-light-upcoming-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-        Skills
-      </h2>
-      <hr class="border-gray-400 mb-4" />
-      <p>
-        <a href="https://skillicons.dev">
-          <img src="https://skillicons.dev/icons?i=git,github,bitbucket,gitlab,nextjs,astro,docker,fastapi,nginx,cloudflare,grafana,cpp,vim,vscode,arduino,raspberrypi,opencv,autocad,matlab,latex,md" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">Mind</h3>
+    <p class="text-sm mb-10">好きなことをとことん極める</p>
+
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">趣味</h3>
+    <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm mb-10">
+      <dt class="text-gray-500">撮る</dt><dd>写真</dd>
+      <dt class="text-gray-500">聴く</dt><dd>関西フォーク</dd>
+      <dt class="text-gray-500">歩く</dt><dd>旅行</dd>
+      <dt class="text-gray-500">知る</dt><dd>民族紛争</dd>
+      <dt class="text-gray-500">遊ぶ</dt><dd>自宅サーバー</dd>
+      <dt class="text-gray-500">創る</dt><dd>ロボット</dd>
+    </dl>
+
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">主な活動歴</h3>
+    <ul class="list-none p-0 m-0 flex flex-col gap-2 mb-2">
+      {pickupItems.map((item) => (
+        <li class="flex items-baseline gap-3">
+          <span class="text-xs text-gray-400 flex-shrink-0 w-16">{item.date.slice(0, 7).replace('-', '.')}</span>
+          <span class="text-sm">
+            {item.url ? (
+              <a href={item.url} class="text-inherit hover:text-blue-600 transition-colors">{item.title} — {item.sub}</a>
+            ) : (
+              <>{item.title} — {item.sub}</>
+            )}
+          </span>
+        </li>
+      ))}
+    </ul>
+    <p class="text-xs text-gray-400 mb-10">
+      <a href="#" id="go-to-timeline" class="text-gray-400 hover:text-gray-600 transition-colors">すべての活動歴を見る →</a>
+    </p>
+
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">Skills</h3>
+    <div class="mb-10">
+      <a href="https://skillicons.dev">
+        <img src="https://skillicons.dev/icons?i=git,github,bitbucket,gitlab,nextjs,astro,docker,fastapi,nginx,cloudflare,grafana,cpp,vim,vscode,arduino,raspberrypi,opencv,autocad,matlab,latex,md" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
+      </a>
+    </div>
+
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">資格</h3>
+    <ul class="list-none p-0 m-0 flex flex-col gap-3 mb-10">
+      <li class="flex items-center gap-3">
+        <a href="https://www.credly.com/badges/dc1e577a-c863-4c11-8377-b51780f429ec/public_url" class="flex-shrink-0">
+          <Image src={Badge1} width={48} densities={[1, 2]} alt="Dell GenAI Foundations" />
         </a>
-      </p>
-    </section>
+        <span class="text-sm">Dell GenAI Foundations</span>
+      </li>
+      <li class="flex items-center gap-3">
+        <a href="https://www.credly.com/badges/6ff7b8a5-c4c8-4d1d-a683-071162cb3a5f/public_url" class="flex-shrink-0">
+          <Image src={Badge2} width={48} densities={[1, 2]} alt="Dell Security Foundations 2024" />
+        </a>
+        <span class="text-sm">Dell Security Foundations 2024</span>
+      </li>
+      <li class="flex items-center gap-3">
+        <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-gray-500"><i class="i-material-symbols-light-license-outline text-2xl"></i></span>
+        <span class="text-sm">CCNA CyberOps Associate 2024 修了</span>
+      </li>
+      <li class="flex items-center gap-3">
+        <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-gray-500"><i class="i-material-symbols-light-license-outline text-2xl"></i></span>
+        <span class="text-sm">第四級アマチュア無線技士</span>
+      </li>
+    </ul>
 
-    <section class="mb-10">
-      <h2 class="text-3xl mb-4 flex items-center">
-        <i class="i-material-symbols-light-id-card-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-        資格
-      </h2>
-      <hr class="border-gray-400 mb-4" />
-      <ul class="list-none p-0 m-0 flex flex-col gap-3">
-        <li class="flex items-center gap-3">
-          <a href="https://www.credly.com/badges/dc1e577a-c863-4c11-8377-b51780f429ec/public_url" class="flex-shrink-0">
-            <Image src={Badge1} width={48} densities={[1, 2]} alt="Dell GenAI Foundations" />
-          </a>
-          <span class="text-sm">Dell GenAI Foundations</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <a href="https://www.credly.com/badges/6ff7b8a5-c4c8-4d1d-a683-071162cb3a5f/public_url" class="flex-shrink-0">
-            <Image src={Badge2} width={48} densities={[1, 2]} alt="Dell Security Foundations 2024" />
-          </a>
-          <span class="text-sm">Dell Security Foundations 2024</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-gray-500"><i class="i-material-symbols-light-license-outline text-2xl"></i></span>
-          <span class="text-sm">CCNA CyberOps Associate 2024 修了</span>
-        </li>
-        <li class="flex items-center gap-3">
-          <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center text-gray-500"><i class="i-material-symbols-light-license-outline text-2xl"></i></span>
-          <span class="text-sm">第四級アマチュア無線技士</span>
-        </li>
-      </ul>
-    </section>
-
-    <section class="mb-10">
-      <h2 class="text-3xl mb-4 flex items-center">
-        <i class="i-material-symbols-light-co-present-outline-rounded inline-block align-middle mr-2 text-4xl"></i>
-        主な活動歴
-      </h2>
-      <hr class="border-gray-400 mb-4" />
-      <ul class="list-none p-0 m-0 flex flex-col gap-2">
-        {pickupItems.map((item) => (
-          <li class="flex items-baseline gap-3">
-            <span class="text-xs text-gray-400 flex-shrink-0 w-16">{item.date.slice(0, 7).replace('-', '.')}</span>
-            <span class="text-sm">
-              {item.url ? (
-                <a href={item.url} class="text-inherit hover:text-blue-600 transition-colors">{item.title} — {item.sub}</a>
-              ) : (
-                <>{item.title} — {item.sub}</>
-              )}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <p class="text-xs text-gray-400 mt-3">
-        <a href="#" id="go-to-timeline" class="text-gray-400 hover:text-gray-600 transition-colors">すべての活動歴を見る →</a>
-      </p>
-    </section>
-  </div>
-
-  <div id="tab-affiliated" class="tab-panel" style="display:none;">
+    <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">所属</h3>
     <Affiliated />
   </div>
 
