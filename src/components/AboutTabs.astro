@@ -5,6 +5,9 @@ import Affiliated from './Affiliated.astro';
 import Image from 'astro/components/Image.astro';
 import Badge1 from '../assets/img/badge/dell-genai-foundations.webp';
 import Badge2 from '../assets/img/badge/dell-security-foundations-2024.webp';
+import { getPickupItems, formatMonth } from '../data/timeline';
+
+const pickupItems = getPickupItems();
 
 const tabs = [
   { id: 'profile', label: 'Profile', icon: 'i-material-symbols-light-person-outline-rounded' },
@@ -78,30 +81,18 @@ const tabs = [
       </h2>
       <hr class="border-gray-400 mb-4" />
       <ul class="list-none p-0 m-0 flex flex-col gap-2">
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2026.03</span>
-          <span class="text-sm"><a href="/awards/ictsc-2025" class="text-inherit hover:text-blue-600 transition-colors">ICTSC 2025 — 1st Prize</a></span>
-        </li>
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2026.03</span>
-          <span class="text-sm">JAWS DAYS 2026 — NOC</span>
-        </li>
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2025.03</span>
-          <span class="text-sm"><a href="/awards/ictsc-2024" class="text-inherit hover:text-blue-600 transition-colors">ICTSC 2024 — 4th</a></span>
-        </li>
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2021.11</span>
-          <span class="text-sm">Robocup Asia-Pacific (Junior Soccer Open) — 2nd</span>
-        </li>
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2021.04</span>
-          <span class="text-sm">RoboCup World Wide (Junior Soccer Open) — Best TDP Award, Individual 4th</span>
-        </li>
-        <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">2012.06</span>
-          <span class="text-sm"><a href="/awards/shizen-kagaku-kansatsu-concours-53rd" class="text-inherit hover:text-blue-600 transition-colors">第53回自然科学観察コンクール — 2等賞</a></span>
-        </li>
+        {pickupItems.map((item) => (
+          <li class="flex items-baseline gap-3">
+            <span class="text-xs text-gray-400 flex-shrink-0 w-16">{item.date.slice(0, 7).replace('-', '.')}</span>
+            <span class="text-sm">
+              {item.url ? (
+                <a href={item.url} class="text-inherit hover:text-blue-600 transition-colors">{item.title} — {item.sub}</a>
+              ) : (
+                <>{item.title} — {item.sub}</>
+              )}
+            </span>
+          </li>
+        ))}
       </ul>
       <p class="text-xs text-gray-400 mt-3">
         <a href="#" id="go-to-timeline" class="text-gray-400 hover:text-gray-600 transition-colors">すべての活動歴を見る →</a>

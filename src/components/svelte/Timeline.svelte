@@ -2,22 +2,7 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import { cubicOut, elasticOut } from 'svelte/easing';
-
-  const tags = {
-    education: 'Education',
-    work: 'Work',
-    internship: 'Internship',
-    award: 'Award',
-    event: 'Event',
-    speaking: 'Speaking',
-    contest: 'Contest',
-    noc: 'NOC',
-    staff: 'Staff',
-    robotics: 'Robotics',
-    network: 'Network',
-    research: 'Research',
-    ai: 'AI',
-  };
+  import { items, tags, getYear, formatMonth } from '../../data/timeline';
 
   const tagColors = {
     education: { bg: 'bg-violet-100', text: 'text-violet-700', dot: 'bg-violet-500', active: 'bg-violet-600', ring: 'ring-violet-300' },
@@ -35,45 +20,6 @@
     ai: { bg: 'bg-fuchsia-100', text: 'text-fuchsia-700', dot: 'bg-fuchsia-500', active: 'bg-fuchsia-600', ring: 'ring-fuchsia-300' },
   };
 
-  const items = [
-    { title: '電気通信大学', sub: '入学', date: '2022-04', year: '2022', tags: ['education'], ongoing: true },
-    { title: '私立東山高等学校', sub: '卒業', date: '2022-03', year: '2022', tags: ['education'] },
-    { title: '私立東山高等学校', sub: '入学', date: '2019-04', year: '2019', tags: ['education'] },
-    { title: '京都市立近衛中学校', sub: '卒業', date: '2019-03', year: '2019', tags: ['education'] },
-    { title: '京都市立近衛中学校', sub: '入学', date: '2016-04', year: '2016', tags: ['education'] },
-    { title: '京都市立錦林小学校', sub: '卒業', date: '2016-03', year: '2016', tags: ['education'] },
-    { title: '京都市立錦林小学校', sub: '入学', date: '2010-04', year: '2010', tags: ['education'] },
-    { title: '電気通信大学 共創進化スマート社会実現機構', sub: '技術支援員', date: '2024-07', year: '2024', tags: ['work', 'network'], ongoing: true },
-    { title: '株式会社インフォクラフト', sub: 'アルバイト勤務 サーバー管理業務', date: '2023-04', year: '2023', tags: ['work', 'network'], ongoing: true },
-    { title: '株式会社サイバーエージェント', sub: 'インターン', date: '2025-07', year: '2025', tags: ['internship'] },
-    { title: 'シスコシステムズ合同会社', sub: 'インターン', date: '2024-08', year: '2024', tags: ['internship', 'network'] },
-    { title: '株式会社Turing', sub: 'インターン', date: '2023-08', year: '2023', tags: ['internship', 'ai'] },
-    { title: 'JAWS DAYS 2026', sub: 'NOC', date: '2026-03', year: '2026', tags: ['event', 'staff', 'noc', 'network'], pickup: true },
-    { title: 'JANOG57', sub: 'NOC backboneチーム', date: '2026-02', year: '2026', tags: ['event', 'staff', 'noc', 'network'] },
-    { title: 'OisixのSREチームとの交流会 お野菜を添えて', sub: '登壇', date: '2025-07', year: '2025', tags: ['speaking', 'network'] },
-    { title: 'MCP Ops LT大会！！！', sub: '登壇', date: '2025-06', year: '2025', tags: ['speaking', 'ai'] },
-    { title: 'RoboCupper Online Meeting by Scramble #2', sub: '登壇', date: '2022-11', year: '2022', tags: ['speaking', 'robotics'] },
-    { title: 'ICTSC 2025', sub: '1st Prize', date: '2026-03', year: '2026', tags: ['award', 'contest', 'network'], url: '/awards/ictsc-2025', pickup: true },
-    { title: 'ICTSC 2024', sub: '4th', date: '2025-03', year: '2025', tags: ['award', 'contest', 'network'], url: '/awards/ictsc-2024', pickup: true },
-    { title: 'RobocupJuniorJapanOpen', sub: 'ロボット学会賞, デザイン賞', date: '2023-03', year: '2023', tags: ['award', 'contest', 'robotics'] },
-    { title: 'Robocup Asia-Pacific (Junior Soccer Open)', sub: '2nd', date: '2021-11', year: '2021', tags: ['award', 'contest', 'robotics'], pickup: true },
-    { title: 'サイエンスキャッスル研究費 THK賞', sub: '採択「感情を汲み取る自立走行型配膳ロボットの開発」', date: '2021-06', year: '2021', tags: ['award', 'research', 'robotics'], url: '/awards/science-castle-thk-2021' },
-    { title: 'FIRST Robotics Competition Infinite ReCharge', sub: 'Rookie Game Changer Award', date: '2021-05', year: '2021', tags: ['award', 'contest', 'robotics'] },
-    { title: 'RoboCup World Wide (Junior Soccer Open)', sub: 'Best Team Description Paper Award, Individual 4th', date: '2021-04', year: '2021', tags: ['award', 'contest', 'robotics'], pickup: true },
-    { title: 'RobocupJuniorJapanOpen', sub: 'Open 2位', date: '2021-03', year: '2021', tags: ['award', 'contest', 'robotics'] },
-    { title: 'ロボカップジュニア・京滋奈ブロック大会', sub: 'Open 準優勝', date: '2021-01', year: '2021', tags: ['award', 'contest', 'robotics'] },
-    { title: 'RoboMaster', sub: '2nd Prize', date: '2020-10', year: '2020', tags: ['award', 'contest', 'robotics'] },
-    { title: 'RoboCupJunior Soccer Virtual Poster Session', sub: 'Most Popular Poster in Open', date: '2020-09', year: '2020', tags: ['award', 'contest', 'robotics'] },
-    { title: '第64回日本学生科学賞', sub: '入選3等「自律走行システムの考案」', date: '2020-06', year: '2020', tags: ['award', 'contest', 'research', 'robotics'], url: '/awards/japan-student-science-prize-64th' },
-    { title: 'ロボカップジュニア・京滋奈ブロック大会', sub: 'Open 優勝', date: '2020-01', year: '2020', tags: ['award', 'contest', 'robotics'] },
-    { title: '関西オープン', sub: 'Open 準優勝', date: '2019-06', year: '2019', tags: ['award', 'contest', 'robotics'] },
-    { title: 'BIWAKOオープン', sub: 'LightWeight 4位', date: '2018-09', year: '2018', tags: ['award', 'contest', 'robotics'] },
-    { title: 'せとうちオープン', sub: 'LightWeight 4位, SuperTeam 優勝', date: '2018-07', year: '2018', tags: ['award', 'contest', 'robotics'] },
-    { title: 'ロボカップジュニア・ジャパンオープン2018和歌山', sub: 'NIPPON League サッカー ビギナーズ 予選12位', date: '2018-04', year: '2018', tags: ['award', 'contest', 'robotics'] },
-    { title: 'SRC@国際ロボット展', sub: 'Classic部門 優勝', date: '2017-11', year: '2017', tags: ['award', 'contest', 'robotics'] },
-    { title: 'SRC13', sub: '全国予選 8位', date: '2016-06', year: '2016', tags: ['award', 'contest', 'robotics'] },
-    { title: '第53回自然科学観察コンクール', sub: '2等賞「オクラに見つけた水玉の正体」', date: '2012-06', year: '2012', tags: ['award', 'contest', 'research'], url: '/awards/shizen-kagaku-kansatsu-concours-53rd', pickup: true },
-  ];
 
   let expanded = $state(true);
   let activeTags = $state(new Set());
@@ -113,7 +59,8 @@
   // Full count per year (always based on all items, ignoring pickup/filter)
   const yearCounts = $derived(
     items.reduce((acc, item) => {
-      acc[item.year] = (acc[item.year] || 0) + 1;
+      const y = getYear(item.date);
+      acc[y] = (acc[y] || 0) + 1;
       return acc;
     }, {})
   );
@@ -121,16 +68,15 @@
   const grouped = $derived(
     Object.entries(
       filtered.reduce((acc, item) => {
-        if (!acc[item.year]) acc[item.year] = [];
-        acc[item.year].push(item);
+        const y = getYear(item.date);
+        if (!acc[y]) acc[y] = [];
+        acc[y].push(item);
         return acc;
       }, {})
-    ).sort((a, b) => b[0].localeCompare(a[0]))
+    ).map(([year, yearItems]) => [year, yearItems.sort((a, b) => b.date.localeCompare(a.date))])
+     .sort((a, b) => b[0].localeCompare(a[0]))
   );
 
-  function formatMonth(date) {
-    return parseInt(date.split('-')[1]) + '月';
-  }
 </script>
 
 <div>
