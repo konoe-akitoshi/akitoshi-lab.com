@@ -4,51 +4,139 @@ import UEC from '../assets/img/affiliated/uec-logo.webp';
 import MMA from '../assets/img/affiliated/mma-logo.webp';
 import Infocraft from '../assets/img/affiliated/infocraft-logo.webp';
 import Scramble from '../assets/img/affiliated/scramble-logo.webp';
+
+const affiliations = [
+  {
+    logo: UEC,
+    alt: 'uec-logo',
+    name: '電気通信大学',
+    lines: ['The University of Electro-Communications', '共創進化スマート社会実現推進機構 技術支援員'],
+    since: 'Apr 2022 - Present',
+    // engineer mode (lldp) 用
+    device: 'uec.ac.jp',
+    intf: 'Gi2022.04',
+    cap: 'E,W',
+    port: 'smart-society/tech-support',
+  },
+  {
+    logo: MMA,
+    alt: 'mma-logo',
+    name: '電気通信大学 MMA',
+    lines: ['UEC MMA'],
+    since: 'Apr 2022 - Present',
+    device: 'mma.club.uec.ac.jp',
+    intf: 'Gi2022.04',
+    cap: 'C',
+    port: 'member',
+  },
+  {
+    logo: Infocraft,
+    alt: 'infocraft-logo',
+    name: 'Infocraft Inc.',
+    lines: ['サーバー管理部 バイト'],
+    since: 'May 2023 - Present',
+    device: 'infocraft.co.jp',
+    intf: 'Gi2023.05',
+    cap: 'W',
+    port: 'server-admin',
+  },
+  {
+    logo: Scramble,
+    alt: 'scramble-logo',
+    name: '（一社）次世代ロボットエンジニア支援機構',
+    lines: ['Scramble'],
+    since: 'Apr 2020 - Present',
+    device: 'scramble-robot.org',
+    intf: 'Gi2020.04',
+    cap: 'N',
+    port: 'member',
+  },
+];
+
+// CLI風テーブルを固定幅で組む
+const pad = (s: string, n: number) => s.padEnd(n, ' ');
+const lldpHeader = `${pad('Device ID', 22)}${pad('Local Intf', 14)}${pad('Hold-time', 11)}${pad('Capability', 12)}Port ID`;
+const lldpRows = affiliations.map(
+  (a) => `${pad(a.device, 22)}${pad(a.intf, 14)}${pad('∞', 11)}${pad(a.cap, 12)}${a.port}`
+);
 ---
 
-<ul class="space-y-2 mb-10">
-    <li class="flex items-center gap-4 py-3">
-      <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded bg-white">
-        <Image src={UEC} width={48} densities={[1, 2]} alt="uec-logo" class="object-contain max-w-full max-h-full" />
-      </span>
-      <div class="flex flex-col justify-center">
-        <span class="font-semibold text-base text-gray-800">電気通信大学</span>
-        <span class="text-gray-500 text-sm">The University of Electro-Communications</span>
-        <span class="text-gray-500 text-sm">共創進化スマート社会実現推進機構 技術支援員</span>
-        <span class="text-gray-400 text-xs mt-1">Apr 2022 - Present</span>
-      </div>
-    </li>
-    <hr class="border-gray-200 my-0" />
-    <li class="flex items-center gap-4 py-3">
-      <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded bg-white">
-        <Image src={MMA} width={48} densities={[1, 2]} alt="mma-logo" class="object-contain max-w-full max-h-full" />
-      </span>
-      <div class="flex flex-col justify-center">
-        <span class="font-semibold text-base text-gray-800">電気通信大学 MMA</span>
-        <span class="text-gray-500 text-sm">UEC MMA</span>
-        <span class="text-gray-400 text-xs mt-1">Apr 2022 - Present</span>
-      </div>
-    </li>
-    <hr class="border-gray-200 my-0" />
-    <li class="flex items-center gap-4 py-3">
-      <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded bg-white">
-        <Image src={Infocraft} width={48} densities={[1, 2]} alt="infocraft-logo" class="object-contain max-w-full max-h-full" />
-      </span>
-      <div class="flex flex-col justify-center">
-        <span class="font-semibold text-base text-gray-800">Infocraft Inc.</span>
-        <span class="text-gray-500 text-sm">サーバー管理部 バイト</span>
-        <span class="text-gray-400 text-xs mt-1">May 2023 - Present</span>
-      </div>
-    </li>
-    <hr class="border-gray-200 my-0" />
-    <li class="flex items-center gap-4 py-3">
-      <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded bg-white">
-        <Image src={Scramble} width={48} densities={[1, 2]} alt="scramble-logo" class="object-contain max-w-full max-h-full" />
-      </span>
-      <div class="flex flex-col justify-center">
-        <span class="font-semibold text-base text-gray-800">（一社）次世代ロボットエンジニア支援機構</span>
-        <span class="text-gray-500 text-sm">Scramble</span>
-        <span class="text-gray-400 text-xs mt-1">Apr 2020 - Present</span>
-      </div>
-    </li>
-</ul>
+<div class="mb-10">
+  <div class="flex justify-end mb-1">
+    <button
+      id="affil-toggle"
+      type="button"
+      class="font-mono text-xs text-gray-400 hover:text-gray-700 bg-transparent border-none cursor-pointer transition-colors px-1 py-0.5"
+      aria-pressed="false"
+    >$ show lldp neighbors</button>
+  </div>
+
+  <ul id="affil-human" class="space-y-2 list-none p-0 m-0">
+    {affiliations.map((a, i) => (
+      <>
+        {i > 0 && <hr class="border-gray-200 my-0" />}
+        <li class="flex items-center gap-4 py-3">
+          <span class="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded bg-white">
+            <Image src={a.logo} width={48} densities={[1, 2]} alt={a.alt} class="object-contain max-w-full max-h-full" />
+          </span>
+          <div class="flex flex-col justify-center">
+            <span class="font-semibold text-base text-gray-800">{a.name}</span>
+            {a.lines.map((line) => (
+              <span class="text-gray-500 text-sm">{line}</span>
+            ))}
+            <span class="text-gray-400 text-xs mt-1">{a.since}</span>
+          </div>
+        </li>
+      </>
+    ))}
+  </ul>
+
+  <div id="affil-lldp" hidden>
+    <pre class="lldp-block font-mono"><span class="lldp-prompt">akitoshi@lab&gt;</span> show lldp neighbors
+<span class="lldp-dim">Capability codes: (E) Education, (W) Work, (C) Club, (N) NPO</span>
+
+<span class="lldp-head">{lldpHeader}</span>
+{lldpRows.join('\n')}
+
+<span class="lldp-dim">Total entries displayed: {affiliations.length}</span></pre>
+  </div>
+</div>
+
+<style>
+  .lldp-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 0;
+  }
+  .lldp-prompt {
+    color: #3fb950;
+  }
+  .lldp-head {
+    color: #58a6ff;
+  }
+  .lldp-dim {
+    color: #6e7681;
+  }
+</style>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const btn = document.getElementById('affil-toggle');
+    const human = document.getElementById('affil-human');
+    const lldp = document.getElementById('affil-lldp');
+    if (!btn || !human || !lldp) return;
+
+    btn.addEventListener('click', () => {
+      const engineerMode = lldp.hidden;
+      human.hidden = engineerMode;
+      lldp.hidden = !engineerMode;
+      btn.textContent = engineerMode ? '$ exit' : '$ show lldp neighbors';
+      btn.setAttribute('aria-pressed', String(engineerMode));
+    });
+  });
+</script>
