@@ -6,7 +6,7 @@ import HobbySankey from './svelte/HobbySankey.svelte';
 import Image from 'astro/components/Image.astro';
 import Badge1 from '../assets/img/badge/dell-genai-foundations.webp';
 import Badge2 from '../assets/img/badge/dell-security-foundations-2024.webp';
-import { getPickupItems, formatMonth } from '../data/timeline';
+import { getPickupItems, formatYearMonth } from '../data/timeline';
 
 const pickupItems = getPickupItems();
 
@@ -61,7 +61,7 @@ const tabs = [
     <ul class="list-none p-0 m-0 flex flex-col gap-2 mb-2">
       {pickupItems.map((item) => (
         <li class="flex items-baseline gap-3">
-          <span class="text-xs text-gray-400 flex-shrink-0 w-16">{item.date.slice(0, 7).replace('-', '.')}</span>
+          <span class="text-xs text-gray-400 flex-shrink-0 w-16">{formatYearMonth(item.date)}</span>
           <span class="text-sm">
             {item.url ? (
               <a href={item.url} class="text-inherit hover:text-blue-600 transition-colors">{item.title} — {item.sub}</a>

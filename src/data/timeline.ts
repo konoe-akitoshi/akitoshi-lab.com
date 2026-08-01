@@ -83,8 +83,27 @@ export function getYear(date: string): string {
   return date.split('-')[0];
 }
 
-export function formatMonth(date: string): string {
-  return parseInt(date.split('-')[1]) + '月';
+export function formatYearMonth(date: string): string {
+  return date.slice(0, 7).replace('-', '.');
+}
+
+export function formatDateRange(date: string, dateEnd?: string): string {
+  const [, startMonthStr, startDayStr] = date.split('-');
+  const startMonth = parseInt(startMonthStr, 10);
+
+  if (!dateEnd) {
+    return `${startMonth}月`;
+  }
+
+  const [, endMonthStr, endDayStr] = dateEnd.split('-');
+  const endMonth = parseInt(endMonthStr, 10);
+  const startDay = parseInt(startDayStr, 10);
+  const endDay = parseInt(endDayStr, 10);
+
+  if (startMonth === endMonth) {
+    return `${startMonth}/${startDay}〜${endDay}`;
+  }
+  return `${startMonth}/${startDay}〜${endMonth}/${endDay}`;
 }
 
 export function getPickupItems(): TimelineItem[] {

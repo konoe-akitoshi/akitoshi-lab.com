@@ -2,7 +2,7 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import { cubicOut, elasticOut } from 'svelte/easing';
-  import { items, tags, getYear, formatMonth } from '../../data/timeline';
+  import { items, tags, getYear, formatDateRange } from '../../data/timeline';
 
   const tagColors = {
     education: { bg: 'bg-violet-100', text: 'text-violet-700', dot: 'bg-violet-500', active: 'bg-violet-600', ring: 'ring-violet-300' },
@@ -148,7 +148,7 @@
                     {/each}
                   </div>
                 </div>
-                <span class="text-gray-400 text-xs flex-shrink-0 mt-0.5">{formatMonth(item.date)}</span>
+                <span class="text-gray-400 text-xs flex-shrink-0 mt-0.5">{formatDateRange(item.date, item.dateEnd)}</span>
               </div>
             {/snippet}
 
