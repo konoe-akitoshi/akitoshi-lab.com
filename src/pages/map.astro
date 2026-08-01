@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import JapanMap from "../components/svelte/JapanMap.svelte";
+---
+
+<Layout
+  title="Map | Akitoshi Lab."
+  description="旅行・仕事での訪問記録"
+  ogImage="/img/OGP.webp"
+  bodyClass="m-0 p-0 font-sans overflow-x-hidden bg-background text-text"
+>
+  <JapanMap client:load />
+</Layout>
