@@ -1,5 +1,16 @@
-<script>
-  const connections = [
+<script lang="ts">
+  interface Connection {
+    verb: string;
+    items: string[];
+  }
+
+  interface FlowPath {
+    verb: string;
+    item: string;
+    d: string;
+  }
+
+  const connections: Connection[] = [
     { verb: '歩く', items: ['旅行', 'バックパック', '登山', '雪山', '温泉', '徒歩宿', '野宿'] },
     { verb: '乗る', items: ['電車', '自転車', '飛行機', 'フェリー', '車', '旅行'] },
     { verb: '泊まる', items: ['徒歩宿', '野宿', '温泉', '旅行'] },
@@ -14,8 +25,8 @@
   ];
 
   // Collect unique items preserving first-appearance order, grouped by primary verb
-  const seen = new Set();
-  const uniqueItems = [];
+  const seen = new Set<string>();
+  const uniqueItems: string[] = [];
   for (const c of connections) {
     for (const item of c.items) {
       if (!seen.has(item)) {
@@ -26,11 +37,11 @@
   }
 
   // Which verbs connect to each item
-  const itemVerbs = new Map();
+  const itemVerbs = new Map<string, string[]>();
   for (const c of connections) {
     for (const item of c.items) {
       if (!itemVerbs.has(item)) itemVerbs.set(item, []);
-      itemVerbs.get(item).push(c.verb);
+      itemVerbs.get(item)!.push(c.verb);
     }
   }
 
@@ -41,11 +52,6 @@
   const verbStartY = 14;
   const itemStartY = 14;
 
-  const verbPositions = connections.map((c, i) => ({
-    ...c,
-    y: verbStartY + i * lineH * (uniqueItems.length / connections.length),
-  }));
-
   // Distribute items evenly
   const itemPositions = uniqueItems.map((item, i) => ({
     label: item,
@@ -53,7 +59,7 @@
   }));
 
   // Recompute verb Y to be centered on their connected items
-  const verbYMap = new Map();
+  const verbYMap = new Map<string, number>();
   for (const c of connections) {
     const ys = c.items.map(item => itemPositions.find(p => p.label === item)?.y ?? 0);
     const avgY = ys.reduce((a, b) => a + b, 0) / ys.length;
@@ -61,7 +67,7 @@
   }
 
   // Build path data
-  const paths = [];
+  const paths: FlowPath[] = [];
   for (const c of connections) {
     const vy = verbYMap.get(c.verb);
     for (const item of c.items) {
@@ -79,25 +85,49 @@
     itemPositions.length > 0 ? itemPositions[itemPositions.length - 1].y : 0
   ) + 20;
 
-  let hoverVerb = $state(null);
-  let hoverItem = $state(null);
+  let hoverVerb = $state<string | null>(null);
+  let hoverItem = $state<string | null>(null);
+  let pinnedVerb = $state<string | null>(null);
+  let pinnedItem = $state<string | null>(null);
 
-  function isActive(path) {
-    if (hoverVerb) return path.verb === hoverVerb;
-    if (hoverItem) return path.item === hoverItem;
+  // Pinned selection (from a click/tap) takes priority over hover; hover only
+  // drives the display when nothing is pinned, so touch devices (which never
+  // fire hover) can still highlight a connection via tap.
+  const isPinned = $derived(pinnedVerb !== null || pinnedItem !== null);
+  const effectiveVerb = $derived(isPinned ? pinnedVerb : hoverVerb);
+  const effectiveItem = $derived(isPinned ? pinnedItem : hoverItem);
+
+  function isActive(path: FlowPath): boolean {
+    if (effectiveVerb) return path.verb === effectiveVerb;
+    if (effectiveItem) return path.item === effectiveItem;
     return true;
   }
 
-  function isVerbActive(verb) {
-    if (hoverVerb) return verb === hoverVerb;
-    if (hoverItem) return itemVerbs.get(hoverItem)?.includes(verb);
+  function isVerbActive(verb: string): boolean {
+    if (effectiveVerb) return verb === effectiveVerb;
+    if (effectiveItem) return itemVerbs.get(effectiveItem)?.includes(verb) ?? false;
     return true;
   }
 
-  function isItemActive(item) {
-    if (hoverItem) return item === hoverItem;
-    if (hoverVerb) return connections.find(c => c.verb === hoverVerb)?.items.includes(item);
+  function isItemActive(item: string): boolean {
+    if (effectiveItem) return item === effectiveItem;
+    if (effectiveVerb) return connections.find(c => c.verb === effectiveVerb)?.items.includes(item) ?? false;
     return true;
+  }
+
+  function toggleVerbPin(verb: string) {
+    pinnedVerb = pinnedVerb === verb ? null : verb;
+    pinnedItem = null;
+  }
+
+  function toggleItemPin(item: string) {
+    pinnedItem = pinnedItem === item ? null : item;
+    pinnedVerb = null;
+  }
+
+  function clearPin() {
+    pinnedVerb = null;
+    pinnedItem = null;
   }
 </script>
 
@@ -106,6 +136,7 @@
   class="hobby-sankey"
   role="img"
   aria-label="趣味のつながり図"
+  onclick={clearPin}
 >
   <!-- Paths -->
   {#each paths as path}
@@ -131,6 +162,7 @@
       opacity={isVerbActive(conn.verb) ? 1 : 0.2}
       onmouseenter={() => hoverVerb = conn.verb}
       onmouseleave={() => hoverVerb = null}
+      onclick={(e) => { e.stopPropagation(); toggleVerbPin(conn.verb); }}
     >{conn.verb}</text>
   {/each}
 
@@ -146,6 +178,7 @@
       opacity={isItemActive(pos.label) ? 1 : 0.2}
       onmouseenter={() => hoverItem = pos.label}
       onmouseleave={() => hoverItem = null}
+      onclick={(e) => { e.stopPropagation(); toggleItemPin(pos.label); }}
     >{pos.label}</text>
   {/each}
 </svg>
@@ -159,7 +192,7 @@
   .label {
     font-size: 12px;
     fill: #6b7280;
-    cursor: default;
+    cursor: pointer;
     transition: opacity 0.15s ease;
   }
 
