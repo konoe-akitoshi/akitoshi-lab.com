@@ -6,7 +6,7 @@ import HobbySankey from './svelte/HobbySankey.svelte';
 import Image from 'astro/components/Image.astro';
 import Badge1 from '../assets/img/badge/dell-genai-foundations.webp';
 import Badge2 from '../assets/img/badge/dell-security-foundations-2024.webp';
-import { getPickupItems, formatYearMonth } from '../data/timeline';
+import { getPickupItems, formatYearMonth, vtName } from '../data/timeline';
 
 const pickupItems = getPickupItems();
 
@@ -88,7 +88,7 @@ const skills = [
     <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">主な活動歴</h3>
     <ul class="list-none p-0 m-0 flex flex-col gap-2 mb-2">
       {pickupItems.map((item) => (
-        <li class="flex items-baseline gap-3">
+        <li class="flex items-baseline gap-3" style={`view-transition-name: ${vtName(item)}`}>
           <span class="text-xs text-gray-400 flex-shrink-0 w-16">{formatYearMonth(item.date)}</span>
           <span class="text-sm">
             {item.url ? (
@@ -190,6 +190,20 @@ const skills = [
     });
   }
 
+  // Same-document View Transition: Profileのpickup項目とTimelineの同一項目は
+  // vtNameで共有要素になっており、タブ切替時にmorphする
+  let currentTab = '';
+  function transitionToTab(tabId: string) {
+    if (tabId === currentTab) return;
+    currentTab = tabId;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || reduced) {
+      switchTab(tabId);
+      return;
+    }
+    document.startViewTransition(() => switchTab(tabId));
+  }
+
   function initTabs() {
     const buttons = document.querySelectorAll<HTMLButtonElement>('#tab-bar .tab-item');
     buttons.forEach((btn) => {
@@ -205,13 +219,14 @@ const skills = [
     document.querySelectorAll<HTMLAnchorElement>('.tab-panel a[href^="#"]').forEach((link) => {
       const tabId = link.getAttribute('href')!.slice(1);
       if (TAB_IDS.includes(tabId)) {
-        link.addEventListener('click', () => switchTab(tabId));
+        link.addEventListener('click', () => transitionToTab(tabId));
       }
     });
 
-    switchTab(tabFromHash());
+    currentTab = tabFromHash();
+    switchTab(currentTab);
   }
 
-  window.addEventListener('hashchange', () => switchTab(tabFromHash()));
+  window.addEventListener('hashchange', () => transitionToTab(tabFromHash()));
   document.addEventListener('astro:page-load', initTabs);
 </script>
