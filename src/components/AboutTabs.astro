@@ -42,7 +42,7 @@ const skills = [
 ---
 
 <div>
-  <nav class="flex border-b-2 border-gray-200 mb-6" id="tab-bar">
+  <nav class="flex border-b-2 border-gray-200 mb-6" id="tab-bar" role="tablist">
     {tabs.map((tab) => (
       <button
         class:list={[
@@ -50,6 +50,10 @@ const skills = [
           tab.id === 'profile' && 'active'
         ]}
         data-tab={tab.id}
+        id={`tab-btn-${tab.id}`}
+        role="tab"
+        aria-selected={tab.id === 'profile'}
+        aria-controls={`tab-${tab.id}`}
       >
         <i class={`${tab.icon} text-lg`}></i>
         <span class="tab-label">{tab.label}</span>
@@ -57,7 +61,7 @@ const skills = [
     ))}
   </nav>
 
-  <div id="tab-profile" class="tab-panel">
+  <div id="tab-profile" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-profile">
     <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm mb-8">
       <dt class="text-gray-500">名前</dt>
       <dd>佐伯 明俊</dd>
@@ -97,7 +101,7 @@ const skills = [
       ))}
     </ul>
     <p class="text-xs text-gray-400 mb-10">
-      <a href="#" id="go-to-timeline" class="text-gray-400 hover:text-gray-600 transition-colors">すべての活動歴を見る →</a>
+      <a href="#timeline" class="text-gray-400 hover:text-gray-600 transition-colors">すべての活動歴を見る →</a>
     </p>
 
     <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">Skills</h3>
@@ -137,11 +141,11 @@ const skills = [
     <Affiliated />
   </div>
 
-  <div id="tab-timeline" class="tab-panel" style="display:none;">
+  <div id="tab-timeline" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-timeline" hidden>
     <Timeline client:visible />
   </div>
 
-  <div id="tab-environment" class="tab-panel" style="display:none;">
+  <div id="tab-environment" class="tab-panel" role="tabpanel" aria-labelledby="tab-btn-environment" hidden>
     <Environment />
   </div>
 </div>
@@ -168,27 +172,49 @@ const skills = [
 </style>
 
 <script>
+  const TAB_IDS = ['profile', 'timeline', 'environment'];
+  const DEFAULT_TAB = 'profile';
+
+  function tabFromHash(): string {
+    const hash = location.hash.slice(1);
+    return TAB_IDS.includes(hash) ? hash : DEFAULT_TAB;
+  }
+
   function switchTab(tabId: string) {
     const buttons = document.querySelectorAll<HTMLButtonElement>('#tab-bar .tab-item');
     const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
-    buttons.forEach((b) => b.classList.toggle('active', b.dataset.tab === tabId));
+    buttons.forEach((b) => {
+      const isActive = b.dataset.tab === tabId;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+    });
     panels.forEach((p) => {
-      p.style.display = p.id === `tab-${tabId}` ? '' : 'none';
+      p.hidden = p.id !== `tab-${tabId}`;
     });
   }
 
   function initTabs() {
     const buttons = document.querySelectorAll<HTMLButtonElement>('#tab-bar .tab-item');
     buttons.forEach((btn) => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab!));
+      btn.addEventListener('click', () => {
+        location.hash = btn.dataset.tab!;
+      });
     });
 
-    const goToTimeline = document.getElementById('go-to-timeline');
-    goToTimeline?.addEventListener('click', (e) => {
-      e.preventDefault();
-      switchTab('timeline');
+    // In-page links to a tab (e.g. "view all" -> #timeline). Astro's ClientRouter
+    // intercepts same-page hash link clicks and updates the URL via
+    // history.pushState, which does not fire a native "hashchange" event, so the
+    // switch is also triggered directly here rather than relying on that event.
+    document.querySelectorAll<HTMLAnchorElement>('.tab-panel a[href^="#"]').forEach((link) => {
+      const tabId = link.getAttribute('href')!.slice(1);
+      if (TAB_IDS.includes(tabId)) {
+        link.addEventListener('click', () => switchTab(tabId));
+      }
     });
+
+    switchTab(tabFromHash());
   }
 
+  window.addEventListener('hashchange', () => switchTab(tabFromHash()));
   document.addEventListener('astro:page-load', initTabs);
 </script>
