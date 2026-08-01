@@ -3,31 +3,6 @@
   import { prefGeos, prefGeoByName } from '../../data/japan-geo';
   import { items, getYear, formatYearMonth } from '../../data/timeline';
 
-  // TODO: エージェント作業完了後に timeline.ts の各itemへ `pref` フィールドとして移す。
-  // 場所が確定しているイベントのみ登録（オンライン開催・場所未確認はまだ含めない）。
-  // キー: `${title}|${date}`
-  const prefByEvent: Record<string, string> = {
-    '京都市立錦林小学校|2010-04-01': '京都府',
-    '京都市立錦林小学校|2016-03-01': '京都府',
-    '京都市立近衛中学校|2016-04-01': '京都府',
-    '京都市立近衛中学校|2019-03-01': '京都府',
-    '私立東山高等学校|2019-04-01': '京都府',
-    '私立東山高等学校|2022-03-01': '京都府',
-    '電気通信大学|2022-04-01': '東京都',
-    'SRC@国際ロボット展|2017-11-29': '東京都',
-    'ロボカップジュニア・ジャパンオープン2018和歌山|2018-04-28': '和歌山県',
-    'BIWAKOオープン|2018-09-15': '滋賀県',
-    'ロボカップジュニア・京滋奈ブロック大会|2020-01-12': '京都府',
-    'ロボカップジュニア・京滋奈ブロック大会|2021-01-10': '京都府',
-    'SRE NEXT 2025 IN TOKYO|2025-07-11': '東京都',
-    'Observability Conference Tokyo 2025|2025-10-27': '東京都',
-    'MMA創設50周年記念パーティー|2025-10-25': '東京都',
-    'OSC2026 Tokyo/Spring|2026-02-27': '東京都',
-    'クラウドネイティブ会議|2026-05-14': '愛知県',
-    'JANOG58|2026-07-15': '愛媛県',
-    'KubeCon + CloudNativeCon Japan 2026|2026-07-28': '神奈川県',
-  };
-
   interface LocatedEvent {
     title: string;
     sub: string;
@@ -36,12 +11,10 @@
     year: number;
   }
 
+  // 場所は timeline.ts の pref フィールドが正（オンライン開催・場所未確認は未設定）
   const located: LocatedEvent[] = items
-    .map((i) => {
-      const pref = prefByEvent[`${i.title}|${i.date}`];
-      return pref ? { title: i.title, sub: i.sub, date: i.date, pref, year: parseInt(getYear(i.date), 10) } : null;
-    })
-    .filter((e): e is LocatedEvent => e !== null)
+    .filter((i) => i.pref)
+    .map((i) => ({ title: i.title, sub: i.sub, date: i.date, pref: i.pref!, year: parseInt(getYear(i.date), 10) }))
     .sort((a, b) => a.date.localeCompare(b.date));
 
   const unlocatedCount = items.length - located.length;
