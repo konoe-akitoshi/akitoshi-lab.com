@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
-  import { items, tags, getYear, formatDateRange } from '../../data/timeline';
+  import { items, tags, getYear, formatDateRange, vtName } from '../../data/timeline';
   import type { TagKey, TimelineItem } from '../../data/timeline';
+  import ActivityHeatmap from './ActivityHeatmap.svelte';
 
   type FilterKey = TagKey | 'all';
 
@@ -95,9 +97,26 @@
      .sort((a, b) => b[0].localeCompare(a[0]))
   );
 
+  // ヒートマップのセルクリック → フィルタ解除・全件表示にしてその年へスクロール
+  async function scrollToYear(year: string) {
+    if (!expanded || hasActive) {
+      expanded = true;
+      activeTags = new Set();
+      await tick();
+    }
+    const el = document.getElementById(`tl-year-${year}`);
+    if (!el) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    el.classList.remove('year-flash');
+    void el.offsetWidth; // reflowでアニメーションを再トリガー可能にする
+    el.classList.add('year-flash');
+  }
 </script>
 
 <div>
+  <ActivityHeatmap onSelectYear={scrollToYear} />
+
   <!-- Spotify-style filter bar (only when expanded) -->
   {#if expanded}
   <div class="filter-bar" transition:slide={{ duration: 200 }}>
@@ -131,7 +150,7 @@
 
     {#each grouped as [year, yearItems], yi (year)}
       <div>
-        <div class="relative flex items-center mb-3 {yi > 0 ? 'mt-1' : ''}">
+        <div id={`tl-year-${year}`} class="year-header relative flex items-center mb-3 {yi > 0 ? 'mt-1' : ''}">
           <div class="w-7 h-7 rounded-full bg-gray-900 text-white flex items-center justify-center text-[10px] font-bold z-1 flex-shrink-0">
             {yearCounts[year]}
           </div>
@@ -156,7 +175,7 @@
               <p class="text-gray-500 text-sm mt-0.5 leading-snug">{item.sub}</p>
             {/snippet}
 
-            <div class="flex-1 rounded-lg p-3 -mx-2 transition-colors duration-150 {item.url ? 'group hover:bg-gray-50' : ''}">
+            <div class="flex-1 rounded-lg p-3 -mx-2 transition-colors duration-150 {item.url ? 'group hover:bg-gray-50' : ''}" style={`view-transition-name: ${vtName(item)}`}>
               <div class="flex items-start gap-2 w-full">
                 <div class="flex-1 min-w-0">
                   {#if item.url}
@@ -310,5 +329,17 @@
   }
   .expand-icon.flipped {
     transform: rotate(180deg);
+  }
+
+  .year-header {
+    scroll-margin-top: 16px;
+    border-radius: 8px;
+  }
+  :global(.year-header.year-flash) {
+    animation: year-flash 1.4s ease-out;
+  }
+  @keyframes -global-year-flash {
+    0% { background: #dbeafe; }
+    100% { background: transparent; }
   }
 </style>
