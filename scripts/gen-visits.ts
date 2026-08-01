@@ -13,6 +13,7 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { items } from '../src/data/timeline';
 
 const [timelinePath, geojsonPath] = process.argv.slice(2);
@@ -21,7 +22,7 @@ if (!timelinePath || !geojsonPath) {
   console.error('usage: bun scripts/gen-visits.ts <timeline.json> <japan.geojson> [--write]');
   process.exit(1);
 }
-const REPO = join(import.meta.dir, '..');
+const REPO = fileURLToPath(new URL('..', import.meta.url));
 
 // ---------- 県ポリゴン ----------
 type Ring = [number, number][];
