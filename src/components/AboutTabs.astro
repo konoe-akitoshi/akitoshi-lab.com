@@ -15,6 +15,30 @@ const tabs = [
   { id: 'timeline', label: 'Timeline', icon: 'i-material-symbols-light-co-present-outline-rounded' },
   { id: 'environment', label: 'Environment', icon: 'i-material-symbols-light-shield-with-house-outline-rounded' },
 ];
+
+const skills = [
+  { icon: 'i-skill-icons:git', label: 'Git' },
+  { icon: 'i-skill-icons:github-light', label: 'GitHub' },
+  { icon: 'i-skill-icons:bitbucket-light', label: 'Bitbucket' },
+  { icon: 'i-skill-icons:gitlab-light', label: 'GitLab' },
+  { icon: 'i-skill-icons:nextjs-light', label: 'Next.js' },
+  { icon: 'i-skill-icons:astro', label: 'Astro' },
+  { icon: 'i-skill-icons:docker', label: 'Docker' },
+  { icon: 'i-skill-icons:fastapi', label: 'FastAPI' },
+  { icon: 'i-skill-icons:nginx', label: 'NGINX' },
+  { icon: 'i-skill-icons:cloudflare-light', label: 'Cloudflare' },
+  { icon: 'i-skill-icons:grafana-light', label: 'Grafana' },
+  { icon: 'i-skill-icons:cpp', label: 'C++' },
+  { icon: 'i-skill-icons:vim-light', label: 'Vim' },
+  { icon: 'i-skill-icons:vscode-light', label: 'VS Code' },
+  { icon: 'i-skill-icons:arduino', label: 'Arduino' },
+  { icon: 'i-skill-icons:raspberrypi-light', label: 'Raspberry Pi' },
+  { icon: 'i-skill-icons:opencv-light', label: 'OpenCV' },
+  { icon: 'i-skill-icons:autocad-light', label: 'AutoCAD' },
+  { icon: 'i-skill-icons:matlab-light', label: 'MATLAB' },
+  { icon: 'i-skill-icons:latex-light', label: 'LaTeX' },
+  { icon: 'i-skill-icons:markdown-light', label: 'Markdown' },
+];
 ---
 
 <div>
@@ -78,9 +102,11 @@ const tabs = [
 
     <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">Skills</h3>
     <div class="mb-10">
-      <a href="https://skillicons.dev">
-        <img src="https://skillicons.dev/icons?i=git,github,bitbucket,gitlab,nextjs,astro,docker,fastapi,nginx,cloudflare,grafana,cpp,vim,vscode,arduino,raspberrypi,opencv,autocad,matlab,latex,md" style="max-width:100%;height:auto;display:block;margin:0 auto;" />
-      </a>
+      <ul class="flex flex-wrap gap-2 list-none p-0 m-0">
+        {skills.map((skill) => (
+          <li><span class={`${skill.icon} w-10 h-10`} title={skill.label} aria-label={skill.label}></span></li>
+        ))}
+      </ul>
     </div>
 
     <h3 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-4">資格</h3>
