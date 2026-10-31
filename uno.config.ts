@@ -3,6 +3,15 @@ import { defineConfig, presetWind4 } from 'unocss'
 import { presetIcons } from 'unocss'
 
 export default defineConfig({
+  content: {
+    pipeline: {
+      include: [
+        /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+        // src/data/*.ts にアイコンクラスを定義しているため
+        'src/data/**/*.ts',
+      ],
+    },
+  },
   presets: [
     presetWind4(),
     presetIcons({

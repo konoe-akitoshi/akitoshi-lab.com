@@ -1,0 +1,165 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from 'astro:assets';
+import Back from '../assets/img/back.webp';
+import Avatar from '../assets/img/avatar.webp';
+import { contact, socialLinks } from '../data/social';
+
+const contactItems = [
+  { label: '個人メール', value: contact.personalEmail, href: `mailto:${contact.personalEmail}`, icon: 'i-material-symbols-light-mail-outline-rounded' },
+  { label: '大学メール', value: contact.universityEmail, href: `mailto:${contact.universityEmail}`, icon: 'i-material-symbols-light-school-outline-rounded' },
+  { label: 'アマチュア無線', value: contact.callsign, href: undefined, icon: 'i-material-symbols-light-settings-input-antenna-rounded' },
+];
+
+const primaryLinks = [socialLinks.linkedin, socialLinks.github, socialLinks.x];
+const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram, socialLinks.facebook];
+---
+
+<Layout
+  title="Links | Akitoshi Lab."
+  description="佐伯 明俊（Akitoshi Saeki）の連絡先・SNSリンク"
+  ogImage="/img/OGP.webp"
+  canonicalUrl="https://akitoshi-lab.com/links/"
+  useMainWrapper={false}
+>
+  <main class="max-w-md mx-auto px-4 pt-10 pb-12">
+    <section class="relative rounded-lg overflow-hidden bg-cover bg-center mb-8" style={`background-image: url(${Back.src});`}>
+      <div class="absolute inset-0 bg-black/60"></div>
+      <div class="relative flex flex-col items-center text-center text-white px-6 pt-8 pb-6">
+        <div class="w-24 h-24 rounded-full shadow-lg overflow-hidden mb-3">
+          <Image src={Avatar} width={96} densities={[1, 2]} alt="Akitoshi Saeki" class="w-full h-full object-cover" />
+        </div>
+        <h1 class="text-3xl font-semibold mb-1">Akitoshi Saeki</h1>
+        <p class="text-sm font-light m-0 mb-1">佐伯 明俊</p>
+        <p class="text-sm font-light text-white/80 m-0 mb-5">電気通信大学 / Robotics, Network, Server</p>
+        <a
+          href="/akitoshi-saeki.vcf"
+          download="akitoshi-saeki.vcf"
+          data-astro-reload
+          class="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-white text-[#181A1B] text-sm font-medium no-underline transition-colors duration-150 hover:bg-gray-100 active:bg-gray-200"
+        >
+          <i class="i-material-symbols-light-person-add-outline-rounded text-xl"></i>
+          連絡先に追加
+        </a>
+      </div>
+    </section>
+
+    <h2 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-3">Contact</h2>
+    <ul class="list-none p-0 m-0 mb-10 bg-white rounded-lg shadow-sm divide-y divide-gray-100 overflow-hidden">
+      {contactItems.map((item) => (
+        <li class="flex items-center">
+          {item.href ? (
+            <a href={item.href} class="flex-1 min-w-0 flex items-center gap-3 pl-4 py-3.5 text-inherit no-underline active:bg-gray-50">
+              <i class={`${item.icon} text-2xl text-gray-500 flex-shrink-0`}></i>
+              <span class="min-w-0">
+                <span class="block text-xs text-gray-400 leading-tight">{item.label}</span>
+                <span class="block text-[15px] truncate">{item.value}</span>
+              </span>
+            </a>
+          ) : (
+            <div class="flex-1 min-w-0 flex items-center gap-3 pl-4 py-3.5">
+              <i class={`${item.icon} text-2xl text-gray-500 flex-shrink-0`}></i>
+              <span class="min-w-0">
+                <span class="block text-xs text-gray-400 leading-tight">{item.label}</span>
+                <span class="block text-[15px] font-mono tracking-wider">{item.value}</span>
+              </span>
+            </div>
+          )}
+          <button
+            type="button"
+            class="copy-btn flex-shrink-0 w-12 h-12 mr-1 flex items-center justify-center rounded-full border-none bg-transparent text-gray-400 cursor-pointer transition-colors duration-150 hover:text-gray-700 active:bg-gray-100"
+            data-copy={item.value}
+            aria-label={`${item.label}をコピー`}
+          >
+            <i class="copy-icon i-material-symbols-light-content-copy-outline-rounded text-xl"></i>
+            <i class="done-icon i-material-symbols-light-check-rounded text-xl text-green-600"></i>
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    <h2 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-3">SNS</h2>
+    <ul class="list-none p-0 m-0 mb-5 bg-white rounded-lg shadow-sm divide-y divide-gray-100 overflow-hidden">
+      {primaryLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener"
+            class="flex items-center gap-3 px-4 py-3.5 text-inherit no-underline active:bg-gray-50"
+          >
+            <i class={`${link.icon} text-2xl text-gray-700 flex-shrink-0`}></i>
+            <span class="flex-1 min-w-0">
+              <span class="block text-xs text-gray-400 leading-tight">{link.label}</span>
+              <span class="block text-[15px] truncate">{link.handle}</span>
+            </span>
+            <i class="i-material-symbols-light-arrow-outward-rounded text-xl text-gray-300"></i>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <ul class="list-none p-0 m-0 flex justify-center gap-6">
+      {otherLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener"
+            class="block p-2 text-2xl text-gray-500 transition transform hover:scale-110 hover:text-gray-800"
+            aria-label={link.label}
+          >
+            <i class={link.icon}></i>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+
+  <div
+    id="copy-toast"
+    class="fixed left-1/2 bottom-8 -translate-x-1/2 px-4 py-2 rounded-full bg-[#232425] text-white text-sm shadow-lg pointer-events-none opacity-0 transition-opacity duration-200"
+    role="status"
+    aria-live="polite"
+  ></div>
+</Layout>
+
+<style>
+  .copy-btn .done-icon,
+  .copy-btn.copied .copy-icon {
+    display: none;
+  }
+  .copy-btn.copied .done-icon {
+    display: inline-block;
+  }
+</style>
+
+<script>
+  let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function showToast(message: string) {
+    const toast = document.getElementById('copy-toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.remove('opacity-0');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add('opacity-0'), 1600);
+  }
+
+  function initCopyButtons() {
+    document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copy!);
+        } catch {
+          showToast('コピーできませんでした');
+          return;
+        }
+        btn.classList.add('copied');
+        showToast(`${btn.dataset.copy} をコピーしました`);
+        setTimeout(() => btn.classList.remove('copied'), 1600);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initCopyButtons);
+</script>
