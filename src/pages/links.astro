@@ -1,15 +1,46 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Image } from 'astro:assets';
 import Back from '../assets/img/back.webp';
-import Avatar from '../assets/img/avatar.webp';
 import { contact, socialLinks } from '../data/social';
 
-const contactItems = [
-  { label: '個人メール', value: contact.personalEmail, href: `mailto:${contact.personalEmail}`, icon: 'i-material-symbols-light-mail-outline-rounded' },
-  { label: '大学メール', value: contact.universityEmail, href: `mailto:${contact.universityEmail}`, icon: 'i-material-symbols-light-school-outline-rounded' },
-  { label: 'アマチュア無線', value: contact.callsign, href: undefined, icon: 'i-material-symbols-light-settings-input-antenna-rounded' },
-];
+// アドレス収集ボット対策: メールアドレスは HTML に平文で出さない。
+// 逆順にして base64 にした文字列を置き、表示前のスクリプトで復元する（JS が無いときは [at] 表記）
+const obfuscate = (s: string) => btoa([...s].reverse().join(''));
+const atNotation = (s: string) => s.replace('@', ' [at] ');
+
+// vCard も静的ファイルにせず、タップ時にブラウザ内で生成する
+const vcard = [
+  'BEGIN:VCARD',
+  'VERSION:3.0',
+  'N:Saeki;Akitoshi;;;',
+  'FN:Akitoshi Saeki',
+  'ORG:The University of Electro-Communications',
+  `EMAIL;TYPE=INTERNET,WORK:${contact.universityEmail}`,
+  `EMAIL;TYPE=INTERNET,HOME:${contact.personalEmail}`,
+  'URL:https://akitoshi-lab.com/',
+  ...[socialLinks.linkedin, socialLinks.github, socialLinks.x].map((link) => `URL:${link.href}`),
+  `NOTE:Amateur radio callsign: ${contact.callsign}`,
+  'END:VCARD',
+].join('\r\n') + '\r\n';
+
+// 名刺は日本語を読まない人にも渡るため、意味はアイコンに持たせ、
+// 残る文字はブラウザの言語で日英を切り替える（data-en / data-en-label）
+const mailItems = [
+  { label: { ja: '個人メール', en: 'Personal email' }, address: contact.personalEmail, icon: 'i-lab-mail-personal' },
+  { label: { ja: '大学メール', en: 'University email' }, address: contact.universityEmail, icon: 'i-lab-mail-university' },
+].map((item) => ({ ...item, encoded: obfuscate(item.address), fallback: atNotation(item.address) }));
+const callsign = { label: { ja: 'アマチュア無線 コールサイン', en: 'Amateur radio callsign' }, value: contact.callsign, icon: 'i-lab-radio' };
+
+// SNS も /links では独自のラインアイコンで描く（About の Card は simple-icons のまま）
+const snsIcons: Record<string, string> = {
+  linkedin: 'i-lab-linkedin',
+  github: 'i-lab-github',
+  x: 'i-lab-x',
+  zenn: 'i-lab-zenn',
+  youtube: 'i-lab-youtube',
+  instagram: 'i-lab-instagram',
+  facebook: 'i-lab-facebook',
+};
 
 const primaryLinks = [socialLinks.linkedin, socialLinks.github, socialLinks.x];
 const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram, socialLinks.facebook];
@@ -23,62 +54,69 @@ const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram
   useMainWrapper={false}
 >
   <main class="max-w-md mx-auto px-4 pt-10 pb-12">
-    <section class="relative rounded-lg overflow-hidden bg-cover bg-center mb-8" style={`background-image: url(${Back.src});`}>
-      <div class="absolute inset-0 bg-black/60"></div>
-      <div class="relative flex flex-col items-center text-center text-white px-6 pt-8 pb-6">
-        <div class="w-24 h-24 rounded-full shadow-lg overflow-hidden mb-3">
-          <Image src={Avatar} width={96} densities={[1, 2]} alt="Akitoshi Saeki" class="w-full h-full object-cover" />
-        </div>
-        <h1 class="text-3xl font-semibold mb-1">Akitoshi Saeki</h1>
-        <p class="text-sm font-light m-0 mb-1">佐伯 明俊</p>
-        <p class="text-sm font-light text-white/80 m-0 mb-5">電気通信大学 / Robotics, Network, Server</p>
-        <a
-          href="/akitoshi-saeki.vcf"
-          download="akitoshi-saeki.vcf"
-          data-astro-reload
-          class="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-white text-[#181A1B] text-sm font-medium no-underline transition-colors duration-150 hover:bg-gray-100 active:bg-gray-200"
-        >
-          <i class="i-material-symbols-light-person-add-outline-rounded text-xl"></i>
-          連絡先に追加
-        </a>
+    <!-- 名刺から開かれるので、カードも名刺と同じ 91:55 -->
+    <section class="relative aspect-[91/55] rounded-lg overflow-hidden bg-cover bg-center mb-8" style={`background-image: url(${Back.src});`}>
+      <div class="absolute inset-0" style="background: linear-gradient(to top, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.25) 60%, rgb(0 0 0 / 0.1));"></div>
+      <button
+        type="button"
+        id="add-contact"
+        data-vcard={obfuscate(vcard)}
+        aria-label="連絡先に追加"
+        data-en-label="Add to Contacts"
+        class="absolute top-1.5 right-1.5 w-11 h-11 flex items-center justify-center border-none bg-transparent text-white cursor-pointer transition-opacity duration-150 hover:opacity-80 active:opacity-60"
+        style="filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.5));"
+      >
+        <i class="i-lab-person-add text-[26px]" aria-hidden="true"></i>
+      </button>
+      <div class="absolute left-5 right-5 bottom-4 text-white">
+        <h1 class="text-2xl font-semibold leading-tight m-0">Akitoshi Saeki</h1>
+        <p class="text-sm m-0 mb-2">佐伯 明俊</p>
+        <p class="text-xs font-light text-white/80 leading-relaxed m-0">
+          <span data-en="The University of Electro-Communications">電気通信大学</span><br />
+          Robotics, Network, Server
+        </p>
       </div>
     </section>
 
     <h2 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-3">Contact</h2>
     <ul class="list-none p-0 m-0 mb-10 bg-white rounded-lg shadow-sm divide-y divide-gray-100 overflow-hidden">
-      {contactItems.map((item) => (
-        <li class="flex items-center">
-          {item.href ? (
-            <a href={item.href} class="flex-1 min-w-0 flex items-center gap-3 pl-4 py-3.5 text-inherit no-underline active:bg-gray-50">
-              <i class={`${item.icon} text-2xl text-gray-500 flex-shrink-0`}></i>
-              <span class="min-w-0">
-                <span class="block text-xs text-gray-400 leading-tight">{item.label}</span>
-                <span class="block text-[15px] truncate">{item.value}</span>
-              </span>
-            </a>
-          ) : (
-            <div class="flex-1 min-w-0 flex items-center gap-3 pl-4 py-3.5">
-              <i class={`${item.icon} text-2xl text-gray-500 flex-shrink-0`}></i>
-              <span class="min-w-0">
-                <span class="block text-xs text-gray-400 leading-tight">{item.label}</span>
-                <span class="block text-[15px] font-mono tracking-wider">{item.value}</span>
-              </span>
-            </div>
-          )}
+      {mailItems.map((item) => (
+        <li class="flex items-center" data-mail={item.encoded}>
+          <a class="flex-1 min-w-0 flex items-center gap-3.5 pl-4 py-4 text-inherit no-underline active:bg-gray-50" title={item.label.ja} data-en-label={item.label.en}>
+            <i class={`${item.icon} text-[28px] text-gray-700 flex-shrink-0`} aria-hidden="true"></i>
+            <span class="mail-text text-[15px] truncate">{item.fallback}</span>
+          </a>
           <button
             type="button"
-            class="copy-btn flex-shrink-0 w-12 h-12 mr-1 flex items-center justify-center rounded-full border-none bg-transparent text-gray-400 cursor-pointer transition-colors duration-150 hover:text-gray-700 active:bg-gray-100"
-            data-copy={item.value}
-            aria-label={`${item.label}をコピー`}
+            class="copy-btn flex-shrink-0 self-stretch w-14 flex items-center justify-center border-none bg-transparent text-gray-400 cursor-pointer transition-colors duration-150 hover:text-gray-700 active:bg-gray-100"
+            aria-label={`${item.label.ja}をコピー`}
+            data-en-label={`Copy ${item.label.en.toLowerCase()}`}
           >
-            <i class="copy-icon i-material-symbols-light-content-copy-outline-rounded text-xl"></i>
-            <i class="done-icon i-material-symbols-light-check-rounded text-xl text-green-600"></i>
+            <i class="copy-icon i-lab-copy text-xl"></i>
+            <i class="done-icon i-lab-check text-xl text-green-600"></i>
           </button>
         </li>
       ))}
+      <li class="flex items-center">
+        <div class="flex-1 min-w-0 flex items-center gap-3.5 pl-4 py-4" title={callsign.label.ja} data-en-label={callsign.label.en}>
+          <i class={`${callsign.icon} text-[28px] text-gray-700 flex-shrink-0`} aria-hidden="true"></i>
+          <span class="sr-only" data-en={callsign.label.en}>{callsign.label.ja}</span>
+          <span class="text-[15px] font-mono tracking-wider">{callsign.value}</span>
+        </div>
+        <button
+          type="button"
+          class="copy-btn flex-shrink-0 self-stretch w-14 flex items-center justify-center border-none bg-transparent text-gray-400 cursor-pointer transition-colors duration-150 hover:text-gray-700 active:bg-gray-100"
+          data-copy={callsign.value}
+          aria-label={`${callsign.label.ja}をコピー`}
+          data-en-label={`Copy ${callsign.label.en.toLowerCase()}`}
+        >
+          <i class="copy-icon i-lab-copy text-xl"></i>
+          <i class="done-icon i-lab-check text-xl text-green-600"></i>
+        </button>
+      </li>
     </ul>
 
-    <h2 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-3">SNS</h2>
+    <h2 class="text-sm font-medium text-gray-400 tracking-wider uppercase mb-3">Social Media</h2>
     <ul class="list-none p-0 m-0 mb-5 bg-white rounded-lg shadow-sm divide-y divide-gray-100 overflow-hidden">
       {primaryLinks.map((link) => (
         <li>
@@ -86,14 +124,12 @@ const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram
             href={link.href}
             target="_blank"
             rel="noopener"
-            class="flex items-center gap-3 px-4 py-3.5 text-inherit no-underline active:bg-gray-50"
+            class="flex items-center gap-3.5 px-4 py-4 text-inherit no-underline active:bg-gray-50"
+            aria-label={`${link.label} ${link.handle}`}
           >
-            <i class={`${link.icon} text-2xl text-gray-700 flex-shrink-0`}></i>
-            <span class="flex-1 min-w-0">
-              <span class="block text-xs text-gray-400 leading-tight">{link.label}</span>
-              <span class="block text-[15px] truncate">{link.handle}</span>
-            </span>
-            <i class="i-material-symbols-light-arrow-outward-rounded text-xl text-gray-300"></i>
+            <i class={`${snsIcons[link.id]} text-[28px] text-gray-700 flex-shrink-0`} aria-hidden="true"></i>
+            <span class="flex-1 min-w-0 text-[15px] truncate">{link.handle}</span>
+            <i class="i-lab-arrow-outward text-lg text-gray-300"></i>
           </a>
         </li>
       ))}
@@ -105,22 +141,32 @@ const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram
             href={link.href}
             target="_blank"
             rel="noopener"
-            class="block p-2 text-2xl text-gray-500 transition transform hover:scale-110 hover:text-gray-800"
+            class="block p-2 text-[28px] text-gray-500 transition transform hover:scale-110 hover:text-gray-800"
             aria-label={link.label}
           >
-            <i class={link.icon}></i>
+            <i class={snsIcons[link.id]} aria-hidden="true"></i>
           </a>
         </li>
       ))}
     </ul>
   </main>
 
-  <div
-    id="copy-toast"
-    class="fixed left-1/2 bottom-8 -translate-x-1/2 px-4 py-2 rounded-full bg-[#232425] text-white text-sm shadow-lg pointer-events-none opacity-0 transition-opacity duration-200"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <script is:inline data-astro-rerun>
+    document.querySelectorAll('[data-mail]').forEach((row) => {
+      const address = atob(row.dataset.mail).split('').reverse().join('');
+      row.querySelector('a').href = 'mailto:' + address;
+      row.querySelector('.mail-text').textContent = address;
+      row.querySelector('.copy-btn').dataset.copy = address;
+    });
+    if (!navigator.language.toLowerCase().startsWith('ja')) {
+      document.documentElement.lang = 'en';
+      document.querySelectorAll('[data-en]').forEach((el) => { el.textContent = el.dataset.en; });
+      document.querySelectorAll('[data-en-label]').forEach((el) => {
+        if (el.hasAttribute('title')) el.title = el.dataset.enLabel;
+        else el.setAttribute('aria-label', el.dataset.enLabel);
+      });
+    }
+  </script>
 </Layout>
 
 <style>
@@ -134,32 +180,52 @@ const otherLinks = [socialLinks.zenn, socialLinks.youtube, socialLinks.instagram
 </style>
 
 <script>
-  let toastTimer: ReturnType<typeof setTimeout> | undefined;
-
-  function showToast(message: string) {
-    const toast = document.getElementById('copy-toast');
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.remove('opacity-0');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.add('opacity-0'), 1600);
+  async function copyText(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Clipboard API は https でしか使えないため、旧来の方法にフォールバック
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.append(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    }
   }
 
   function initCopyButtons() {
     document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
       btn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(btn.dataset.copy!);
-        } catch {
-          showToast('コピーできませんでした');
-          return;
-        }
+        if (!(await copyText(btn.dataset.copy!))) return;
         btn.classList.add('copied');
-        showToast(`${btn.dataset.copy} をコピーしました`);
         setTimeout(() => btn.classList.remove('copied'), 1600);
       });
     });
   }
 
-  document.addEventListener('astro:page-load', initCopyButtons);
+  function initAddContact() {
+    const btn = document.getElementById('add-contact');
+    btn?.addEventListener('click', () => {
+      const vcard = atob(btn.dataset.vcard!).split('').reverse().join('');
+      const url = URL.createObjectURL(new Blob([vcard], { type: 'text/vcard' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'akitoshi-saeki.vcf';
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    initCopyButtons();
+    initAddContact();
+  });
 </script>

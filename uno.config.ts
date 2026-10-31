@@ -1,6 +1,7 @@
 // uno.config.ts
 import { defineConfig, presetWind4 } from 'unocss'
 import { presetIcons } from 'unocss'
+import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 
 export default defineConfig({
   content: {
@@ -15,6 +16,10 @@ export default defineConfig({
   presets: [
     presetWind4(),
     presetIcons({
+      collections: {
+        // サイト独自アイコン（src/icons/*.svg → i-lab-<name>）
+        lab: FileSystemIconLoader('./src/icons'),
+      },
       extraProperties: {
         'display': 'inline-block',
         'vertical-align': 'middle',
