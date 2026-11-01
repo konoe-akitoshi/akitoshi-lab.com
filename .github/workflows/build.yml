@@ -68,8 +68,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ghcr.io/${{ github.repository }}
+          # master-<timestamp>-<sha> is sortable and drives Flux image automation (infra repo).
           tags: |
             type=sha
+            type=raw,value=master-{{date 'YYYYMMDDHHmmss'}}-{{sha}}
             type=raw,value=latest
 
       - name: Build and push
